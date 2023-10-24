@@ -49,13 +49,14 @@ public class PlayerStats {
         }
 
         Stat newStat = new Stat(addStat.getStatType(), newValue);
-        Stat appliedStat = new Stat(addStat.getStatType(), playerStats[index] - oldValue);
         playerStats[index] = newStat.getValue();
+        Stat appliedStat = new Stat(addStat.getStatType(), playerStats[index] - oldValue);
+
         MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
 
-        System.out.println(newStat.getStatType().getName());
-        System.out.println("저장 전: " + oldValue);
-        System.out.println("저장 후: " + playerStats[index]);
+//        System.out.println(newStat.getStatType().getName());
+//        System.out.println("저장 전: " + oldValue);
+//        System.out.println("저장 후: " + playerStats[index]);
         return appliedStat.getValue();
     }
 

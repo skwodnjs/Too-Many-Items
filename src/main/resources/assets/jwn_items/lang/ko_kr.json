@@ -1,0 +1,19 @@
+{
+  "item.jwn_items.test": "테스트용",
+  "item.jwn_items.pill": "알약",
+  "item.jwn_items.coin": "동전",
+  "item.jwn_items.rocket": "로켓",
+
+  "item.jwn_items.message_health": "체력",
+  "item.jwn_items.message_damage": "데미지",
+  "item.jwn_items.message_attack_speed": "공격속도",
+  "item.jwn_items.message_attack_range": "공격범위",
+  "item.jwn_items.message_mining_speed": "채굴속도",
+  "item.jwn_items.message_movement_speed": "이동속도",
+  "item.jwn_items.message_luck": "행운",
+  "item.jwn_items.message_coin": "동전",
+
+  "item.jwn_items.message_no_stat_changed": "스텟 변동 없음",
+
+  "item.jwn_items.message_pill_random_stat_change": "스텟 랜덤 변경"
+}

@@ -1,7 +1,8 @@
 {
+  "item.jwn_items.test": "Test",
   "item.jwn_items.pill": "Pill",
   "item.jwn_items.coin": "Coin",
-  "item.jwn_items.test": "Test",
+  "item.jwn_items.rocket": "Rocket",
 
   "item.jwn_items.message_health": "Health",
   "item.jwn_items.message_damage": "Damage",
@@ -12,28 +13,7 @@
   "item.jwn_items.message_luck": "Luck",
   "item.jwn_items.message_coin": "Coin",
 
-  "item.jwn_item.message_no_stat_changed": "No Stat Changed",
-
-  "item.jwn_items.message_pill_health_by_consumables_up": "Health Up",
-  "item.jwn_items.message_pill_health_by_consumables_down": "Health Down",
-
-  "item.jwn_items.message_pill_attack_range_by_consumables_up": "Attack Range Up",
-  "item.jwn_items.message_pill_attack_range_by_consumables_down": "Attack Range Down",
-
-  "item.jwn_items.message_pill_luck_by_consumables_up": "Luck Up",
-  "item.jwn_items.message_pill_luck_by_consumables_down": "Luck Down",
-
-  "item.jwn_items.message_pill_attack_speed_by_consumables_up": "Attack Speed Up",
-  "item.jwn_items.message_pill_attack_speed_by_consumables_down": "Attack Speed Down",
-
-  "item.jwn_items.message_pill_damage_by_consumables_up": "Damage Up",
-  "item.jwn_items.message_pill_damage_by_consumables_down": "Damage Down",
-
-  "item.jwn_items.message_pill_mining_speed_by_consumables_up": "Mining Speed Up",
-  "item.jwn_items.message_pill_mining_speed_by_consumables_down": "Mining Speed Down",
-
-  "item.jwn_items.message_pill_movement_speed_by_consumables_up": "Speed Up",
-  "item.jwn_items.message_pill_movement_speed_by_consumables_down": "Speed Down",
+  "item.jwn_items.message_no_stat_changed": "No Stat Changed",
 
   "item.jwn_items.message_pill_random_stat_change": "random stat change"
 }

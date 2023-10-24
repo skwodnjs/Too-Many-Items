@@ -34,8 +34,8 @@ public class PillItem extends ModItem {
             StatType.MOVEMENT_SPEED_BY_CONSUMABLES
     );
 
-    public PillItem(Properties pProperties, ItemType itemType) {
-        super(pProperties, itemType);
+    public PillItem(Properties pProperties, int ID) {
+        super(pProperties, ItemType.CONSUMABLES, ID);
     }
 
     protected void playSound(Level level, Player player, SoundEvent soundEvent, float volume, float pitch) {
@@ -61,9 +61,6 @@ public class PillItem extends ModItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        // Item used event
-        super.use(pLevel, pPlayer, pUsedHand);
-
         playSound(pLevel, pPlayer, SoundEvents.WOODEN_DOOR_OPEN, 0.5f, 0.5f);
 
         if (!pLevel.isClientSide) {

@@ -1,11 +1,15 @@
 package net.jwn.jwn_items.event;
 
 import net.jwn.jwn_items.Main;
+import net.jwn.jwn_items.event.custom.ModItemUsedEvent;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
+import net.jwn.jwn_items.inventory.MyStuffProvider;
+import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.StatSyncS2CPacket;
 import net.jwn.jwn_items.stat.PlayerStats;
 import net.jwn.jwn_items.stat.PlayerStatsProvider;
+import net.jwn.jwn_items.stat.Stat;
 import net.jwn.jwn_items.stat.StatType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,7 +17,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -26,6 +32,9 @@ public class ModEvents {
         if (event.getObject() instanceof Player) {
             if (!event.getObject().getCapability(PlayerStatsProvider.playerStatsCapability).isPresent()) {
                 event.addCapability(new ResourceLocation(Main.MOD_ID, "player_stats"), new PlayerStatsProvider());
+            }
+            if (!event.getObject().getCapability(MyStuffProvider.myStuffCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "my_stuff"), new MyStuffProvider());
             }
         }
     }
@@ -116,7 +125,49 @@ public class ModEvents {
                 luckByItemValue.get(),
                 coinValue.get()
             };
+
             ModMessages.sendToPlayer(new StatSyncS2CPacket(playerStats), (ServerPlayer) event.player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+        double miningSpeedCorrectionValue;
+        AtomicReference<Double> miningSpeedAtomicValue = new AtomicReference<>(0.0);
+        event.getEntity().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
+            miningSpeedAtomicValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.MINING_SPEED_BY_ITEM) + playerStats.getValue(StatType.MINING_SPEED_BY_CONSUMABLES));
+        });
+        miningSpeedCorrectionValue = 1.0 + 0.4 / 60.0 * miningSpeedAtomicValue.get();
+        event.setNewSpeed(event.getOriginalSpeed() * (float) miningSpeedCorrectionValue);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!event.getEntity().level().isClientSide) {
+            event.getEntity().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
+                float[] stats = new float[15];
+                for (int i = 0; i < stats.length; i++) {
+                    stats[i] = playerStats.getValue(i);
+                }
+                MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(event.getEntity()));
+            });
+            event.getEntity().getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+                // packet
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public static void onClone(PlayerEvent.Clone event) {
+        if(event.isWasDeath()) {
+            event.getOriginal().reviveCaps();
+            event.getOriginal().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                    MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(event.getEntity()));
+                });
+            });
+            event.getOriginal().invalidateCaps();
         }
     }
 }

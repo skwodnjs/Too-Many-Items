@@ -1,4 +1,4 @@
-package net.jwn.jwn_items.stat;
+package net.jwn.jwn_items.inventory;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -11,23 +11,23 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerStatsProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<PlayerStats> playerStatsCapability = CapabilityManager.get(new CapabilityToken<PlayerStats>() {});
+public class MyStuffProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+    public static Capability<MyStuff> myStuffCapability = CapabilityManager.get(new CapabilityToken<MyStuff>() {});
 
-    private PlayerStats playerStats = null;
+    private MyStuff myStuff = null;
 
-    private final LazyOptional<PlayerStats> optional = LazyOptional.of(this::createPlayerStats);
+    private final LazyOptional<MyStuff> optional = LazyOptional.of(this::createMyStuff);
 
-    private PlayerStats createPlayerStats() {
-        if (this.playerStats == null) {
-            this.playerStats = new PlayerStats();
+    private MyStuff createMyStuff() {
+        if (this.myStuff == null) {
+            this.myStuff = new MyStuff();
         }
-        return this.playerStats;
+        return this.myStuff;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == playerStatsCapability) {
+        if (cap == myStuffCapability) {
             return optional.cast();
         }
         return LazyOptional.empty();
@@ -36,12 +36,12 @@ public class PlayerStatsProvider implements ICapabilityProvider, INBTSerializabl
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        createPlayerStats().saveNBTData(nbt);
+        createMyStuff().saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createPlayerStats().loadNBTData(nbt);
+        createMyStuff().loadNBTData(nbt);
     }
 }
