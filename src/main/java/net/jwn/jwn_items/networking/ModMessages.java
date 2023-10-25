@@ -2,7 +2,7 @@ package net.jwn.jwn_items.networking;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.networking.packet.StatSyncS2CPacket;
-import net.jwn.jwn_items.networking.packet.skills.RocketSkillC2SPacket;
+import net.jwn.jwn_items.networking.packet.skills.D1SkillC2SPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -34,10 +34,10 @@ public class ModMessages {
                 .consumerMainThread(StatSyncS2CPacket::handle)
                 .add();
 
-        net.messageBuilder(RocketSkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(RocketSkillC2SPacket::new)
-                .encoder(RocketSkillC2SPacket::toBytes)
-                .consumerMainThread(RocketSkillC2SPacket::handle)
+        net.messageBuilder(D1SkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(D1SkillC2SPacket::new)
+                .encoder(D1SkillC2SPacket::toBytes)
+                .consumerMainThread(D1SkillC2SPacket::handle)
                 .add();
     }
 

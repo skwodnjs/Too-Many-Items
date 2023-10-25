@@ -5,9 +5,12 @@ import net.minecraft.world.entity.player.Player;
 
 public class ModSkills {
     public static void useSkill(Player player, int ID) {
-        if (ID == RocketSkillC2SPacket.ID) {
-//            player.setDeltaMovement(1,1,0);
-            ModMessages.sendToServer(new RocketSkillC2SPacket());
+        if (ID == D1SkillC2SPacket.ID) {
+            // you should play sound in both side
+            // on client
+
+            // on server
+            ModMessages.sendToServer(new D1SkillC2SPacket());
         }
     }
 }

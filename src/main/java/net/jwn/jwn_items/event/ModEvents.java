@@ -152,7 +152,7 @@ public class ModEvents {
                 MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(event.getEntity()));
             });
             event.getEntity().getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                // packet
+                // packet client my stuff 에다가 정보를 넣어야 함
             });
         }
     }

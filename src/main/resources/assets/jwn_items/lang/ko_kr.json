@@ -2,7 +2,8 @@
   "item.jwn_items.test": "테스트용",
   "item.jwn_items.pill": "알약",
   "item.jwn_items.coin": "동전",
-  "item.jwn_items.rocket": "로켓",
+  "item.jwn_items.d1": "D1",
+  "item.jwn_items.d6": "D6",
 
   "item.jwn_items.message_health": "체력",
   "item.jwn_items.message_damage": "데미지",

@@ -8,9 +8,9 @@ import org.lwjgl.glfw.GLFW;
 public class KeyBindings {
     public static final String KEY_CATEGORY_UTILS = "key.category.jwn_items.utils";
 
-    public static final String KEY_ONE = "key.jwn_items.one";
-    public static final KeyMapping ONE_KEY =
-            new KeyMapping(KEY_ONE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, KEY_CATEGORY_UTILS);
+    public static final String KEY_ACTIVE = "key.jwn_items.one";
+    public static final KeyMapping ACTIVE_KEY =
+            new KeyMapping(KEY_ACTIVE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, KEY_CATEGORY_UTILS);
 
     public static final String KEY_TWO = "key.jwn_items.two";
     public static final KeyMapping TWO_KEY =

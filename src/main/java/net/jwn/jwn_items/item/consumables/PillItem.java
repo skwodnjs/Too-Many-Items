@@ -34,8 +34,8 @@ public class PillItem extends ModItem {
             StatType.MOVEMENT_SPEED_BY_CONSUMABLES
     );
 
-    public PillItem(Properties pProperties, int ID) {
-        super(pProperties, ItemType.CONSUMABLES, ID);
+    public PillItem(Properties pProperties, int grade, int ID) {
+        super(pProperties, ItemType.CONSUMABLES, grade, ID);
     }
 
     protected void playSound(Level level, Player player, SoundEvent soundEvent, float volume, float pitch) {
