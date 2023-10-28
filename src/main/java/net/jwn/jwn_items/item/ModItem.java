@@ -9,13 +9,13 @@ import net.minecraft.world.level.Level;
 public abstract class ModItem extends Item {
     public final ItemType itemType;
     public final int ID;
-    public final int grade;
+    public final int quality;
 
-    public ModItem(Properties pProperties, ItemType itemType, int grade, int ID) {
+    public ModItem(Properties pProperties, ItemType itemType, int quality, int ID) {
         super(pProperties);
         this.itemType = itemType;
         this.ID = ID;
-        this.grade = grade;
+        this.quality = quality;
     }
 
     public int getItemID() {

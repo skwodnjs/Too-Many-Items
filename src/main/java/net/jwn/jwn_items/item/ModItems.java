@@ -9,6 +9,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MOD_ID);
 
@@ -26,5 +29,86 @@ public class ModItems {
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
+    }
+
+    public class ModItemsProvider {
+        private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY0 = new ArrayList<>();
+        private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY1 = new ArrayList<>();
+        private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY2 = new ArrayList<>();
+        private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY3 = new ArrayList<>();
+        private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY4 = new ArrayList<>();
+        private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY_LEGEND = new ArrayList<>();
+
+        private static final ArrayList<ModItem> PASSIVE_ITEMS_QUALITY0 = new ArrayList<>();
+        private static final ArrayList<ModItem> PASSIVE_ITEMS_QUALITY1 = new ArrayList<>();
+        private static final ArrayList<ModItem> PASSIVE_ITEMS_QUALITY2 = new ArrayList<>();
+        private static final ArrayList<ModItem> PASSIVE_ITEMS_QUALITY3 = new ArrayList<>();
+        private static final ArrayList<ModItem> PASSIVE_ITEMS_QUALITY4 = new ArrayList<>();
+        private static final ArrayList<ModItem> PASSIVE_ITEMS_QUALITY_LEGEND = new ArrayList<>();
+
+        static {
+            ACTIVE_ITEMS_QUALITY0.add((ModItem) ModItems.D1_ITEM.get());
+            ACTIVE_ITEMS_QUALITY0.add((ModItem) ModItems.D6_ITEM.get());
+
+            //
+        }
+
+        public static ModItem getRandomItem(ItemType itemType, int quality) {
+            if (itemType == ItemType.ACTIVE) {
+                Random random = new Random();
+                int randomIndex;
+                switch (quality) {
+                    case 0:
+                        randomIndex = random.nextInt(ACTIVE_ITEMS_QUALITY0.size());
+                        return ACTIVE_ITEMS_QUALITY0.get(randomIndex);
+                    case 1:
+                        randomIndex = random.nextInt(ACTIVE_ITEMS_QUALITY1.size());
+                        return ACTIVE_ITEMS_QUALITY1.get(randomIndex);
+                    case 2:
+                        randomIndex = random.nextInt(ACTIVE_ITEMS_QUALITY2.size());
+                        return ACTIVE_ITEMS_QUALITY2.get(randomIndex);
+                    case 3:
+                        randomIndex = random.nextInt(ACTIVE_ITEMS_QUALITY3.size());
+                        return ACTIVE_ITEMS_QUALITY3.get(randomIndex);
+                    case 4:
+                        randomIndex = random.nextInt(ACTIVE_ITEMS_QUALITY4.size());
+                        return ACTIVE_ITEMS_QUALITY4.get(randomIndex);
+                    case 5:
+                        randomIndex = random.nextInt(ACTIVE_ITEMS_QUALITY_LEGEND.size());
+                        return ACTIVE_ITEMS_QUALITY_LEGEND.get(randomIndex);
+                    default:
+                        return null;
+                }
+            }
+            else if (itemType == ItemType.PASSIVE) {
+                Random random = new Random();
+                int randomIndex;
+                switch (quality) {
+                    case 0:
+                        randomIndex = random.nextInt(PASSIVE_ITEMS_QUALITY0.size());
+                        return PASSIVE_ITEMS_QUALITY0.get(randomIndex);
+                    case 1:
+                        randomIndex = random.nextInt(PASSIVE_ITEMS_QUALITY1.size());
+                        return PASSIVE_ITEMS_QUALITY1.get(randomIndex);
+                    case 2:
+                        randomIndex = random.nextInt(PASSIVE_ITEMS_QUALITY2.size());
+                        return PASSIVE_ITEMS_QUALITY2.get(randomIndex);
+                    case 3:
+                        randomIndex = random.nextInt(PASSIVE_ITEMS_QUALITY3.size());
+                        return PASSIVE_ITEMS_QUALITY3.get(randomIndex);
+                    case 4:
+                        randomIndex = random.nextInt(PASSIVE_ITEMS_QUALITY4.size());
+                        return PASSIVE_ITEMS_QUALITY4.get(randomIndex);
+                    case 5:
+                        randomIndex = random.nextInt(PASSIVE_ITEMS_QUALITY_LEGEND.size());
+                        return PASSIVE_ITEMS_QUALITY_LEGEND.get(randomIndex);
+                    default:
+                        return null;
+                }
+            }
+            else {
+                return null;
+            }
+        }
     }
 }

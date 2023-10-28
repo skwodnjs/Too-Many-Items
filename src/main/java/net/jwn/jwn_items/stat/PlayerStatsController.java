@@ -1,6 +1,6 @@
-package net.jwn.jwn_items.util;
+package net.jwn.jwn_items.stat;
 
-import net.jwn.jwn_items.stat.PlayerStatsProvider;
+import net.jwn.jwn_items.capability.PlayerStatsProvider;
 import net.jwn.jwn_items.stat.Stat;
 import net.minecraft.server.level.ServerPlayer;
 

@@ -1,9 +1,10 @@
-package net.jwn.jwn_items.networking.packet.skills;
+package net.jwn.jwn_items.skill.packet;
 
+import net.jwn.jwn_items.capability.CoolTimeProvider;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItems;
-import net.jwn.jwn_items.util.ModItemProvider;
+import net.jwn.jwn_items.item.ModItems.ModItemsProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,6 +31,14 @@ public class D1SkillC2SPacket {
             ServerPlayer player = context.getSender();
             ServerLevel level = player.serverLevel();
 
+            // cool time
+            player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(coolTime -> {
+                if (coolTime.getTime() == 0) {
+                    //
+                    coolTime.setTime(50 * 20);
+                }
+            });
+
             ArrayList<Integer> modItemList = new ArrayList<>();
             player.getInventory().items.forEach(itemStack -> {
                 if (itemStack.getItem() instanceof ModItem modItem) {
@@ -42,7 +51,7 @@ public class D1SkillC2SPacket {
             Random random = new Random();
             int targetIndex = modItemList.get(random.nextInt(modItemList.size()));
             ModItem oldItem = (ModItem) player.getInventory().getItem(targetIndex).getItem();
-            ModItem newItem = ModItemProvider.getRandomItem(oldItem.itemType, oldItem.grade);
+            ModItem newItem = ModItemsProvider.getRandomItem(oldItem.itemType, oldItem.quality);
             player.getInventory().setItem(targetIndex, newItem.getDefaultInstance());
         });
         return true;

@@ -1,15 +1,10 @@
 package net.jwn.jwn_items.event;
 
 import net.jwn.jwn_items.Main;
-import net.jwn.jwn_items.event.custom.ModItemUsedEvent;
+import net.jwn.jwn_items.capability.*;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
-import net.jwn.jwn_items.inventory.MyStuffProvider;
-import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.StatSyncS2CPacket;
-import net.jwn.jwn_items.stat.PlayerStats;
-import net.jwn.jwn_items.stat.PlayerStatsProvider;
-import net.jwn.jwn_items.stat.Stat;
 import net.jwn.jwn_items.stat.StatType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,14 +14,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID)
 public class ModEvents {
+    @SubscribeEvent
+    public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
+        if (event.side == LogicalSide.SERVER) {
+            event.player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
+        }
+    }
+
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
@@ -35,6 +39,9 @@ public class ModEvents {
             }
             if (!event.getObject().getCapability(MyStuffProvider.myStuffCapability).isPresent()) {
                 event.addCapability(new ResourceLocation(Main.MOD_ID, "my_stuff"), new MyStuffProvider());
+            }
+            if (!event.getObject().getCapability(CoolTimeProvider.coolTimeCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "cool_time"), new CoolTimeProvider());
             }
         }
     }

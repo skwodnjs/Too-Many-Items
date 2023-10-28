@@ -1,6 +1,6 @@
 package net.jwn.jwn_items.networking.packet;
 
-import net.jwn.jwn_items.stat.PlayerStatsProvider;
+import net.jwn.jwn_items.capability.PlayerStatsProvider;
 import net.jwn.jwn_items.stat.Stat;
 import net.jwn.jwn_items.stat.StatType;
 import net.minecraft.client.Minecraft;

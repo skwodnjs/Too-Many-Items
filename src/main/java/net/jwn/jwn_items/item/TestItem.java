@@ -1,8 +1,7 @@
 package net.jwn.jwn_items.item;
 
-import net.jwn.jwn_items.inventory.MyStuffProvider;
-import net.jwn.jwn_items.stat.PlayerStatsProvider;
-import net.jwn.jwn_items.stat.StatType;
+import net.jwn.jwn_items.capability.MyStuffProvider;
+import net.jwn.jwn_items.capability.PlayerStatsProvider;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;

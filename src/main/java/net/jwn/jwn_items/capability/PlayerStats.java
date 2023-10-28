@@ -1,12 +1,13 @@
-package net.jwn.jwn_items.stat;
+package net.jwn.jwn_items.capability;
 
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
+import net.jwn.jwn_items.stat.Stat;
+import net.jwn.jwn_items.stat.StatType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class PlayerStats {
     private float[] playerStats = new float[15];

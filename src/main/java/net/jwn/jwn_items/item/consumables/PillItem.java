@@ -6,7 +6,7 @@ import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.stat.Stat;
 import net.jwn.jwn_items.stat.StatType;
-import net.jwn.jwn_items.util.PlayerStatsController;
+import net.jwn.jwn_items.stat.PlayerStatsController;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,8 +34,8 @@ public class PillItem extends ModItem {
             StatType.MOVEMENT_SPEED_BY_CONSUMABLES
     );
 
-    public PillItem(Properties pProperties, int grade, int ID) {
-        super(pProperties, ItemType.CONSUMABLES, grade, ID);
+    public PillItem(Properties pProperties, int quality, int ID) {
+        super(pProperties, ItemType.CONSUMABLES, quality, ID);
     }
 
     protected void playSound(Level level, Player player, SoundEvent soundEvent, float volume, float pitch) {

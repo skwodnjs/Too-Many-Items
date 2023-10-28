@@ -1,6 +1,7 @@
-package net.jwn.jwn_items.networking.packet.skills;
+package net.jwn.jwn_items.skill;
 
 import net.jwn.jwn_items.networking.ModMessages;
+import net.jwn.jwn_items.skill.packet.D1SkillC2SPacket;
 import net.minecraft.world.entity.player.Player;
 
 public class ModSkills {

@@ -1,4 +1,4 @@
-package net.jwn.jwn_items.inventory;
+package net.jwn.jwn_items.capability;
 
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
@@ -7,9 +7,17 @@ import net.minecraft.nbt.CompoundTag;
 import java.util.Arrays;
 
 public class MyStuff {
-    int[] myStuffForActive = new int[30];
-    int[] myStuffForPassive = new int[5];
-    boolean passiveLimit = false;
+    int[] myStuffForActive = new int[5];
+    int[] myStuffForPassive = new int[30];
+    boolean passiveLimit = true;
+
+    public int[] getMyStuffForActive() {
+        return myStuffForActive;
+    }
+
+    public int[] getMyStuffForPassive() {
+        return myStuffForPassive;
+    }
 
     private final int LIMIT = 10000;
 
@@ -30,17 +38,18 @@ public class MyStuff {
         return -1;
     }
 
-    private boolean ifSlotFull(ItemType itemType) {
+    private boolean isSlotFull(ItemType itemType) {
         return switch (itemType) {
-            case ACTIVE -> myStuffForActive[29] != 0;
-            case PASSIVE -> myStuffForPassive[4] != 0;
+            case ACTIVE -> passiveLimit ? myStuffForActive[2] != 0 : myStuffForActive[myStuffForActive.length - 1] != 0;
+            case PASSIVE -> myStuffForPassive[myStuffForPassive.length - 1] != 0;
             case CONSUMABLES -> true;
         };
     }
 
-    private int getLastSlot(ItemType itemType) {
+    public int getLastEmptySlot(ItemType itemType) {
         if (itemType == ItemType.ACTIVE) {
-            for (int i = 0; i < myStuffForActive.length; i++) {
+            int n = (passiveLimit) ? 3 : myStuffForActive.length;
+            for (int i = 0; i < n; i++) {
                 if (myStuffForActive[i] == 0) return i;
             }
         } else if (itemType == ItemType.PASSIVE) {
@@ -54,6 +63,22 @@ public class MyStuff {
         return (myStuffForActive[0] % 1000) / 10;
     }
 
+    public void changeMainActiveItem() {
+        int n = 0;
+        for (int i = 0; i < myStuffForActive.length; i++) {
+            if (myStuffForActive[i] != 0) {
+                n++;
+            }
+        }
+        if (n == 0) return;
+
+        int mainItem = myStuffForActive[0];
+        for (int i = 0; i < n - 1; i++) {
+            myStuffForActive[i] = myStuffForActive[i+1];
+        }
+        myStuffForActive[n - 1] = mainItem;
+    }
+
     public void reset() {
         Arrays.fill(myStuffForActive, 0);
         Arrays.fill(myStuffForPassive, 0);
@@ -61,7 +86,7 @@ public class MyStuff {
     }
 
     public boolean addItem(ModItem item) {
-        if (ifSlotFull(item.itemType)) return false;
+        if (isSlotFull(item.itemType)) return false;
         if (item.itemType == ItemType.CONSUMABLES) return false;
 
         int slot = getSlotIfHas(item);
@@ -74,10 +99,12 @@ public class MyStuff {
                 level = myStuffForPassive[slot] % 10;
             }
         } else {
-            slot = getLastSlot(item.itemType);
+            slot = getLastEmptySlot(item.itemType);
         }
 
         if (level >= 5) return false;
+
+        System.out.println(slot);
 
         int value = LIMIT + item.ID * 10 + level + 1;
         if (item.itemType == ItemType.ACTIVE) {
@@ -85,22 +112,23 @@ public class MyStuff {
         } else if (item.itemType == ItemType.PASSIVE) {
             myStuffForPassive[slot] = value;
         }
-
         return true;
     }
 
     public boolean removeItem(ItemType itemType, int slot) {
         if (slot < 0) return false;
         else if (itemType == ItemType.CONSUMABLES) return false;
-        else if (itemType == ItemType.ACTIVE && slot > 5) return false;
-        else if (itemType == ItemType.PASSIVE && slot > 30) return false;
+        else if (itemType == ItemType.ACTIVE && slot >= myStuffForActive.length) return false;
+        else if (itemType == ItemType.PASSIVE && slot >= myStuffForPassive.length) return false;
 
         if (itemType == ItemType.ACTIVE) {
-            for (int i = slot; i < myStuffForActive.length; i++) {
+            myStuffForActive[slot] = 0;
+            for (int i = slot; i < myStuffForActive.length - 1; i++) {
                 myStuffForActive[i] = myStuffForActive[i+1];
             }
         } else if (itemType == ItemType.PASSIVE) {
-            for (int i = slot; i < myStuffForPassive.length; i++) {
+            myStuffForPassive[slot] = 0;
+            for (int i = slot; i < myStuffForPassive.length - 1; i++) {
                 myStuffForPassive[i] = myStuffForPassive[i+1];
             }
         } return true;

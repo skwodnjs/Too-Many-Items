@@ -1,6 +1,6 @@
 package net.jwn.jwn_items.item;
 
-import net.jwn.jwn_items.inventory.MyStuffProvider;
+import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
@@ -12,8 +12,8 @@ import net.minecraft.world.level.Level;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ModStuffItem extends ModItem {
-    public ModStuffItem(Properties pProperties, ItemType itemType, int grade, int ID) {
-        super(pProperties, itemType, grade, ID);
+    public ModStuffItem(Properties pProperties, ItemType itemType, int quality, int ID) {
+        super(pProperties, itemType, quality, ID);
     }
 
     @Override

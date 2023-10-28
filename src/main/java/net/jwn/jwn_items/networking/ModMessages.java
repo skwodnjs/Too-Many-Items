@@ -1,8 +1,11 @@
 package net.jwn.jwn_items.networking;
 
 import net.jwn.jwn_items.Main;
+import net.jwn.jwn_items.networking.packet.ChangeMainActiveItemC2SPacket;
 import net.jwn.jwn_items.networking.packet.StatSyncS2CPacket;
-import net.jwn.jwn_items.networking.packet.skills.D1SkillC2SPacket;
+import net.jwn.jwn_items.networking.packet.StatsC2SPacket;
+import net.jwn.jwn_items.networking.packet.StuffC2SPacket;
+import net.jwn.jwn_items.skill.packet.D1SkillC2SPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -34,6 +37,25 @@ public class ModMessages {
                 .consumerMainThread(StatSyncS2CPacket::handle)
                 .add();
 
+        net.messageBuilder(StatsC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(StatsC2SPacket::new)
+                .encoder(StatsC2SPacket::toBytes)
+                .consumerMainThread(StatsC2SPacket::handle)
+                .add();
+
+        net.messageBuilder(StuffC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(StuffC2SPacket::new)
+                .encoder(StuffC2SPacket::toBytes)
+                .consumerMainThread(StuffC2SPacket::handle)
+                .add();
+
+        net.messageBuilder(ChangeMainActiveItemC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ChangeMainActiveItemC2SPacket::new)
+                .encoder(ChangeMainActiveItemC2SPacket::toBytes)
+                .consumerMainThread(ChangeMainActiveItemC2SPacket::handle)
+                .add();
+
+        // SKILLS
         net.messageBuilder(D1SkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(D1SkillC2SPacket::new)
                 .encoder(D1SkillC2SPacket::toBytes)

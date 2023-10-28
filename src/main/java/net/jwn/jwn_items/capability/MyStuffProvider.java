@@ -1,4 +1,4 @@
-package net.jwn.jwn_items.inventory;
+package net.jwn.jwn_items.capability;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
