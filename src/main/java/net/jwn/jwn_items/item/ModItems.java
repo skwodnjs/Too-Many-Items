@@ -3,6 +3,9 @@ package net.jwn.jwn_items.item;
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.item.active.ModActiveItem;
 import net.jwn.jwn_items.item.consumables.PillItem;
+import net.jwn.jwn_items.item.passive.ModPassiveItem;
+import net.jwn.jwn_items.stat.Stat;
+import net.jwn.jwn_items.stat.StatType;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -10,22 +13,28 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MOD_ID);
 
     public static final RegistryObject<Item> TEST_ITEM = ITEMS.register("test",
-            () -> new TestItem(new Item.Properties()));
+            () -> new TestItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> PILL_ITEM = ITEMS.register("pill",
-            () -> new PillItem(new Item.Properties(), 0, 1));
+            () -> new PillItem(new Item.Properties().stacksTo(1), 0, 1));
 
     public static final RegistryObject<Item> D1_ITEM = ITEMS.register("d1",
-            () -> new ModActiveItem(new Item.Properties(), 0, 2));
+            () -> new ModActiveItem(new Item.Properties().stacksTo(1), 0, 2));
 
     public static final RegistryObject<Item> D6_ITEM = ITEMS.register("d6",
-            () -> new ModActiveItem(new Item.Properties(), 0, 3));
+            () -> new ModActiveItem(new Item.Properties().stacksTo(1), 0, 3));
+
+    public static final RegistryObject<Item> MUSTACHE_ITEM = ITEMS.register("mustache",
+            () -> new ModPassiveItem(new Item.Properties().stacksTo(1), 0, 4,
+                    Arrays.asList(new Stat(StatType.LUCK_BY_ITEM, 3))
+            ));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
@@ -48,7 +57,7 @@ public class ModItems {
 
         static {
             ACTIVE_ITEMS_QUALITY0.add((ModItem) ModItems.D1_ITEM.get());
-            ACTIVE_ITEMS_QUALITY0.add((ModItem) ModItems.D6_ITEM.get());
+            ACTIVE_ITEMS_QUALITY0.add((ModItem) ModItems.MUSTACHE_ITEM.get());
 
             //
         }

@@ -3,6 +3,7 @@ package net.jwn.jwn_items.event;
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.*;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
+import net.jwn.jwn_items.item.passive.Mustache;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.StatSyncS2CPacket;
 import net.jwn.jwn_items.stat.StatType;
@@ -27,8 +28,19 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
         if (event.side == LogicalSide.SERVER) {
+            // cool time
             event.player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
+
+            // mustache
+            Mustache.operate(event.player);
+
+            //
+        } else {
+
         }
+
+        // both side
+
     }
 
     @SubscribeEvent
