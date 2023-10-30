@@ -11,6 +11,9 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+import static net.jwn.jwn_items.util.Options.*;
+import static net.jwn.jwn_items.util.Options.PASSIVE_MAX;
+
 public class StuffC2SPacket {
     public static final int ID = ((ModItem) ModItems.D1_ITEM.get()).getItemID();
 
@@ -31,23 +34,23 @@ public class StuffC2SPacket {
             System.out.println("--- MY STUFF / SERVER SIDE ---");
             player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
                 System.out.println("--- ACTIVE ITEM ---");
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < (myStuff.getActiveLimit() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
                     System.out.printf("%d\t", myStuff.getMyStuffForActive()[i]);
                 }
                 System.out.println();
                 System.out.println("get ID of main active item: " + myStuff.getIDOfMainActiveItem());
 
                 System.out.println("--- PASSIVE ITEM ---");
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < PASSIVE_MAX / 3; i++) {
                     System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i]);
                 }
                 System.out.println();
-                for (int i = 0; i < 10; i++) {
-                    System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i + 10]);
+                for (int i = PASSIVE_MAX / 3; i < PASSIVE_MAX * 2 / 3; i++) {
+                    System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i]);
                 }
                 System.out.println();
-                for (int i = 0; i < 10; i++) {
-                    System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i + 20]);
+                for (int i = PASSIVE_MAX * 2 / 3; i < PASSIVE_MAX; i++) {
+                    System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i]);
                 }
                 System.out.println();
                 System.out.println("get last slot of passive item: " + myStuff.getLastEmptySlot(ItemType.PASSIVE));

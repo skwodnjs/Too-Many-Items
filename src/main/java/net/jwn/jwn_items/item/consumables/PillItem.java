@@ -83,7 +83,7 @@ public class PillItem extends ModItem {
                 Stat randomStat = new Stat(statTypes.get(index), sign * value);
                 float appliedValue = PlayerStatsController.addSingleStat((ServerPlayer) pPlayer, randomStat);
                 if (appliedValue != 0) {
-                    message += I18n.get("item." + Main.MOD_ID + ".message_" + randomStat.getStatType().getName())
+                    message += I18n.get("stat." + Main.MOD_ID + "." + randomStat.getStatType().getName())
                             + ((sign > 0) ? " +" : " -") + Math.abs(appliedValue) + " ";
                 }
             }

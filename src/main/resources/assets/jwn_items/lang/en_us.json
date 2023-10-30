@@ -1,4 +1,6 @@
 {
+  "title.jwn_items.my_stuff": "MY STUFF!",
+
   "item.jwn_items.test": "Test",
   "item.jwn_items.pill": "Pill",
   "item.jwn_items.coin": "Coin",
@@ -6,14 +8,14 @@
   "item.jwn_items.d6": "D6",
   "item.jwn_items.mustache": "Mustache",
 
-  "item.jwn_items.message_health": "Health",
-  "item.jwn_items.message_damage": "Damage",
-  "item.jwn_items.message_attack_speed": "Attack Speed",
-  "item.jwn_items.message_attack_range": "Attack Range",
-  "item.jwn_items.message_mining_speed": "Mining Speed",
-  "item.jwn_items.message_movement_speed": "Movement Speed",
-  "item.jwn_items.message_luck": "Luck",
-  "item.jwn_items.message_coin": "Coin",
+  "stat.jwn_items.health": "Health",
+  "stat.jwn_items.damage": "Damage",
+  "stat.jwn_items.attack_speed": "Attack Speed",
+  "stat.jwn_items.attack_range": "Attack Range",
+  "stat.jwn_items.mining_speed": "Mining Speed",
+  "stat.jwn_items.movement_speed": "Movement Speed",
+  "stat.jwn_items.luck": "Luck",
+  "stat.jwn_items.coin": "Coin",
 
   "item.jwn_items.message_no_stat_changed": "No Stat Changed",
 

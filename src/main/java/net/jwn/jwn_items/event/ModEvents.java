@@ -5,6 +5,8 @@ import net.jwn.jwn_items.capability.*;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
 import net.jwn.jwn_items.item.passive.Mustache;
 import net.jwn.jwn_items.networking.ModMessages;
+import net.jwn.jwn_items.networking.packet.MyStuffSyncS2CPacket;
+import net.jwn.jwn_items.networking.packet.OptionSyncS2CPacket;
 import net.jwn.jwn_items.networking.packet.StatSyncS2CPacket;
 import net.jwn.jwn_items.stat.StatType;
 import net.minecraft.resources.ResourceLocation;
@@ -54,6 +56,9 @@ public class ModEvents {
             }
             if (!event.getObject().getCapability(CoolTimeProvider.coolTimeCapability).isPresent()) {
                 event.addCapability(new ResourceLocation(Main.MOD_ID, "cool_time"), new CoolTimeProvider());
+            }
+            if (!event.getObject().getCapability(PlayerStatsProvider.playerStatsCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "player_options"), new PlayerOptionsProvider());
             }
         }
     }
@@ -163,15 +168,23 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getEntity().level().isClientSide) {
-            event.getEntity().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
+            Player player = event.getEntity();
+            // Player Stat
+            player.getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
                 float[] stats = new float[15];
                 for (int i = 0; i < stats.length; i++) {
                     stats[i] = playerStats.getValue(i);
                 }
-                MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(event.getEntity()));
+                MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
             });
-            event.getEntity().getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                // packet client my stuff 에다가 정보를 넣어야 함
+            // My Stuff
+            player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+                ModMessages.sendToPlayer(new MyStuffSyncS2CPacket(myStuff.getMyStuffForActive(), myStuff.getMyStuffForPassive(),
+                        myStuff.getActiveLock(), myStuff.getPassiveLock(), myStuff.getActiveLimit()), (ServerPlayer) player);
+            });
+            // Player Option
+            player.getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(playerOptions -> {
+                ModMessages.sendToPlayer(new OptionSyncS2CPacket(playerOptions.getStatHudOption(), playerOptions.getStatHudDetailOptions()), (ServerPlayer) player);
             });
         }
     }
@@ -180,10 +193,23 @@ public class ModEvents {
     public static void onClone(PlayerEvent.Clone event) {
         if(event.isWasDeath()) {
             event.getOriginal().reviveCaps();
+            // Player Stat
             event.getOriginal().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(oldStore -> {
                 event.getEntity().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                     MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(event.getEntity()));
+                });
+            });
+            // My Stuff
+            event.getOriginal().getCapability(MyStuffProvider.myStuffCapability).ifPresent(oldStore -> {
+                event.getEntity().getCapability(MyStuffProvider.myStuffCapability).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+            // Player Option
+            event.getOriginal().getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
                 });
             });
             event.getOriginal().invalidateCaps();

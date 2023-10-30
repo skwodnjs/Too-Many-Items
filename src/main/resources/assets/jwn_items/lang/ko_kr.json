@@ -1,4 +1,6 @@
 {
+  "title.jwn_items.my_stuff": "찾은 것들!",
+
   "item.jwn_items.test": "테스트용",
   "item.jwn_items.pill": "알약",
   "item.jwn_items.coin": "동전",
@@ -6,14 +8,14 @@
   "item.jwn_items.d6": "D6",
   "item.jwn_items.mustache": "콧수염",
 
-  "item.jwn_items.message_health": "체력",
-  "item.jwn_items.message_damage": "데미지",
-  "item.jwn_items.message_attack_speed": "공격속도",
-  "item.jwn_items.message_attack_range": "공격범위",
-  "item.jwn_items.message_mining_speed": "채굴속도",
-  "item.jwn_items.message_movement_speed": "이동속도",
-  "item.jwn_items.message_luck": "행운",
-  "item.jwn_items.message_coin": "동전",
+  "stat.jwn_items.health": "체력",
+  "stat.jwn_items.damage": "데미지",
+  "stat.jwn_items.attack_speed": "공격속도",
+  "stat.jwn_items.attack_range": "공격범위",
+  "stat.jwn_items.mining_speed": "채굴속도",
+  "stat.jwn_items.movement_speed": "이동속도",
+  "stat.jwn_items.luck": "행운",
+  "stat.jwn_items.coin": "동전",
 
   "item.jwn_items.message_no_stat_changed": "스텟 변동 없음",
 

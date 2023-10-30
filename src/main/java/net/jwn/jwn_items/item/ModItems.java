@@ -11,6 +11,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,21 +19,22 @@ import java.util.Random;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MOD_ID);
+    private static final int ITEM_STACK = 64;
 
     public static final RegistryObject<Item> TEST_ITEM = ITEMS.register("test",
-            () -> new TestItem(new Item.Properties().stacksTo(1)));
+            () -> new TestItem(new Item.Properties().stacksTo(ITEM_STACK)));
 
     public static final RegistryObject<Item> PILL_ITEM = ITEMS.register("pill",
-            () -> new PillItem(new Item.Properties().stacksTo(1), 0, 1));
+            () -> new PillItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 1));
 
     public static final RegistryObject<Item> D1_ITEM = ITEMS.register("d1",
-            () -> new ModActiveItem(new Item.Properties().stacksTo(1), 0, 2));
+            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 2));
 
     public static final RegistryObject<Item> D6_ITEM = ITEMS.register("d6",
-            () -> new ModActiveItem(new Item.Properties().stacksTo(1), 0, 3));
+            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 3));
 
     public static final RegistryObject<Item> MUSTACHE_ITEM = ITEMS.register("mustache",
-            () -> new ModPassiveItem(new Item.Properties().stacksTo(1), 0, 4,
+            () -> new ModPassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 4,
                     Arrays.asList(new Stat(StatType.LUCK_BY_ITEM, 3))
             ));
 
@@ -40,7 +42,7 @@ public class ModItems {
         ITEMS.register(eventBus);
     }
 
-    public class ModItemsProvider {
+    public static class ModItemsProvider {
         private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY0 = new ArrayList<>();
         private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY1 = new ArrayList<>();
         private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY2 = new ArrayList<>();
@@ -118,6 +120,17 @@ public class ModItems {
             else {
                 return null;
             }
+        }
+
+        @Nullable
+        public static ModItem getItemByID(int id) {
+            switch (id) {
+                case 1: return (ModItem) ModItems.PILL_ITEM.get();
+                case 2: return (ModItem) ModItems.D1_ITEM.get();
+                case 3: return (ModItem) ModItems.D6_ITEM.get();
+                case 4: return (ModItem) MUSTACHE_ITEM.get();
+            };
+            return null;
         }
     }
 }

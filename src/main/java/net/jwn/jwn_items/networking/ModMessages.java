@@ -1,10 +1,7 @@
 package net.jwn.jwn_items.networking;
 
 import net.jwn.jwn_items.Main;
-import net.jwn.jwn_items.networking.packet.ChangeMainActiveItemC2SPacket;
-import net.jwn.jwn_items.networking.packet.StatSyncS2CPacket;
-import net.jwn.jwn_items.networking.packet.StatsC2SPacket;
-import net.jwn.jwn_items.networking.packet.StuffC2SPacket;
+import net.jwn.jwn_items.networking.packet.*;
 import net.jwn.jwn_items.skill.packet.D1SkillC2SPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,6 +28,33 @@ public class ModMessages {
 
         INSTANCE = net;
 
+        // My Stuff Sync
+        net.messageBuilder(MyStuffSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(MyStuffSyncS2CPacket::new)
+                .encoder(MyStuffSyncS2CPacket::toBytes)
+                .consumerMainThread(MyStuffSyncS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(MyStuffSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(MyStuffSyncC2SPacket::new)
+                .encoder(MyStuffSyncC2SPacket::toBytes)
+                .consumerMainThread(MyStuffSyncC2SPacket::handle)
+                .add();
+
+        // Player Option Sync
+        net.messageBuilder(OptionSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(OptionSyncC2SPacket::new)
+                .encoder(OptionSyncC2SPacket::toBytes)
+                .consumerMainThread(OptionSyncC2SPacket::handle)
+                .add();
+
+        net.messageBuilder(OptionSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(OptionSyncS2CPacket::new)
+                .encoder(OptionSyncS2CPacket::toBytes)
+                .consumerMainThread(OptionSyncS2CPacket::handle)
+                .add();
+
+        // Player Stat Sync
         net.messageBuilder(StatSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(StatSyncS2CPacket::new)
                 .encoder(StatSyncS2CPacket::toBytes)
