@@ -1,6 +1,9 @@
 package net.jwn.jwn_items.capability;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CoolTime {
     int time = 0;
@@ -9,15 +12,18 @@ public class CoolTime {
         return time;
     }
 
-    public void setTime(int time) {
-        this.time = time;
-        System.out.println(time);
+    public void addTime(int time) {
+        this.time += time;
     }
 
     public void sub() {
         if (time > 0) {
             time -= 1;
         }
+    }
+
+    public boolean canUseSkill(int coolTime, int stack) {
+        return coolTime * (stack - 1) >= time;
     }
 
     public void copyFrom(CoolTime coolTime) {

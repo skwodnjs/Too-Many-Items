@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ModEvents {
     @SubscribeEvent
     public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
-        if (event.side == LogicalSide.SERVER) {
+        if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END) {
             // cool time
             event.player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
 
@@ -208,6 +208,12 @@ public class ModEvents {
             // Player Option
             event.getOriginal().getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(oldStore -> {
                 event.getEntity().getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+            // Cool Time
+            event.getOriginal().getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(oldStore -> {
+                event.getEntity().getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });

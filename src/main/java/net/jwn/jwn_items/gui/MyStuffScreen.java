@@ -24,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.Arrays;
 
+import static net.jwn.jwn_items.util.ModResourceLocations.*;
 import static net.jwn.jwn_items.util.Options.*;
 
 public class MyStuffScreen extends Screen {
@@ -45,8 +46,6 @@ public class MyStuffScreen extends Screen {
 
     private static final ResourceLocation BACKGROUND_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/my_stuff.png");
     private static final ResourceLocation BACKGROUND_UPGRADE_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/my_stuff_upgrade.png");
-    private static final ResourceLocation DAMAGE_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/damage.png");
-    private static final ResourceLocation NO_IMAGE_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/item/no_image.png");
 
     private void setting() {
         Player player = Minecraft.getInstance().player;
@@ -71,22 +70,22 @@ public class MyStuffScreen extends Screen {
         ImageWidget health, damage, attack_speed, attack_range, mining_speed, movement_speed, luck, coin;
         ImageButton mode;
 
-        health = new ImageWidget(leftPos + 13, topPos + 23, 12, 12, NO_IMAGE_RESOURCE);
+        health = new ImageWidget(leftPos + 13, topPos + 23, 12, 12, HEALTH_RESOURCE);
         damage = new ImageWidget(leftPos + 13, topPos + 36, 12, 12, DAMAGE_RESOURCE);
-        attack_speed = new ImageWidget(leftPos + 50, topPos + 23, 12, 12, NO_IMAGE_RESOURCE);
-        attack_range = new ImageWidget(leftPos + 50, topPos + 36, 12, 12, NO_IMAGE_RESOURCE);
-        mining_speed = new ImageWidget(leftPos + 87, topPos + 23, 12, 12, NO_IMAGE_RESOURCE);
-        movement_speed = new ImageWidget(leftPos + 87, topPos + 36, 12, 12, NO_IMAGE_RESOURCE);
-        luck = new ImageWidget(leftPos + 124, topPos + 23, 12, 12, NO_IMAGE_RESOURCE);
-        coin = new ImageWidget(leftPos + 124, topPos + 36, 12, 12, NO_IMAGE_RESOURCE);
+        attack_speed = new ImageWidget(leftPos + 50, topPos + 23, 12, 12, ATTACK_SPEED_RESOURCE);
+        attack_range = new ImageWidget(leftPos + 50, topPos + 36, 12, 12, ATTACK_RANGE_RESOURCE);
+        mining_speed = new ImageWidget(leftPos + 87, topPos + 23, 12, 12, MINING_SPEED_RESOURCE);
+        movement_speed = new ImageWidget(leftPos + 87, topPos + 36, 12, 12, MOVEMENT_SPEED_RESOURCE);
+        luck = new ImageWidget(leftPos + 124, topPos + 23, 12, 12, LUCK_RESOURCE);
+        coin = new ImageWidget(leftPos + 124, topPos + 36, 12, 12, COIN_RESOURCE);
 
-        health.setTooltip(Tooltip.create(Component.literal("health: " + (stats[0] + stats[7]) + "\n" + stats[7] + "increased by item")));
-        damage.setTooltip(Tooltip.create(Component.literal("damage: " + (stats[1] + stats[7]) + "\n" + stats[8] + "increased by item")));
-        attack_speed.setTooltip(Tooltip.create(Component.literal("attack_speed: " + (stats[2] + stats[7]) + "\n" + stats[9] + "increased by item")));
-        attack_range.setTooltip(Tooltip.create(Component.literal("attack_range: " + (stats[3] + stats[7]) + "\n" + stats[10] + "increased by item")));
-        mining_speed.setTooltip(Tooltip.create(Component.literal("mining_speed: " + (stats[4] + stats[7]) + "\n" + stats[11] + "increased by item")));
-        movement_speed.setTooltip(Tooltip.create(Component.literal("movement_speed: " + (stats[5] + stats[7]) + "\n" + stats[12] + "increased by item")));
-        luck.setTooltip(Tooltip.create(Component.literal("luck: " + (stats[6] + stats[7]) + "\n" + stats[13] + "increased by item")));
+        health.setTooltip(Tooltip.create(Component.literal("health: " + (stats[0] + stats[7]) + "\n" + stats[7] + " increased by item")));
+        damage.setTooltip(Tooltip.create(Component.literal("damage: " + (stats[1] + stats[7]) + "\n" + stats[8] + " increased by item")));
+        attack_speed.setTooltip(Tooltip.create(Component.literal("attack_speed: " + (stats[2] + stats[7]) + "\n" + stats[9] + " increased by item")));
+        attack_range.setTooltip(Tooltip.create(Component.literal("attack_range: " + (stats[3] + stats[7]) + "\n" + stats[10] + " increased by item")));
+        mining_speed.setTooltip(Tooltip.create(Component.literal("mining_speed: " + (stats[4] + stats[7]) + "\n" + stats[11] + " increased by item")));
+        movement_speed.setTooltip(Tooltip.create(Component.literal("movement_speed: " + (stats[5] + stats[7]) + "\n" + stats[12] + " increased by item")));
+        luck.setTooltip(Tooltip.create(Component.literal("luck: " + (stats[6] + stats[7]) + "\n" + stats[13] + " increased by item")));
         coin.setTooltip(Tooltip.create(Component.literal("coin: " + stats[14])));
 
         addRenderableWidget(health);
@@ -135,8 +134,7 @@ public class MyStuffScreen extends Screen {
     public void drawSlot(int pX, int pY, int itemID, int slot, boolean locked, boolean deleted) {
         ModItem item = ModItems.ModItemsProvider.getItemByID(itemID);
         assert item != null;
-//        ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + item + ".png");
-        ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/no_image.png");
+        ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + item + ".png");
         if (deleted) {
             ImageButton deletedBackground = new ImageButton(pX - 1, pY - 1, 18, 18, 36, 166, 0, BACKGROUND_RESOURCE, 256, 256, pButton -> makeItemRemovable(item.itemType, slot, false));
             addRenderableWidget(deletedBackground);
@@ -154,6 +152,8 @@ public class MyStuffScreen extends Screen {
                     BACKGROUND_RESOURCE, 256, 256, pButton -> lockItem(item.itemType, slot, false));
             addRenderableWidget(lock);
         }
+
+        // level, 그 전에 cool time 표기부터
     }
 
     private boolean isRemovableItemExists() {

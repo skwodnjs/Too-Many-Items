@@ -4,8 +4,10 @@ import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.capability.PlayerOptionsProvider;
 import net.jwn.jwn_items.gui.MyStuffScreen;
+import net.jwn.jwn_items.hud.ActiveItemHubOverlay;
 import net.jwn.jwn_items.hud.StatHudOverLay;
 import net.jwn.jwn_items.item.ItemType;
+import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.ChangeMainActiveItemC2SPacket;
 import net.jwn.jwn_items.networking.packet.OptionSyncC2SPacket;
@@ -34,7 +36,7 @@ public class ClientEvents {
             Player player = Minecraft.getInstance().player;
             if (KeyBindings.ACTIVE_SKILL_KEY.consumeClick()) {
                 player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                    ModSkills.useSkill(player, myStuff.getActiveSlots()[0].itemID);
+                    ModSkills.useSkill(player, myStuff.getActiveSlots()[0].itemID, myStuff.getActiveSlots()[0].level);
                 });
             } else if (KeyBindings.MY_STUFF_KEY.consumeClick()) {
                 Minecraft.getInstance().setScreen(new MyStuffScreen());
@@ -108,6 +110,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onRegisterGuiOverlaysEvent(RegisterGuiOverlaysEvent event) {
             event.registerAboveAll("stat_hud", StatHudOverLay.STAT_HUD);
+            event.registerAboveAll("active_item_hud", ActiveItemHubOverlay.ACTIVE_ITEM_HUD);
         }
     }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "jwn_items:item/no_image"
+    "layer0": "jwn_items:item/d6"
   }
 }

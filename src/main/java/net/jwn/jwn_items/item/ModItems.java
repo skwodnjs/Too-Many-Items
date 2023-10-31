@@ -28,10 +28,10 @@ public class ModItems {
             () -> new PillItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 1));
 
     public static final RegistryObject<Item> D1_ITEM = ITEMS.register("d1",
-            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 2));
+            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 2, 50, 1, 10));
 
     public static final RegistryObject<Item> D6_ITEM = ITEMS.register("d6",
-            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 3));
+            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 3, 50, 1, 10));
 
     public static final RegistryObject<Item> MUSTACHE_ITEM = ITEMS.register("mustache",
             () -> new ModPassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 4,
@@ -59,8 +59,8 @@ public class ModItems {
 
         static {
             ACTIVE_ITEMS_QUALITY0.add((ModItem) ModItems.D1_ITEM.get());
-            ACTIVE_ITEMS_QUALITY0.add((ModItem) ModItems.MUSTACHE_ITEM.get());
-
+            ACTIVE_ITEMS_QUALITY0.add((ModItem) ModItems.D6_ITEM.get());
+            PASSIVE_ITEMS_QUALITY0.add((ModItem) ModItems.MUSTACHE_ITEM.get());
             //
         }
 

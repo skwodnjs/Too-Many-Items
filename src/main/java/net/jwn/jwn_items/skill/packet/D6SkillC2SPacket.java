@@ -17,14 +17,14 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
-public class D1SkillC2SPacket {
-    public static final int ID = ((ModItem) ModItems.D1_ITEM.get()).getItemID();
+public class D6SkillC2SPacket {
+    public static final int ID = ((ModItem) ModItems.D6_ITEM.get()).getItemID();
     public int itemLevel;
 
-    public D1SkillC2SPacket(int itemLevel) {
+    public D6SkillC2SPacket(int itemLevel) {
         this.itemLevel = itemLevel;
     }
-    public D1SkillC2SPacket(FriendlyByteBuf buf) {
+    public D6SkillC2SPacket(FriendlyByteBuf buf) {
         this.itemLevel = buf.readInt();
     }
     public void toBytes(FriendlyByteBuf buf) {
@@ -63,11 +63,12 @@ public class D1SkillC2SPacket {
                         }
                     }
                 });
-                Random random = new Random();
-                int targetIndex = modItemList.get(random.nextInt(modItemList.size()));
-                ModItem oldItem = (ModItem) player.getInventory().getItem(targetIndex).getItem();
-                ModItem newItem = ModItemsProvider.getRandomItem(oldItem.itemType, oldItem.quality);
-                player.getInventory().setItem(targetIndex, newItem.getDefaultInstance());
+                for (int index : modItemList) {
+                    ModItem oldItem = (ModItem) player.getInventory().getItem(index).getItem();
+                    System.out.println(oldItem);
+                    ModItem newItem = ModItemsProvider.getRandomItem(oldItem.itemType, oldItem.quality);
+                    player.getInventory().setItem(index, newItem.getDefaultInstance());
+                }
             }
         });
         return true;
