@@ -179,8 +179,7 @@ public class ModEvents {
             });
             // My Stuff
             player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                ModMessages.sendToPlayer(new MyStuffSyncS2CPacket(myStuff.getMyStuffForActive(), myStuff.getMyStuffForPassive(),
-                        myStuff.getActiveLock(), myStuff.getPassiveLock(), myStuff.getActiveLimit()), (ServerPlayer) player);
+                ModMessages.sendToPlayer(new MyStuffSyncS2CPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.getActiveUpgraded()), (ServerPlayer) player);
             });
             // Player Option
             player.getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(playerOptions -> {

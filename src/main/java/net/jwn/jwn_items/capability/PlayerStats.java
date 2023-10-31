@@ -17,6 +17,14 @@ public class PlayerStats {
     public static final float MIN_STAT = 0.0f;
     public static final float MAX_COIN = 99.0f;
 
+    public float[] getAll() {
+        float[] toReturn = new float[15];
+        for (int i = 0; i < 15; i++) {
+            toReturn[i] = getValue(i);
+        }
+        return toReturn;
+    }
+
     public float getValue(StatType statType) {
         int index = statType.ordinal();
         return playerStats[index];

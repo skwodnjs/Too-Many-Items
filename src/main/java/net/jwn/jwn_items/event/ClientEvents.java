@@ -2,12 +2,10 @@ package net.jwn.jwn_items.event;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.MyStuffProvider;
-import net.jwn.jwn_items.capability.PlayerOptions;
 import net.jwn.jwn_items.capability.PlayerOptionsProvider;
 import net.jwn.jwn_items.gui.MyStuffScreen;
 import net.jwn.jwn_items.hud.StatHudOverLay;
 import net.jwn.jwn_items.item.ItemType;
-import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.ChangeMainActiveItemC2SPacket;
 import net.jwn.jwn_items.networking.packet.OptionSyncC2SPacket;
@@ -36,33 +34,33 @@ public class ClientEvents {
             Player player = Minecraft.getInstance().player;
             if (KeyBindings.ACTIVE_SKILL_KEY.consumeClick()) {
                 player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                    ModSkills.useSkill(player, myStuff.getIDOfMainActiveItem());
+                    ModSkills.useSkill(player, myStuff.getActiveSlots()[0].itemID);
                 });
             } else if (KeyBindings.MY_STUFF_KEY.consumeClick()) {
                 Minecraft.getInstance().setScreen(new MyStuffScreen());
-                System.out.println("--- MY STUFFS /CLIENT SIDE ---");
+                System.out.println("--- MY STUFFS / CLIENT SIDE ---");
                 player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
                     System.out.println("--- ACTIVE ITEM ---");
-                    for (int i = 0; i < (myStuff.getActiveLimit() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
-                        System.out.printf("%d\t", myStuff.getMyStuffForActive()[i]);
+                    for (int i = 0; i < (myStuff.getActiveUpgraded() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
+                        System.out.printf("%d\t", myStuff.getActiveSlots()[i].itemID);
                     }
                     System.out.println();
-                    System.out.println("get ID of main active item: " + myStuff.getIDOfMainActiveItem());
+                    System.out.println("get ID of main active item: " + myStuff.getActiveSlots()[0].itemID);
 
                     System.out.println("--- PASSIVE ITEM ---");
                     for (int i = 0; i < PASSIVE_MAX / 3; i++) {
-                        System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i]);
+                        System.out.printf("%d\t", myStuff.getPassiveSlots()[i].itemID);
                     }
                     System.out.println();
                     for (int i = PASSIVE_MAX / 3; i < PASSIVE_MAX * 2 / 3; i++) {
-                        System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i]);
+                        System.out.printf("%d\t", myStuff.getPassiveSlots()[i].itemID);
                     }
                     System.out.println();
                     for (int i = PASSIVE_MAX * 2 / 3; i < PASSIVE_MAX; i++) {
-                        System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i]);
+                        System.out.printf("%d\t", myStuff.getPassiveSlots()[i].itemID);
                     }
                     System.out.println();
-                    System.out.println("get last slot of passive item: " + myStuff.getLastEmptySlot(ItemType.PASSIVE));
+                    System.out.println("get last slot of passive item: " + myStuff.getEmptySlot(ItemType.PASSIVE));
                 });
                 ModMessages.sendToServer(new StuffC2SPacket());
             } else if (KeyBindings.STATS_KEY.consumeClick()) {

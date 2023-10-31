@@ -34,26 +34,26 @@ public class StuffC2SPacket {
             System.out.println("--- MY STUFF / SERVER SIDE ---");
             player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
                 System.out.println("--- ACTIVE ITEM ---");
-                for (int i = 0; i < (myStuff.getActiveLimit() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
-                    System.out.printf("%d\t", myStuff.getMyStuffForActive()[i]);
+                for (int i = 0; i < (myStuff.getActiveUpgraded() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
+                    System.out.printf("%d\t", myStuff.getActiveSlots()[i].itemID);
                 }
                 System.out.println();
-                System.out.println("get ID of main active item: " + myStuff.getIDOfMainActiveItem());
+                System.out.println("get ID of main active item: " + myStuff.getActiveSlots()[0].itemID);
 
                 System.out.println("--- PASSIVE ITEM ---");
                 for (int i = 0; i < PASSIVE_MAX / 3; i++) {
-                    System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i]);
+                    System.out.printf("%d\t", myStuff.getPassiveSlots()[i].itemID);
                 }
                 System.out.println();
                 for (int i = PASSIVE_MAX / 3; i < PASSIVE_MAX * 2 / 3; i++) {
-                    System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i]);
+                    System.out.printf("%d\t", myStuff.getPassiveSlots()[i].itemID);
                 }
                 System.out.println();
                 for (int i = PASSIVE_MAX * 2 / 3; i < PASSIVE_MAX; i++) {
-                    System.out.printf("%d\t", myStuff.getMyStuffForPassive()[i]);
+                    System.out.printf("%d\t", myStuff.getPassiveSlots()[i].itemID);
                 }
                 System.out.println();
-                System.out.println("get last slot of passive item: " + myStuff.getLastEmptySlot(ItemType.PASSIVE));
+                System.out.println("get last slot of passive item: " + myStuff.getEmptySlot(ItemType.PASSIVE));
             });
         });
         return true;

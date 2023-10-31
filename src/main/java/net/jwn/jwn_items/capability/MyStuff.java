@@ -1,5 +1,6 @@
 package net.jwn.jwn_items.capability;
 
+import net.jwn.jwn_items.inventory.ModSlot;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
 import net.minecraft.nbt.CompoundTag;
@@ -9,59 +10,68 @@ import java.util.Arrays;
 import static net.jwn.jwn_items.util.Options.*;
 
 public class MyStuff {
+    int[] activeItemID = new int[ACTIVE_MAX_UPGRADE];
+    int[] activeItemLevel = new int[ACTIVE_MAX_UPGRADE];
+    boolean[] activeItemLocked = new boolean[ACTIVE_MAX_UPGRADE];
 
-    int[] myStuffForActive = new int[ACTIVE_MAX_UPGRADE];
-    int[] myStuffForPassive = new int[PASSIVE_MAX];
-    boolean[] activeLock = new boolean[ACTIVE_MAX_UPGRADE];
-    boolean[] passiveLock = new boolean[PASSIVE_MAX];
-    boolean activeLimit = true;
+    int[] passiveItemID = new int[PASSIVE_MAX];
+    int[] passiveItemLevel = new int[PASSIVE_MAX];
+    boolean[] passiveItemLocked = new boolean[PASSIVE_MAX];
 
-    public void set(int[] myStuffForActive, int[] myStuffForPassive, boolean[] activeLock, boolean[] passiveLock, boolean activeLimit) {
-        this.myStuffForActive = myStuffForActive;
-        this.myStuffForPassive = myStuffForPassive;
-        this.activeLock = activeLock;
-        this.passiveLock = passiveLock;
-        this.activeLimit = activeLimit;
+    boolean activeUpgraded = false;
+
+    public void set(ModSlot[] activeSlots, ModSlot[] passiveSlots, boolean activeUpgraded) {
+        for (int i = 0; i < activeSlots.length; i++) {
+            this.activeItemID[i] = activeSlots[i].itemID;
+            this.activeItemLevel[i] = activeSlots[i].level;
+            this.activeItemLocked[i] = activeSlots[i].locked;
+        }
+        for (int i = 0; i < passiveSlots.length; i++) {
+            this.passiveItemID[i] = passiveSlots[i].itemID;
+            this.passiveItemLevel[i] = passiveSlots[i].level;
+            this.passiveItemLocked[i] = passiveSlots[i].locked;
+        }
+        this.activeUpgraded = activeUpgraded;
     }
 
-    public boolean getActiveLimit() {
-        return activeLimit;
+    public void lockActiveSlot(int index, boolean locked) {
+        activeItemLocked[index] = locked;
     }
 
-    public boolean[] getActiveLock() {
-        return activeLock;
+    public void lockPassiveSlot(int index, boolean locked) {
+        passiveItemLocked[index] = locked;
     }
 
-    public boolean[] getPassiveLock() {
-        return passiveLock;
+    public ModSlot[] getActiveSlots() {
+        ModSlot[] toReturn = new ModSlot[ACTIVE_MAX_UPGRADE];
+        for (int i = 0; i < ACTIVE_MAX_UPGRADE; i++) {
+            toReturn[i] = new ModSlot(activeItemID[i], activeItemLevel[i], activeItemLocked[i]);
+        }
+        return toReturn;
     }
 
-    public void setActiveLock(int slot, boolean lock) {
-        this.activeLock[slot] = lock;
+    public ModSlot[] getPassiveSlots() {
+        ModSlot[] toReturn = new ModSlot[PASSIVE_MAX];
+        for (int i = 0; i < PASSIVE_MAX; i++) {
+            toReturn[i] = new ModSlot(passiveItemID[i], passiveItemLevel[i], passiveItemLocked[i]);
+        }
+        return toReturn;
     }
 
-    public void setPassiveLock(int slot, boolean lock) {
-        this.passiveLock[slot] = lock;
-    }
-
-    public int[] getMyStuffForActive() {
-        return myStuffForActive;
-    }
-
-    public int[] getMyStuffForPassive() {
-        return myStuffForPassive;
+    public boolean getActiveUpgraded() {
+        return activeUpgraded;
     }
 
     private int getSlotIfHas(ModItem item) {
         if (item.itemType == ItemType.ACTIVE) {
-            for (int i = 0; i < myStuffForActive.length; i++) {
-                if (myStuffForActive[i] / 10 == item.ID) {
+            for (int i = 0; i < ACTIVE_MAX_UPGRADE; i++) {
+                if (activeItemID[i] == item.ID) {
                     return i;
                 }
             }
         } else if (item.itemType == ItemType.PASSIVE) {
-            for (int i = 0; i < myStuffForPassive.length; i++) {
-                if (myStuffForPassive[i] / 10 == item.ID) {
+            for (int i = 0; i < PASSIVE_MAX; i++) {
+                if (passiveItemID[i] == item.ID) {
                     return i;
                 }
             }
@@ -71,144 +81,138 @@ public class MyStuff {
 
     private boolean isSlotFull(ItemType itemType) {
         return switch (itemType) {
-            case ACTIVE -> activeLimit ? myStuffForActive[ACTIVE_MAX - 1] != 0 : myStuffForActive[ACTIVE_MAX_UPGRADE - 1] != 0;
-            case PASSIVE -> myStuffForPassive[PASSIVE_MAX - 1] != 0;
+            case ACTIVE -> activeUpgraded ? activeItemID[ACTIVE_MAX_UPGRADE - 1] != 0 : activeItemID[ACTIVE_MAX - 1] != 0;
+            case PASSIVE -> passiveItemID[PASSIVE_MAX - 1] != 0;
             case CONSUMABLES -> true;
         };
     }
 
-    public int getLastEmptySlot(ItemType itemType) {
+    public int getEmptySlot(ItemType itemType) {
         if (itemType == ItemType.ACTIVE) {
-            int active_max = (activeLimit) ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE;
+            int active_max = (activeUpgraded) ? ACTIVE_MAX_UPGRADE : ACTIVE_MAX;
             for (int i = 0; i < active_max; i++) {
-                if (myStuffForActive[i] == 0) return i;
+                if (activeItemID[i] == 0) return i;
             }
         } else if (itemType == ItemType.PASSIVE) {
             for (int i = 0; i < PASSIVE_MAX; i++) {
-                if (myStuffForPassive[i] == 0) return i;
+                if (passiveItemID[i] == 0) return i;
             }
         } return -1;
     }
 
-    public int getIDOfMainActiveItem() {
-        return myStuffForActive[0] / 10;
-    }
-
     public void changeMainActiveItem() {
-        int active_item_num = 0;
-        for (int i = 0; i < myStuffForActive.length; i++) {
-            if (myStuffForActive[i] != 0) {
-                active_item_num++;
+        int num = 0;
+        for (int i = 0; i < ACTIVE_MAX_UPGRADE; i++) {
+            if (activeItemID[i] != 0) {
+                num++;
             }
         }
-        if (active_item_num == 0) return;
+        if (num == 0) return;
 
-        int mainItem = myStuffForActive[0];
-        boolean mainLock = activeLock[0];
-        for (int i = 0; i < active_item_num - 1; i++) {
-            myStuffForActive[i] = myStuffForActive[i+1];
-            activeLock[i] = activeLock[i+1];
+        ModSlot mainItem = new ModSlot(activeItemID[0], activeItemLevel[0], activeItemLocked[0]);
+        for (int i = 0; i < num - 1; i++) {
+            activeItemID[i] = activeItemID[i+1];
+            activeItemLevel[i] = activeItemLevel[i+1];
+            activeItemLocked[i] = activeItemLocked[i+1];
         }
-        myStuffForActive[active_item_num - 1] = mainItem;
-        activeLock[active_item_num - 1] = mainLock;
+        activeItemID[num - 1] = mainItem.itemID;
+        activeItemLevel[num - 1] = mainItem.level;
+        activeItemLocked[num - 1] = mainItem.locked;
     }
 
     public void reset() {
-        Arrays.fill(myStuffForActive, 0);
-        Arrays.fill(myStuffForPassive, 0);
-        Arrays.fill(activeLock, false);
-        Arrays.fill(passiveLock, false);
-        activeLimit = false;
+        Arrays.fill(activeItemID, 0);
+        Arrays.fill(activeItemLevel, 0);
+        Arrays.fill(activeItemLocked, false);
+        Arrays.fill(passiveItemID, 0);
+        Arrays.fill(passiveItemLevel, 0);
+        Arrays.fill(passiveItemLocked, false);
+        activeUpgraded = false;
     }
 
     public boolean addItem(ModItem item) {
         if (isSlotFull(item.itemType)) return false;
         if (item.itemType == ItemType.CONSUMABLES) return false;
 
-        int slot = getSlotIfHas(item);
-        int level = 0;
-
-        if (slot != -1) {
-            if (item.itemType == ItemType.ACTIVE) {
-                level = myStuffForActive[slot] % 10;
-            } else if (item.itemType == ItemType.PASSIVE) {
-                level = myStuffForPassive[slot] % 10;
-            }
+        int index;
+        if (getSlotIfHas(item) == -1)  {
+            index = getEmptySlot(item.itemType);
         } else {
-            slot = getLastEmptySlot(item.itemType);
+            index = getSlotIfHas(item);
         }
 
-        if (level >= 5) return false;
-
-        int value = item.ID * 10 + level + 1;
+        int level;
         if (item.itemType == ItemType.ACTIVE) {
-            myStuffForActive[slot] = value;
-        } else if (item.itemType == ItemType.PASSIVE) {
-            myStuffForPassive[slot] = value;
+            level = activeItemLevel[index];
+            if (level >= 5) return false;
+            activeItemID[index] = item.ID;
+            activeItemLevel[index] = level + 1;
+        } else {
+            level = passiveItemLevel[index];
+            if (level >= 5) return false;
+            passiveItemID[index] = item.ID;
+            passiveItemLevel[index] = level + 1;
         }
         return true;
     }
 
-    public boolean removeItem(ItemType itemType, int slot) {
-        if (slot < 0) return false;
-        else if (itemType == ItemType.CONSUMABLES) return false;
-        else if (itemType == ItemType.ACTIVE && slot >= ACTIVE_MAX_UPGRADE) return false;
-        else if (itemType == ItemType.PASSIVE && slot >= PASSIVE_MAX) return false;
-
+    public void removeItem(ItemType itemType, int index) {
         if (itemType == ItemType.ACTIVE) {
-            myStuffForActive[slot] = 0;
-            activeLock[slot] = false;
-            for (int i = slot; i < ACTIVE_MAX_UPGRADE - 1; i++) {
-                myStuffForActive[i] = myStuffForActive[i+1];
-                activeLock[i] = activeLock[i+1];
+            for (int i = index; i < ACTIVE_MAX_UPGRADE - 1; i++) {
+                activeItemID[i] = activeItemID[i+1];
+                activeItemLevel[i] = activeItemLevel[i+1];
+                activeItemLocked[i] = activeItemLocked[i+1];
             }
+            activeItemID[ACTIVE_MAX_UPGRADE - 1] = 0;
+            activeItemLevel[ACTIVE_MAX_UPGRADE - 1] = 0;
+            activeItemLocked[ACTIVE_MAX_UPGRADE - 1] = false;
         } else if (itemType == ItemType.PASSIVE) {
-            myStuffForPassive[slot] = 0;
-            passiveLock[slot] = false;
-            for (int i = slot; i < PASSIVE_MAX - 1; i++) {
-                myStuffForPassive[i] = myStuffForPassive[i+1];
-                passiveLock[i] = passiveLock[i+1];
+            for (int i = index; i < PASSIVE_MAX - 1; i++) {
+                passiveItemID[i] = passiveItemID[i+1];
+                passiveItemLevel[i] = passiveItemLevel[i+1];
+                passiveItemLocked[i] = passiveItemLocked[i+1];
             }
-        } return true;
+            passiveItemID[PASSIVE_MAX - 1] = 0;
+            passiveItemLevel[PASSIVE_MAX - 1] = 0;
+            passiveItemLocked[PASSIVE_MAX - 1] = false;
+        }
     }
 
     public void copyFrom(MyStuff myStuff) {
-        System.arraycopy(myStuff.myStuffForActive, 0, myStuffForActive, 0, myStuffForActive.length);
-        System.arraycopy(myStuff.myStuffForPassive, 0, myStuffForPassive, 0, myStuffForPassive.length);
-        System.arraycopy(myStuff.activeLock, 0, activeLock, 0, activeLock.length);
-        System.arraycopy(myStuff.passiveLock, 0, passiveLock, 0, passiveLock.length);
-        activeLimit = myStuff.activeLimit;
+        activeItemID = myStuff.activeItemID;
+        activeItemLevel = myStuff.activeItemLevel;
+        activeItemLocked = myStuff.activeItemLocked;
+        passiveItemID = myStuff.passiveItemID;
+        passiveItemLevel = myStuff.passiveItemLevel;
+        passiveItemLocked = myStuff.passiveItemLocked;
+        activeUpgraded = myStuff.activeUpgraded;
     }
 
     public void saveNBTData(CompoundTag nbt) {
-        for (int index = 0; index < myStuffForActive.length; index++) {
-            nbt.putInt("my_stuff_active_" + index, myStuffForActive[index]);
+        for (int i = 0; i < ACTIVE_MAX_UPGRADE; i++) {
+            nbt.putInt("my_stuff_active_id_" + i, activeItemID[i]);
+            nbt.putInt("my_stuff_active_level_" + i, activeItemLevel[i]);
+            nbt.putBoolean("my_stuff_active_locked_" + i, activeItemLocked[i]);
         }
-        for (int index = 0; index < myStuffForPassive.length; index++) {
-            nbt.putInt("my_stuff_passive_" + index, myStuffForPassive[index]);
+        for (int i = 0; i < PASSIVE_MAX; i++) {
+            nbt.putInt("my_stuff_passive_id_" + i, passiveItemID[i]);
+            nbt.putInt("my_stuff_passive_level_" + i, passiveItemLevel[i]);
+            nbt.putBoolean("my_stuff_passive_locked_" + i, passiveItemLocked[i]);
         }
-        for (int index = 0; index < activeLock.length; index++) {
-            nbt.putBoolean("active_lock_" + index, activeLock[index]);
-        }
-        for (int index = 0; index < activeLock.length; index++) {
-            nbt.putBoolean("passive_lock_" + index, passiveLock[index]);
-        }
-        nbt.putBoolean("passive_limit", activeLimit);
+        nbt.putBoolean("passive_limit", activeUpgraded);
     }
 
     public void loadNBTData(CompoundTag nbt) {
-        for (int index = 0; index < myStuffForActive.length; index++) {
-            myStuffForActive[index] = nbt.getInt("my_stuff_active_" + index);
+        for (int i = 0; i < ACTIVE_MAX_UPGRADE; i++) {
+            activeItemID[i] = nbt.getInt("my_stuff_active_id_" + i);
+            activeItemLevel[i] = nbt.getInt("my_stuff_active_level_" + i);
+            activeItemLocked[i] = nbt.getBoolean("my_stuff_active_locked_" + i);
         }
-        for (int index = 0; index < myStuffForPassive.length; index++) {
-            myStuffForPassive[index] = nbt.getInt("my_stuff_passive_" + index);
+        for (int i = 0; i < PASSIVE_MAX; i++) {
+            passiveItemID[i] = nbt.getInt("my_stuff_passive_id_" + i);
+            passiveItemLevel[i] = nbt.getInt("my_stuff_passive_level_" + i);
+            passiveItemLocked[i] = nbt.getBoolean("my_stuff_passive_locked_" + i);
         }
-        for (int index = 0; index < activeLock.length; index++) {
-            activeLock[index] = nbt.getBoolean("active_lock_" + index);
-        }
-        for (int index = 0; index < activeLock.length; index++) {
-            passiveLock[index] = nbt.getBoolean("passive_lock_" + index);
-        }
-        activeLimit = nbt.getBoolean("passive_limit");
+        activeUpgraded = nbt.getBoolean("passive_limit");
     }
 }

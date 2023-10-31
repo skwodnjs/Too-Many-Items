@@ -2,6 +2,8 @@ package net.jwn.jwn_items.gui;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.MyStuffProvider;
+import net.jwn.jwn_items.capability.PlayerStatsProvider;
+import net.jwn.jwn_items.inventory.ModSlot;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItems;
@@ -30,36 +32,38 @@ public class MyStuffScreen extends Screen {
     }
 
     private int leftPos, topPos;
-    private int[] myStuffForActive;
-    private int[] myStuffForPassive;
-    private boolean[] activeLock;
-    private boolean[] passiveLock;
     private boolean[] removableActiveSlot = new boolean[ACTIVE_MAX_UPGRADE];
     private boolean[] removablePassiveSlot = new boolean[PASSIVE_MAX];
     private boolean removeMode = false;
 
-    private boolean activeLimit;
+    private ModSlot[] activeSlot;
+    private ModSlot[] passiveSlot;
+
+    private boolean activeUpgraded;
+
+    private float[] stats;
 
     private static final ResourceLocation BACKGROUND_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/my_stuff.png");
     private static final ResourceLocation BACKGROUND_UPGRADE_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/my_stuff_upgrade.png");
     private static final ResourceLocation DAMAGE_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/damage.png");
     private static final ResourceLocation NO_IMAGE_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/item/no_image.png");
 
-    private void setMyStuff() {
+    private void setting() {
         Player player = Minecraft.getInstance().player;
         player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-            myStuffForActive = myStuff.getMyStuffForActive();
-            myStuffForPassive = myStuff.getMyStuffForPassive();
-            activeLock = myStuff.getActiveLock();
-            passiveLock = myStuff.getPassiveLock();
-            activeLimit = myStuff.getActiveLimit();
+            activeSlot = myStuff.getActiveSlots();
+            passiveSlot = myStuff.getPassiveSlots();
+            activeUpgraded = myStuff.getActiveUpgraded();
+        });
+        player.getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
+            stats = playerStats.getAll();
         });
     }
 
     @Override
     protected void init() {
         super.init();
-        setMyStuff();
+        setting();
 
         this.leftPos = (width - 176) / 2;
         this.topPos = (height - 166) / 2;
@@ -76,14 +80,14 @@ public class MyStuffScreen extends Screen {
         luck = new ImageWidget(leftPos + 124, topPos + 23, 12, 12, NO_IMAGE_RESOURCE);
         coin = new ImageWidget(leftPos + 124, topPos + 36, 12, 12, NO_IMAGE_RESOURCE);
 
-//        health.setTooltip(Tooltip.create(Component.literal("health")));
-//        damage.setTooltip(Tooltip.create(Component.literal("damage")));
-//        attack_speed.setTooltip(Tooltip.create(Component.literal("attack_speed")));
-//        attack_range.setTooltip(Tooltip.create(Component.literal("attack_range")));
-//        mining_speed.setTooltip(Tooltip.create(Component.literal("mining_speed")));
-//        movement_speed.setTooltip(Tooltip.create(Component.literal("movement_speed")));
-//        luck.setTooltip(Tooltip.create(Component.literal("luck")));
-//        coin.setTooltip(Tooltip.create(Component.literal("coin")));
+        health.setTooltip(Tooltip.create(Component.literal("health: " + (stats[0] + stats[7]) + "\n" + stats[7] + "increased by item")));
+        damage.setTooltip(Tooltip.create(Component.literal("damage: " + (stats[1] + stats[7]) + "\n" + stats[8] + "increased by item")));
+        attack_speed.setTooltip(Tooltip.create(Component.literal("attack_speed: " + (stats[2] + stats[7]) + "\n" + stats[9] + "increased by item")));
+        attack_range.setTooltip(Tooltip.create(Component.literal("attack_range: " + (stats[3] + stats[7]) + "\n" + stats[10] + "increased by item")));
+        mining_speed.setTooltip(Tooltip.create(Component.literal("mining_speed: " + (stats[4] + stats[7]) + "\n" + stats[11] + "increased by item")));
+        movement_speed.setTooltip(Tooltip.create(Component.literal("movement_speed: " + (stats[5] + stats[7]) + "\n" + stats[12] + "increased by item")));
+        luck.setTooltip(Tooltip.create(Component.literal("luck: " + (stats[6] + stats[7]) + "\n" + stats[13] + "increased by item")));
+        coin.setTooltip(Tooltip.create(Component.literal("coin: " + stats[14])));
 
         addRenderableWidget(health);
         addRenderableWidget(damage);
@@ -94,51 +98,26 @@ public class MyStuffScreen extends Screen {
         addRenderableWidget(luck);
         addRenderableWidget(coin);
 
-        mode = new ImageButton(leftPos + 152, topPos + 65, 16, 16, (removeMode) ? (removableItemExists()) ? 93 : 77 : 61, 166, 0,
+        mode = new ImageButton(leftPos + 152, topPos + 65, 16, 16, (removeMode) ? (isRemovableItemExists()) ? 93 : 77 : 61, 166, 0,
                 BACKGROUND_RESOURCE, 256, 256, pButton -> {
-            if (removableItemExists()) removeItem();
+            if (isRemovableItemExists()) removeItem();
             else changeMode();
         });
         addRenderableWidget(mode);
 
-        for (int i = 0; i < myStuffForActive.length; i++) {
-            int id = myStuffForActive[i] / 10;
-            if (id != 0) {
-                int slotIndex = i;
-//                ResourceLocation resourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/no_image.png");
-//                ImageButton imageButton;
+        for (int i = 0; i < activeSlot.length; i++) {
+            if (activeSlot[i].itemID != 0) {
                 if (i == 0) {
-                    drawSlot(leftPos + 12, topPos + 61, id, slotIndex, activeLock[slotIndex], removableActiveSlot[slotIndex]);
+                    drawSlot(leftPos + 12, topPos + 61, activeSlot[i].itemID, i, activeSlot[i].locked, removableActiveSlot[i]);
                 } else {
-                    drawSlot(leftPos + 34 * i, topPos + 65, id, slotIndex, activeLock[slotIndex], removableActiveSlot[slotIndex]);
-//                    imageButton = new ImageButton(leftPos + 34 * i, topPos + 65, 16, 16, 0, 0, 0,
-//                            resourceLocation, 16, 16, pButton -> lockItem(ItemType.ACTIVE, slotIndex, !activeLock[slotIndex]));
-//                    imageButton.setTooltip(Tooltip.create(Component.translatable("item." + Main.MOD_ID + "." + ModItems.ModItemsProvider.getItemByID(id).toString())));
-//                    addRenderableWidget(imageButton);
-//                    if (activeLock[slotIndex]) {
-//                        ImageButton lock = new ImageButton(leftPos + 34 * i + 10, topPos + 65 + 10, 7, 7, 68, 166, 0,
-//                                BACKGROUND_RESOURCE, 256, 256, pButton -> lockItem(ItemType.ACTIVE, slotIndex, !activeLock[slotIndex]));
-//                        addRenderableWidget(lock);
-//                    }
+                    drawSlot(leftPos + 34 * i, topPos + 65, activeSlot[i].itemID, i, activeSlot[i].locked, removableActiveSlot[i]);
                 }
             }
         }
 
-        for (int i = 0; i < myStuffForPassive.length; i++) {
-            int id = myStuffForPassive[i] / 10;
-            if (id != 0) {
-                int slotIndex = i;
-                drawSlot(leftPos + 8 + 18 * (i % 9), topPos + 89 + 24 * (i / 9), id, slotIndex, passiveLock[slotIndex], removablePassiveSlot[slotIndex]);
-//                ResourceLocation resourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/no_image.png");
-//                ImageButton imageButton = new ImageButton(leftPos + 8 + 18 * (i % 9), topPos + 89 + 24 * (i / 9), 16, 16, 0, 0, 0,
-//                        resourceLocation, 16, 16, pButton -> lockItem(ItemType.PASSIVE, slotIndex, !passiveLock[slotIndex]));
-//                imageButton.setTooltip(Tooltip.create(Component.translatable("item." + Main.MOD_ID + "." + ModItems.ModItemsProvider.getItemByID(id).toString())));
-//                addRenderableWidget(imageButton);
-//                if (passiveLock[slotIndex]) {
-//                    ImageButton lock = new ImageButton(leftPos + 8 + 18 * (i % 9) + 10, topPos + 89 + 24 * (i / 9) + 10, 7, 7, 68, 166, 0,
-//                            BACKGROUND_RESOURCE, 256, 256, pButton -> lockItem(ItemType.PASSIVE, slotIndex, !passiveLock[slotIndex]));
-//                    addRenderableWidget(lock);
-//                }
+        for (int i = 0; i < passiveSlot.length; i++) {
+            if (passiveSlot[i].itemID != 0) {
+                drawSlot(leftPos + 8 + 18 * (i % 9), topPos + 89 + 24 * (i / 9), passiveSlot[i].itemID, i, passiveSlot[i].locked, removablePassiveSlot[i]);
             }
         }
     }
@@ -146,7 +125,7 @@ public class MyStuffScreen extends Screen {
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         renderBackground(pGuiGraphics);
-        pGuiGraphics.blit(activeLimit ? BACKGROUND_RESOURCE : BACKGROUND_UPGRADE_RESOURCE, leftPos, topPos, 0, 0, 176, 166);
+        pGuiGraphics.blit(activeUpgraded ? BACKGROUND_RESOURCE : BACKGROUND_UPGRADE_RESOURCE, leftPos, topPos, 0, 0, 176, 166);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 
         String title = I18n.get("title." + Main.MOD_ID + ".my_stuff");
@@ -177,14 +156,20 @@ public class MyStuffScreen extends Screen {
         }
     }
 
-    private boolean removableItemExists() {
+    private boolean isRemovableItemExists() {
         if (!removeMode) return false;
         boolean toReturn = false;
-        for (int i = 0; i < removableActiveSlot.length; i++) {
-            if (removableActiveSlot[i]) toReturn = true;
+        for (boolean b : removableActiveSlot) {
+            if (b) {
+                toReturn = true;
+                break;
+            }
         }
-        for (int i = 0; i < removablePassiveSlot.length; i++) {
-            if (removablePassiveSlot[i]) toReturn = true;
+        for (boolean b : removablePassiveSlot) {
+            if (b) {
+                toReturn = true;
+                break;
+            }
         }
         return toReturn;
     }
@@ -198,37 +183,36 @@ public class MyStuffScreen extends Screen {
             for (int i = 0; i < removablePassiveSlot.length; i++) {
                 if (removablePassiveSlot[i]) myStuff.removeItem(ItemType.PASSIVE, i);
             }
-            ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getMyStuffForActive(), myStuff.getMyStuffForPassive(),
-                    myStuff.getActiveLock(), myStuff.getPassiveLock(), myStuff.getActiveLimit()));
+            ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.getActiveUpgraded()));
             Arrays.fill(removableActiveSlot, false);
             Arrays.fill(removablePassiveSlot, false);
         });
         rebuildWidgets();
     }
+
     private void changeMode() {
         removeMode = !removeMode;
         rebuildWidgets();
     }
 
-    private void makeItemRemovable(ItemType itemType, int slot, boolean delete) {
+    private void makeItemRemovable(ItemType itemType, int slot, boolean removable) {
         if (itemType == ItemType.ACTIVE) {
-            if (activeLock[slot]) return;
-            removableActiveSlot[slot] = delete;
+            if (activeSlot[slot].locked) return;
+            removableActiveSlot[slot] = removable;
         }
         else if (itemType == ItemType.PASSIVE) {
-            if (passiveLock[slot]) return;
-            removablePassiveSlot[slot] = delete;
+            if (passiveSlot[slot].locked) return;
+            removablePassiveSlot[slot] = removable;
         }
         rebuildWidgets();
     }
 
-    private void lockItem(ItemType itemType, int slot, boolean lock) {
+    private void lockItem(ItemType itemType, int slot, boolean locked) {
         Player player = Minecraft.getInstance().player;
         player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-            if (itemType == ItemType.ACTIVE) myStuff.setActiveLock(slot, lock);
-            else if (itemType == ItemType.PASSIVE) myStuff.setPassiveLock(slot, lock);
-            ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getMyStuffForActive(), myStuff.getMyStuffForPassive(),
-                    myStuff.getActiveLock(), myStuff.getPassiveLock(), myStuff.getActiveLimit()));
+            if (itemType == ItemType.ACTIVE) myStuff.lockActiveSlot(slot, locked);
+            else if (itemType == ItemType.PASSIVE) myStuff.lockPassiveSlot(slot, locked);
+            ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.getActiveUpgraded()));
         });
         rebuildWidgets();
     }
