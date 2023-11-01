@@ -1,9 +1,7 @@
 package net.jwn.jwn_items.item;
 
 import net.jwn.jwn_items.Main;
-import net.jwn.jwn_items.item.active.ModActiveItem;
 import net.jwn.jwn_items.item.consumables.PillItem;
-import net.jwn.jwn_items.item.passive.ModPassiveItem;
 import net.jwn.jwn_items.stat.Stat;
 import net.jwn.jwn_items.stat.StatType;
 import net.minecraft.world.item.Item;

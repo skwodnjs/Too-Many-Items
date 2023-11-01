@@ -34,7 +34,7 @@ public class ModEvents {
             event.player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
 
             // mustache
-            Mustache.operate(event.player);
+            Mustache.operateServer(event.player);
 
             //
         } else {

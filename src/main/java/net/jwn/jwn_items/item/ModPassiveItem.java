@@ -1,4 +1,4 @@
-package net.jwn.jwn_items.item.passive;
+package net.jwn.jwn_items.item;
 
 import net.jwn.jwn_items.capability.PlayerStatsProvider;
 import net.jwn.jwn_items.item.ItemType;

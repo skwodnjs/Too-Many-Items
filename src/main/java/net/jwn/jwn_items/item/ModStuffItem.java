@@ -1,6 +1,8 @@
 package net.jwn.jwn_items.item;
 
 import net.jwn.jwn_items.capability.MyStuffProvider;
+import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
@@ -8,6 +10,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,6 +43,7 @@ public class ModStuffItem extends ModItem {
 //            playSound();
         } else {
             message = Component.literal("success");
+            MinecraftForge.EVENT_BUS.post(new ModItemUsedSuccessfullyEvent(pPlayer));
 //            playSound(); grades 에 따른 sound 재생
         }
 

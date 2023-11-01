@@ -2,8 +2,7 @@ package net.jwn.jwn_items.networking;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.networking.packet.*;
-import net.jwn.jwn_items.skill.packet.D1SkillC2SPacket;
-import net.jwn.jwn_items.skill.packet.D6SkillC2SPacket;
+import net.jwn.jwn_items.networking.packet.UseSkillC2SPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -81,16 +80,10 @@ public class ModMessages {
                 .add();
 
         // SKILLS
-        net.messageBuilder(D1SkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(D1SkillC2SPacket::new)
-                .encoder(D1SkillC2SPacket::toBytes)
-                .consumerMainThread(D1SkillC2SPacket::handle)
-                .add();
-
-        net.messageBuilder(D6SkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(D6SkillC2SPacket::new)
-                .encoder(D6SkillC2SPacket::toBytes)
-                .consumerMainThread(D6SkillC2SPacket::handle)
+        net.messageBuilder(UseSkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(UseSkillC2SPacket::new)
+                .encoder(UseSkillC2SPacket::toBytes)
+                .consumerMainThread(UseSkillC2SPacket::handle)
                 .add();
     }
 
