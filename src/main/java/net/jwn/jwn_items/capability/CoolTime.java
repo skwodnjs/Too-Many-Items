@@ -37,4 +37,8 @@ public class CoolTime {
     public void loadNBTData(CompoundTag nbt) {
         this.time = nbt.getInt("coolTime");
     }
+
+    public void reset() {
+        this.time = 0;
+    }
 }

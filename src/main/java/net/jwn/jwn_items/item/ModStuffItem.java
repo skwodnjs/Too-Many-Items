@@ -2,7 +2,6 @@ package net.jwn.jwn_items.item;
 
 import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
@@ -43,7 +42,7 @@ public class ModStuffItem extends ModItem {
 //            playSound();
         } else {
             message = Component.literal("success");
-            MinecraftForge.EVENT_BUS.post(new ModItemUsedSuccessfullyEvent(pPlayer));
+            MinecraftForge.EVENT_BUS.post(new ModItemUsedSuccessfullyEvent(pPlayer, this.ID));
 //            playSound(); grades 에 따른 sound 재생
         }
 

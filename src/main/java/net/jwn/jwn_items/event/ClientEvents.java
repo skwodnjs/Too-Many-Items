@@ -4,6 +4,7 @@ import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.capability.PlayerOptionsProvider;
 import net.jwn.jwn_items.gui.MyStuffScreen;
+import net.jwn.jwn_items.gui.StuffIFoundScreen;
 import net.jwn.jwn_items.hud.ActiveItemHubOverlay;
 import net.jwn.jwn_items.hud.StatHudOverLay;
 import net.jwn.jwn_items.item.ItemType;
@@ -42,7 +43,7 @@ public class ClientEvents {
                 System.out.println("--- MY STUFFS / CLIENT SIDE ---");
                 player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
                     System.out.println("--- ACTIVE ITEM ---");
-                    for (int i = 0; i < (myStuff.getActiveUpgraded() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
+                    for (int i = 0; i < (myStuff.isActiveUpgraded() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
                         System.out.printf("%d\t", myStuff.getActiveSlots()[i].itemID);
                     }
                     System.out.println();
@@ -93,6 +94,8 @@ public class ClientEvents {
                     myStuff.changeMainActiveItem();
                 });
                 ModMessages.sendToServer(new ChangeMainActiveItemC2SPacket());
+            } else if (KeyBindings.FOUND_STUFF_KEY.consumeClick()) {
+                Minecraft.getInstance().setScreen(new StuffIFoundScreen());
             }
         }
     }
@@ -104,6 +107,8 @@ public class ClientEvents {
             event.register(KeyBindings.STATS_KEY);
             event.register(KeyBindings.ACTIVE_SKILL_KEY);
             event.register(KeyBindings.MY_STUFF_KEY);
+            event.register(KeyBindings.ACTIVE_CHANGE_KEY);
+            event.register(KeyBindings.FOUND_STUFF_KEY);
         }
 
         @SubscribeEvent

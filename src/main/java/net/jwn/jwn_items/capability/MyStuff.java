@@ -3,6 +3,7 @@ package net.jwn.jwn_items.capability;
 import net.jwn.jwn_items.inventory.ModSlot;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
+import net.jwn.jwn_items.item.ModItems;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.Arrays;
@@ -58,7 +59,23 @@ public class MyStuff {
         return toReturn;
     }
 
-    public boolean getActiveUpgraded() {
+    public ModSlot getSlotByItem(ModItem modItem) {
+        if (modItem.itemType == ItemType.ACTIVE) {
+            for (ModSlot modSlot : getActiveSlots()) {
+                if (modSlot.itemID == modItem.ID) {
+                    return modSlot;
+                }
+            }
+        } else if (modItem.itemType == ItemType.PASSIVE) {
+            for (ModSlot modSlot : getPassiveSlots()) {
+                if (modSlot.itemID == modItem.ID) {
+                    return modSlot;
+                }
+            }
+        } return null;
+    }
+
+    public boolean isActiveUpgraded() {
         return activeUpgraded;
     }
 

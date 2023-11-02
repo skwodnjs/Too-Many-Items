@@ -2,9 +2,13 @@ package net.jwn.jwn_items.event;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.*;
+import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
+import net.jwn.jwn_items.item.ModItem;
+import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.item.passive.Mustache;
 import net.jwn.jwn_items.networking.ModMessages;
+import net.jwn.jwn_items.networking.packet.FoundStuffSyncS2CPacket;
 import net.jwn.jwn_items.networking.packet.MyStuffSyncS2CPacket;
 import net.jwn.jwn_items.networking.packet.OptionSyncS2CPacket;
 import net.jwn.jwn_items.networking.packet.StatSyncS2CPacket;
@@ -46,6 +50,20 @@ public class ModEvents {
     }
 
     @SubscribeEvent
+    public static void onModItemUsedSuccessfullyEvent(ModItemUsedSuccessfullyEvent event) {
+        Player player = event.player;
+        ModItem modItem = ModItems.ModItemsProvider.getItemByID(event.id);
+        player.getCapability(FoundStuffProvider.foundStuffCapability).ifPresent(foundStuff -> {
+            player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+                int myStuffLevel = myStuff.getSlotByItem(modItem).level;
+                if (foundStuff.getFoundStuffLevel()[event.id] < myStuffLevel) {
+                    foundStuff.set(event.id, myStuffLevel);
+                }
+            });
+        });
+    }
+
+    @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             if (!event.getObject().getCapability(PlayerStatsProvider.playerStatsCapability).isPresent()) {
@@ -59,6 +77,9 @@ public class ModEvents {
             }
             if (!event.getObject().getCapability(PlayerStatsProvider.playerStatsCapability).isPresent()) {
                 event.addCapability(new ResourceLocation(Main.MOD_ID, "player_options"), new PlayerOptionsProvider());
+            }
+            if (!event.getObject().getCapability(FoundStuffProvider.foundStuffCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "found_stuff"), new FoundStuffProvider());
             }
         }
     }
@@ -179,7 +200,11 @@ public class ModEvents {
             });
             // My Stuff
             player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                ModMessages.sendToPlayer(new MyStuffSyncS2CPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.getActiveUpgraded()), (ServerPlayer) player);
+                ModMessages.sendToPlayer(new MyStuffSyncS2CPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.isActiveUpgraded()), (ServerPlayer) player);
+            });
+            // Stuff I Found
+            player.getCapability(FoundStuffProvider.foundStuffCapability).ifPresent(foundStuff -> {
+                ModMessages.sendToPlayer(new FoundStuffSyncS2CPacket(foundStuff.getFoundStuffLevel()), (ServerPlayer) player);
             });
             // Player Option
             player.getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(playerOptions -> {
@@ -214,6 +239,12 @@ public class ModEvents {
             // Cool Time
             event.getOriginal().getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(oldStore -> {
                 event.getEntity().getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+            // Stuff I Found
+            event.getOriginal().getCapability(FoundStuffProvider.foundStuffCapability).ifPresent(oldStore -> {
+                event.getEntity().getCapability(FoundStuffProvider.foundStuffCapability).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });

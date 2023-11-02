@@ -1,5 +1,6 @@
 package net.jwn.jwn_items.item;
 
+import net.jwn.jwn_items.capability.CoolTimeProvider;
 import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.capability.PlayerStatsProvider;
 import net.minecraft.world.InteractionHand;
@@ -20,6 +21,9 @@ public class TestItem extends Item {
             System.out.println("reset");
             pPlayer.getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
                 playerStats.reset(pPlayer);
+            });
+            pPlayer.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(coolTime -> {
+                coolTime.reset();
             });
         }
         pPlayer.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {

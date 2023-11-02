@@ -34,7 +34,7 @@ public class StuffC2SPacket {
             System.out.println("--- MY STUFF / SERVER SIDE ---");
             player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
                 System.out.println("--- ACTIVE ITEM ---");
-                for (int i = 0; i < (myStuff.getActiveUpgraded() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
+                for (int i = 0; i < (myStuff.isActiveUpgraded() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
                     System.out.printf("%d\t", myStuff.getActiveSlots()[i].itemID);
                 }
                 System.out.println();

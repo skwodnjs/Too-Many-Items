@@ -73,6 +73,13 @@ public class ModMessages {
                 .consumerMainThread(StuffC2SPacket::handle)
                 .add();
 
+        // Stuff I Found Sync
+        net.messageBuilder(FoundStuffSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(FoundStuffSyncS2CPacket::new)
+                .encoder(FoundStuffSyncS2CPacket::toBytes)
+                .consumerMainThread(FoundStuffSyncS2CPacket::handle)
+                .add();
+
         net.messageBuilder(ChangeMainActiveItemC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ChangeMainActiveItemC2SPacket::new)
                 .encoder(ChangeMainActiveItemC2SPacket::toBytes)

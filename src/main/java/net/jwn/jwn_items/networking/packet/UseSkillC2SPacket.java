@@ -4,6 +4,7 @@ import net.jwn.jwn_items.capability.CoolTimeProvider;
 import net.jwn.jwn_items.item.ModActiveItem;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItems;
+import net.jwn.jwn_items.item.active.ChargedTNT;
 import net.jwn.jwn_items.item.active.D1;
 import net.jwn.jwn_items.item.active.D6;
 import net.minecraft.network.FriendlyByteBuf;
@@ -55,6 +56,8 @@ public class UseSkillC2SPacket {
                     D1.operateServer(player);
                 } else if (ID == ((ModItem) ModItems.D6_ITEM.get()).getItemID()) {
                     D6.operateServer(player);
+                } else if (ID == ((ModItem) ModItems.CHARGED_TNT_ITEM.get()).getItemID()) {
+                    ChargedTNT.operateServer(player);
                 }
             }
         });

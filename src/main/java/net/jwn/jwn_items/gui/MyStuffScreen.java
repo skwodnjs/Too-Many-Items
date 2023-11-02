@@ -33,8 +33,8 @@ public class MyStuffScreen extends Screen {
     }
 
     private int leftPos, topPos;
-    private boolean[] removableActiveSlot = new boolean[ACTIVE_MAX_UPGRADE];
-    private boolean[] removablePassiveSlot = new boolean[PASSIVE_MAX];
+    private final boolean[] removableActiveSlot = new boolean[ACTIVE_MAX_UPGRADE];
+    private final boolean[] removablePassiveSlot = new boolean[PASSIVE_MAX];
     private boolean removeMode = false;
 
     private ModSlot[] activeSlot;
@@ -52,7 +52,7 @@ public class MyStuffScreen extends Screen {
         player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
             activeSlot = myStuff.getActiveSlots();
             passiveSlot = myStuff.getPassiveSlots();
-            activeUpgraded = myStuff.getActiveUpgraded();
+            activeUpgraded = myStuff.isActiveUpgraded();
         });
         player.getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
             stats = playerStats.getAll();
@@ -133,7 +133,6 @@ public class MyStuffScreen extends Screen {
 
     public void drawSlot(int pX, int pY, int itemID, int slot, boolean locked, boolean deleted) {
         ModItem item = ModItems.ModItemsProvider.getItemByID(itemID);
-        assert item != null;
         ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + item + ".png");
         if (deleted) {
             ImageButton deletedBackground = new ImageButton(pX - 1, pY - 1, 18, 18, 36, 166, 0, BACKGROUND_RESOURCE, 256, 256, pButton -> makeItemRemovable(item.itemType, slot, false));
@@ -183,7 +182,7 @@ public class MyStuffScreen extends Screen {
             for (int i = 0; i < removablePassiveSlot.length; i++) {
                 if (removablePassiveSlot[i]) myStuff.removeItem(ItemType.PASSIVE, i);
             }
-            ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.getActiveUpgraded()));
+            ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.isActiveUpgraded()));
             Arrays.fill(removableActiveSlot, false);
             Arrays.fill(removablePassiveSlot, false);
         });
@@ -212,7 +211,7 @@ public class MyStuffScreen extends Screen {
         player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
             if (itemType == ItemType.ACTIVE) myStuff.lockActiveSlot(slot, locked);
             else if (itemType == ItemType.PASSIVE) myStuff.lockPassiveSlot(slot, locked);
-            ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.getActiveUpgraded()));
+            ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.isActiveUpgraded()));
         });
         rebuildWidgets();
     }

@@ -23,24 +23,29 @@ public class ModItems {
             () -> new TestItem(new Item.Properties().stacksTo(ITEM_STACK)));
 
     public static final RegistryObject<Item> PILL_ITEM = ITEMS.register("pill",
-            () -> new PillItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 1));
+            () -> new PillItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 0));
 
     public static final RegistryObject<Item> D1_ITEM = ITEMS.register("d1",
-            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 2, 50, 1, 10));
+            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 1, 50, 1, 10));
 
     public static final RegistryObject<Item> D6_ITEM = ITEMS.register("d6",
-            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 3, 50, 1, 10));
+            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 2, 50, 1, 10));
 
     public static final RegistryObject<Item> MUSTACHE_ITEM = ITEMS.register("mustache",
-            () -> new ModPassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 4,
+            () -> new ModPassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 3,
                     Arrays.asList(new Stat(StatType.LUCK_BY_ITEM, 3))
             ));
+
+    public static final RegistryObject<Item> CHARGED_TNT_ITEM = ITEMS.register("charged_tnt",
+            () -> new ModActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 0, 4, 30, 3, 5));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
 
     public static class ModItemsProvider {
+        public static final int ITEM_TOTAL = 5;
+
         private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY0 = new ArrayList<>();
         private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY1 = new ArrayList<>();
         private static final ArrayList<ModItem> ACTIVE_ITEMS_QUALITY2 = new ArrayList<>();
@@ -123,10 +128,11 @@ public class ModItems {
         @Nullable
         public static ModItem getItemByID(int id) {
             switch (id) {
-                case 1: return (ModItem) ModItems.PILL_ITEM.get();
-                case 2: return (ModItem) ModItems.D1_ITEM.get();
-                case 3: return (ModItem) ModItems.D6_ITEM.get();
-                case 4: return (ModItem) MUSTACHE_ITEM.get();
+                case 0: return (ModItem) ModItems.PILL_ITEM.get();
+                case 1: return (ModItem) ModItems.D1_ITEM.get();
+                case 2: return (ModItem) ModItems.D6_ITEM.get();
+                case 3: return (ModItem) MUSTACHE_ITEM.get();
+                case 4: return (ModItem) CHARGED_TNT_ITEM.get();
             };
             return null;
         }

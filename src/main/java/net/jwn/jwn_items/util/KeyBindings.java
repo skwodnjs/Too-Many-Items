@@ -23,4 +23,8 @@ public class KeyBindings {
     public static final String KEY_ACTIVE_CHANGE = "key.jwn_items.active_change";
     public static final KeyMapping ACTIVE_CHANGE_KEY =
             new KeyMapping(KEY_ACTIVE_CHANGE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, KEY_CATEGORY_MOD);
+
+    public static final String KEY_FOUND_STUFF = "key.jwn_items.found_stuff";
+    public static final KeyMapping FOUND_STUFF_KEY =
+            new KeyMapping(KEY_FOUND_STUFF, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_X, KEY_CATEGORY_MOD);
 }
