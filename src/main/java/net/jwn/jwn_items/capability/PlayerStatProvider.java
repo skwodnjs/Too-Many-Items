@@ -11,23 +11,23 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerOptionsProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<PlayerOptions> playerOptionsCapability = CapabilityManager.get(new CapabilityToken<PlayerOptions>() {});
+public class PlayerStatProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+    public static Capability<PlayerStat> playerStatsCapability = CapabilityManager.get(new CapabilityToken<PlayerStat>() {});
 
-    private PlayerOptions playerOptions = null;
+    private PlayerStat playerStats = null;
 
-    private final LazyOptional<PlayerOptions> optional = LazyOptional.of(this::createPlayerOptions);
+    private final LazyOptional<PlayerStat> optional = LazyOptional.of(this::createPlayerStats);
 
-    private PlayerOptions createPlayerOptions() {
-        if (this.playerOptions == null) {
-            this.playerOptions = new PlayerOptions();
+    private PlayerStat createPlayerStats() {
+        if (this.playerStats == null) {
+            this.playerStats = new PlayerStat();
         }
-        return this.playerOptions;
+        return this.playerStats;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == playerOptionsCapability) {
+        if (cap == playerStatsCapability) {
             return optional.cast();
         }
         return LazyOptional.empty();
@@ -36,12 +36,12 @@ public class PlayerOptionsProvider implements ICapabilityProvider, INBTSerializa
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        createPlayerOptions().saveNBTData(nbt);
+        createPlayerStats().saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createPlayerOptions().loadNBTData(nbt);
+        createPlayerStats().loadNBTData(nbt);
     }
 }

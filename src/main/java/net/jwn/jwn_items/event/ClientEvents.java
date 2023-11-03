@@ -2,23 +2,16 @@ package net.jwn.jwn_items.event;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.MyStuffProvider;
-import net.jwn.jwn_items.capability.PlayerOptionsProvider;
+import net.jwn.jwn_items.capability.PlayerOptionProvider;
 import net.jwn.jwn_items.gui.MyStuffScreen;
 import net.jwn.jwn_items.gui.StuffIFoundScreen;
-import net.jwn.jwn_items.hud.ActiveItemHubOverlay;
 import net.jwn.jwn_items.hud.StatHudOverLay;
-import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.networking.ModMessages;
-import net.jwn.jwn_items.networking.packet.ChangeMainActiveItemC2SPacket;
-import net.jwn.jwn_items.networking.packet.OptionSyncC2SPacket;
-import net.jwn.jwn_items.networking.packet.StatsC2SPacket;
-import net.jwn.jwn_items.networking.packet.StuffC2SPacket;
+import net.jwn.jwn_items.networking.packet.*;
+import net.jwn.jwn_items.util.Functions;
 import net.jwn.jwn_items.util.ModSkills;
-import net.jwn.jwn_items.capability.PlayerStatsProvider;
-import net.jwn.jwn_items.stat.StatType;
 import net.jwn.jwn_items.util.KeyBindings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -27,82 +20,42 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static net.jwn.jwn_items.util.Options.*;
-
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = Main.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             Player player = Minecraft.getInstance().player;
+            if (player == null) return;
+
             if (KeyBindings.ACTIVE_SKILL_KEY.consumeClick()) {
-                player.sendSystemMessage(Component.literal("block X: " + player.getOnPos().getX()));
-                player.sendSystemMessage(Component.literal("block Y: " + player.getOnPos().getY()));
-                player.sendSystemMessage(Component.literal("block Z: " + player.getOnPos().getZ()));
-                player.sendSystemMessage(Component.literal("X: " + player.position().x));
-                player.sendSystemMessage(Component.literal("Y: " + player.position().y));
-                player.sendSystemMessage(Component.literal("Z: " + player.position().z));
                 player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                    ModSkills.useSkill(player, myStuff.getActiveSlots()[0].itemID, myStuff.getActiveSlots()[0].level);
+                    if (myStuff.getActiveSlots()[0].itemId != 0) {
+                        ModSkills.useSkill(player, myStuff.getActiveSlots()[0].itemId, myStuff.getActiveSlots()[0].level);
+                    }
                 });
+                Functions.printCoolTime(player);
+                ModMessages.sendToServer(new PrintCoolTimeC2SPacket());
             } else if (KeyBindings.MY_STUFF_KEY.consumeClick()) {
                 Minecraft.getInstance().setScreen(new MyStuffScreen());
-                System.out.println("--- MY STUFFS / CLIENT SIDE ---");
-                player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                    System.out.println("--- ACTIVE ITEM ---");
-                    for (int i = 0; i < (myStuff.isActiveUpgraded() ? ACTIVE_MAX : ACTIVE_MAX_UPGRADE); i++) {
-                        System.out.printf("%d\t", myStuff.getActiveSlots()[i].itemID);
-                    }
-                    System.out.println();
-                    System.out.println("get ID of main active item: " + myStuff.getActiveSlots()[0].itemID);
-
-                    System.out.println("--- PASSIVE ITEM ---");
-                    for (int i = 0; i < PASSIVE_MAX / 3; i++) {
-                        System.out.printf("%d\t", myStuff.getPassiveSlots()[i].itemID);
-                    }
-                    System.out.println();
-                    for (int i = PASSIVE_MAX / 3; i < PASSIVE_MAX * 2 / 3; i++) {
-                        System.out.printf("%d\t", myStuff.getPassiveSlots()[i].itemID);
-                    }
-                    System.out.println();
-                    for (int i = PASSIVE_MAX * 2 / 3; i < PASSIVE_MAX; i++) {
-                        System.out.printf("%d\t", myStuff.getPassiveSlots()[i].itemID);
-                    }
-                    System.out.println();
-                    System.out.println("get last slot of passive item: " + myStuff.getEmptySlot(ItemType.PASSIVE));
-                });
-                ModMessages.sendToServer(new StuffC2SPacket());
+                Functions.printInventory(player);
+                ModMessages.sendToServer(new PrintStuffC2SPacket());
             } else if (KeyBindings.STATS_KEY.consumeClick()) {
-                player.getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(playerOptions -> {
+                player.getCapability(PlayerOptionProvider.playerOptionsCapability).ifPresent(playerOptions -> {
                     playerOptions.statHudToggle();
-                    ModMessages.sendToServer(new OptionSyncC2SPacket(playerOptions.getStatHudOption(), playerOptions.getStatHudDetailOptions()));
+                    ModMessages.sendToServer(new PlayerOptionSyncC2SPacket(playerOptions.getStatHudOption(), playerOptions.getStatHudDetailOptions()));
                 });
-                System.out.println("--- STATS / CLIENT SIDE ---");
-                player.getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
-                    System.out.println("HEALTH BY CONSUMABLES: " + playerStats.getValue(StatType.HEALTH_BY_CONSUMABLES));
-                    System.out.println("DAMAGE BY CONSUMABLES: " + playerStats.getValue(StatType.DAMAGE_BY_CONSUMABLES));
-                    System.out.println("ATTACK SPEED BY CONSUMABLES: " + playerStats.getValue(StatType.ATTACK_SPEED_BY_CONSUMABLES));
-                    System.out.println("ATTACK RANGE BY CONSUMABLES: " + playerStats.getValue(StatType.ATTACK_RANGE_BY_CONSUMABLES));
-                    System.out.println("MINING SPEED BY CONSUMABLES: " + playerStats.getValue(StatType.MINING_SPEED_BY_CONSUMABLES));
-                    System.out.println("MOVEMENT SPEED BY CONSUMABLES: " + playerStats.getValue(StatType.MOVEMENT_SPEED_BY_CONSUMABLES));
-                    System.out.println("LUCK BY CONSUMABLES: " + playerStats.getValue(StatType.LUCK_BY_CONSUMABLES));
-                    System.out.println("HEALTH BY ITEM: " + playerStats.getValue(StatType.HEALTH_BY_ITEM));
-                    System.out.println("DAMAGE BY ITEM: " + playerStats.getValue(StatType.DAMAGE_BY_ITEM));
-                    System.out.println("ATTACK SPEED BY ITEM: " + playerStats.getValue(StatType.ATTACK_SPEED_BY_ITEM));
-                    System.out.println("ATTACK RANGE BY ITEM: " + playerStats.getValue(StatType.ATTACK_RANGE_BY_ITEM));
-                    System.out.println("MINING SPEED BY ITEM: " + playerStats.getValue(StatType.MINING_SPEED_BY_ITEM));
-                    System.out.println("MOVEMENT SPEED BY ITEM: " + playerStats.getValue(StatType.MOVEMENT_SPEED_BY_ITEM));
-                    System.out.println("LUCK BY ITEM: " + playerStats.getValue(StatType.LUCK_BY_ITEM));
-                    System.out.println("COIN: " + playerStats.getValue(StatType.COIN));
-                });
-                ModMessages.sendToServer(new StatsC2SPacket());
+                Functions.printStat(player);
+                ModMessages.sendToServer(new PrintStatC2SPacket());
             } else if (KeyBindings.ACTIVE_CHANGE_KEY.consumeClick()) {
                 player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
                     myStuff.changeMainActiveItem();
+                    ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.isActiveUpgraded()));
                 });
-                ModMessages.sendToServer(new ChangeMainActiveItemC2SPacket());
             } else if (KeyBindings.FOUND_STUFF_KEY.consumeClick()) {
                 Minecraft.getInstance().setScreen(new StuffIFoundScreen());
+                Functions.printFoundStuff(player);
+                ModMessages.sendToServer(new PrintFoundStuffC2SPacket());
             }
         }
     }
@@ -121,7 +74,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onRegisterGuiOverlaysEvent(RegisterGuiOverlaysEvent event) {
             event.registerAboveAll("stat_hud", StatHudOverLay.STAT_HUD);
-            event.registerAboveAll("active_item_hud", ActiveItemHubOverlay.ACTIVE_ITEM_HUD);
+//            event.registerAboveAll("active_item_hud", ActiveItemHubOverlay.ACTIVE_ITEM_HUD);
         }
     }
 }

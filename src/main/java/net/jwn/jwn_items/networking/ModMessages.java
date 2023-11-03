@@ -28,65 +28,81 @@ public class ModMessages {
 
         INSTANCE = net;
 
-        // My Stuff Sync
-        net.messageBuilder(MyStuffSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(MyStuffSyncS2CPacket::new)
-                .encoder(MyStuffSyncS2CPacket::toBytes)
-                .consumerMainThread(MyStuffSyncS2CPacket::handle)
+        // sync
+        net.messageBuilder(CoolTimeSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(CoolTimeSyncS2CPacket::new)
+                .encoder(CoolTimeSyncS2CPacket::toBytes)
+                .consumerMainThread(CoolTimeSyncS2CPacket::handle)
                 .add();
-
-        net.messageBuilder(MyStuffSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(MyStuffSyncC2SPacket::new)
-                .encoder(MyStuffSyncC2SPacket::toBytes)
-                .consumerMainThread(MyStuffSyncC2SPacket::handle)
+        net.messageBuilder(CoolTimeSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(CoolTimeSyncC2SPacket::new)
+                .encoder(CoolTimeSyncC2SPacket::toBytes)
+                .consumerMainThread(CoolTimeSyncC2SPacket::handle)
                 .add();
-
-        // Player Option Sync
-        net.messageBuilder(OptionSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(OptionSyncC2SPacket::new)
-                .encoder(OptionSyncC2SPacket::toBytes)
-                .consumerMainThread(OptionSyncC2SPacket::handle)
-                .add();
-
-        net.messageBuilder(OptionSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(OptionSyncS2CPacket::new)
-                .encoder(OptionSyncS2CPacket::toBytes)
-                .consumerMainThread(OptionSyncS2CPacket::handle)
-                .add();
-
-        // Player Stat Sync
-        net.messageBuilder(StatSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(StatSyncS2CPacket::new)
-                .encoder(StatSyncS2CPacket::toBytes)
-                .consumerMainThread(StatSyncS2CPacket::handle)
-                .add();
-
-        net.messageBuilder(StatsC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(StatsC2SPacket::new)
-                .encoder(StatsC2SPacket::toBytes)
-                .consumerMainThread(StatsC2SPacket::handle)
-                .add();
-
-        net.messageBuilder(StuffC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(StuffC2SPacket::new)
-                .encoder(StuffC2SPacket::toBytes)
-                .consumerMainThread(StuffC2SPacket::handle)
-                .add();
-
-        // Stuff I Found Sync
         net.messageBuilder(FoundStuffSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(FoundStuffSyncS2CPacket::new)
                 .encoder(FoundStuffSyncS2CPacket::toBytes)
                 .consumerMainThread(FoundStuffSyncS2CPacket::handle)
                 .add();
-
-        net.messageBuilder(ChangeMainActiveItemC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(ChangeMainActiveItemC2SPacket::new)
-                .encoder(ChangeMainActiveItemC2SPacket::toBytes)
-                .consumerMainThread(ChangeMainActiveItemC2SPacket::handle)
+        net.messageBuilder(FoundStuffSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(FoundStuffSyncC2SPacket::new)
+                .encoder(FoundStuffSyncC2SPacket::toBytes)
+                .consumerMainThread(FoundStuffSyncC2SPacket::handle)
+                .add();
+        net.messageBuilder(MyStuffSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(MyStuffSyncS2CPacket::new)
+                .encoder(MyStuffSyncS2CPacket::toBytes)
+                .consumerMainThread(MyStuffSyncS2CPacket::handle)
+                .add();
+        net.messageBuilder(MyStuffSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(MyStuffSyncC2SPacket::new)
+                .encoder(MyStuffSyncC2SPacket::toBytes)
+                .consumerMainThread(MyStuffSyncC2SPacket::handle)
+                .add();
+        net.messageBuilder(PlayerOptionSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerOptionSyncS2CPacket::new)
+                .encoder(PlayerOptionSyncS2CPacket::toBytes)
+                .consumerMainThread(PlayerOptionSyncS2CPacket::handle)
+                .add();
+        net.messageBuilder(PlayerOptionSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PlayerOptionSyncC2SPacket::new)
+                .encoder(PlayerOptionSyncC2SPacket::toBytes)
+                .consumerMainThread(PlayerOptionSyncC2SPacket::handle)
+                .add();
+        net.messageBuilder(PlayerStatsSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(PlayerStatsSyncS2CPacket::new)
+                .encoder(PlayerStatsSyncS2CPacket::toBytes)
+                .consumerMainThread(PlayerStatsSyncS2CPacket::handle)
+                .add();
+        net.messageBuilder(PlayerStatsSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PlayerStatsSyncC2SPacket::new)
+                .encoder(PlayerStatsSyncC2SPacket::toBytes)
+                .consumerMainThread(PlayerStatsSyncC2SPacket::handle)
                 .add();
 
-        // SKILLS
+        // print
+        net.messageBuilder(PrintStatC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PrintStatC2SPacket::new)
+                .encoder(PrintStatC2SPacket::toBytes)
+                .consumerMainThread(PrintStatC2SPacket::handle)
+                .add();
+        net.messageBuilder(PrintStuffC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PrintStuffC2SPacket::new)
+                .encoder(PrintStuffC2SPacket::toBytes)
+                .consumerMainThread(PrintStuffC2SPacket::handle)
+                .add();
+        net.messageBuilder(PrintCoolTimeC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PrintCoolTimeC2SPacket::new)
+                .encoder(PrintCoolTimeC2SPacket::toBytes)
+                .consumerMainThread(PrintCoolTimeC2SPacket::handle)
+                .add();
+        net.messageBuilder(PrintFoundStuffC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PrintFoundStuffC2SPacket::new)
+                .encoder(PrintFoundStuffC2SPacket::toBytes)
+                .consumerMainThread(PrintFoundStuffC2SPacket::handle)
+                .add();
+
+        // skill
         net.messageBuilder(UseSkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(UseSkillC2SPacket::new)
                 .encoder(UseSkillC2SPacket::toBytes)

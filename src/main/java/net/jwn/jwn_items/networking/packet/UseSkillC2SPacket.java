@@ -1,8 +1,9 @@
 package net.jwn.jwn_items.networking.packet;
 
 import net.jwn.jwn_items.capability.CoolTimeProvider;
-import net.jwn.jwn_items.item.ModActiveItem;
+import net.jwn.jwn_items.item.ActiveItem;
 import net.jwn.jwn_items.item.ModItem;
+import net.jwn.jwn_items.item.ModItemProvider;
 import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.item.active.ChargedTNT;
 import net.jwn.jwn_items.item.active.D1;
@@ -16,19 +17,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 public class UseSkillC2SPacket {
-    private final int ID;
+    private final int id;
     private final int itemLevel;
 
-    public UseSkillC2SPacket(int ID, int itemLevel) {
-        this.ID = ID;
+    public UseSkillC2SPacket(int id, int itemLevel) {
+        this.id = id;
         this.itemLevel = itemLevel;
     }
     public UseSkillC2SPacket(FriendlyByteBuf buf) {
-        this.ID = buf.readInt();
+        this.id = buf.readInt();
         this.itemLevel = buf.readInt();
     }
     public void toBytes(FriendlyByteBuf buf) {
-        buf.writeInt(this.ID);
+        buf.writeInt(this.id);
         buf.writeInt(this.itemLevel);
     }
 
@@ -38,25 +39,25 @@ public class UseSkillC2SPacket {
             // HERE WE ARE ON THE SERVER!
             ServerPlayer player = context.getSender();
 
-            int itemCoolTime = ((ModActiveItem) ModItems.ModItemsProvider.___getItemByID(ID)).getCoolTime(itemLevel);
-            int skillStack = ((ModActiveItem) ModItems.ModItemsProvider.___getItemByID(ID)).getStack();
+            int adjustedCoolTime = ((ActiveItem) ModItemProvider.getItemById(id)).getCoolTime(itemLevel);
+            int skillStack = ((ActiveItem) ModItemProvider.getItemById(id)).getChargeStack();
 
             AtomicBoolean canUseSkill = new AtomicBoolean(false);
             player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(coolTime -> {
-                if (coolTime.canUseSkill(itemCoolTime, skillStack)) {
+                if (coolTime.canUseSkill(adjustedCoolTime, skillStack)) {
                     canUseSkill.set(true);
-                    coolTime.addTime(itemCoolTime);
+                    coolTime.add(adjustedCoolTime);
                 } else {
-                    player.sendSystemMessage(Component.literal("can't use now\n" + (coolTime.getTime() / 20.0) + " seconds left"));
+                    player.sendSystemMessage(Component.literal("can't use now"));
                 }
             });
 
             if (canUseSkill.get()) {
-                if (ID == ((ModItem) ModItems.D1_ITEM.get()).getItemID()) {
+                if (id == ((ModItem) ModItems.D1_ITEM.get()).id) {
                     D1.operateServer(player);
-                } else if (ID == ((ModItem) ModItems.D6_ITEM.get()).getItemID()) {
+                } else if (id == ((ModItem) ModItems.D6_ITEM.get()).id) {
                     D6.operateServer(player);
-                } else if (ID == ((ModItem) ModItems.CHARGED_TNT_ITEM.get()).getItemID()) {
+                } else if (id == ((ModItem) ModItems.CHARGED_TNT_ITEM.get()).id) {
                     ChargedTNT.operateServer(player);
                 }
             }

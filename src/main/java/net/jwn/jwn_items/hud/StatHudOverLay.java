@@ -1,9 +1,9 @@
 package net.jwn.jwn_items.hud;
 
 import net.jwn.jwn_items.Main;
-import net.jwn.jwn_items.capability.PlayerOptionsProvider;
-import net.jwn.jwn_items.capability.PlayerStatsProvider;
-import net.jwn.jwn_items.stat.StatType;
+import net.jwn.jwn_items.capability.PlayerOptionProvider;
+import net.jwn.jwn_items.capability.PlayerStatProvider;
+import net.jwn.jwn_items.util.StatType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
@@ -22,14 +22,14 @@ public class StatHudOverLay {
         int y = (screenHeight - 13 * 7) / 2;
 
         float[] stats = new float[8];
-        player.getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
+        player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
             for (int i = 0; i < 7; i++) {
                 stats[i] = playerStats.getValue(i) + playerStats.getValue(i + 7);
             }
             stats[7] = playerStats.getValue(StatType.COIN);
         });
 
-        player.getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(playerOptions -> {
+        player.getCapability(PlayerOptionProvider.playerOptionsCapability).ifPresent(playerOptions -> {
             if (playerOptions.getStatHudOption()) {
                 String text;
                 int row = 0;

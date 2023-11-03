@@ -1,16 +1,17 @@
 package net.jwn.jwn_items.capability;
 
-import net.jwn.jwn_items.inventory.ModSlot;
+import net.jwn.jwn_items.util.ModSlot;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
-import net.jwn.jwn_items.item.ModItems;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.Arrays;
 
-import static net.jwn.jwn_items.util.Options.*;
-
 public class MyStuff {
+    public static final int ACTIVE_MAX_UPGRADE = 5;
+    public static final int ACTIVE_MAX = 3;
+    public static final int PASSIVE_MAX = 27;
+
     int[] activeItemID = new int[ACTIVE_MAX_UPGRADE];
     int[] activeItemLevel = new int[ACTIVE_MAX_UPGRADE];
     boolean[] activeItemLocked = new boolean[ACTIVE_MAX_UPGRADE];
@@ -20,42 +21,6 @@ public class MyStuff {
     boolean[] passiveItemLocked = new boolean[PASSIVE_MAX];
 
     boolean activeUpgraded = false;
-
-    public void set(ModSlot[] activeSlots, ModSlot[] passiveSlots, boolean activeUpgraded) {
-        for (int i = 0; i < activeSlots.length; i++) {
-            this.activeItemID[i] = activeSlots[i].itemID;
-            this.activeItemLevel[i] = activeSlots[i].level;
-            this.activeItemLocked[i] = activeSlots[i].locked;
-        }
-        for (int i = 0; i < passiveSlots.length; i++) {
-            this.passiveItemID[i] = passiveSlots[i].itemID;
-            this.passiveItemLevel[i] = passiveSlots[i].level;
-            this.passiveItemLocked[i] = passiveSlots[i].locked;
-        }
-        this.activeUpgraded = activeUpgraded;
-    }
-
-    public boolean hasItem(int id) {
-        for (int activeID : activeItemID) {
-            if (activeID == id) {
-                return true;
-            }
-        }
-        for (int passiveID : passiveItemID) {
-            if (passiveID == id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void lockActiveSlot(int index, boolean locked) {
-        activeItemLocked[index] = locked;
-    }
-
-    public void lockPassiveSlot(int index, boolean locked) {
-        passiveItemLocked[index] = locked;
-    }
 
     public ModSlot[] getActiveSlots() {
         ModSlot[] toReturn = new ModSlot[ACTIVE_MAX_UPGRADE];
@@ -73,82 +38,22 @@ public class MyStuff {
         return toReturn;
     }
 
-    public ModSlot getSlotByItem(ModItem modItem) {
-        if (modItem.itemType == ItemType.ACTIVE) {
-            for (ModSlot modSlot : getActiveSlots()) {
-                if (modSlot.itemID == modItem.ID) {
-                    return modSlot;
-                }
-            }
-        } else if (modItem.itemType == ItemType.PASSIVE) {
-            for (ModSlot modSlot : getPassiveSlots()) {
-                if (modSlot.itemID == modItem.ID) {
-                    return modSlot;
-                }
-            }
-        } return null;
-    }
-
     public boolean isActiveUpgraded() {
         return activeUpgraded;
     }
 
-    private int getSlotIfHas(ModItem item) {
-        if (item.itemType == ItemType.ACTIVE) {
-            for (int i = 0; i < ACTIVE_MAX_UPGRADE; i++) {
-                if (activeItemID[i] == item.ID) {
-                    return i;
-                }
-            }
-        } else if (item.itemType == ItemType.PASSIVE) {
-            for (int i = 0; i < PASSIVE_MAX; i++) {
-                if (passiveItemID[i] == item.ID) {
-                    return i;
-                }
-            }
+    public void set(ModSlot[] activeSlots, ModSlot[] passiveSlots, boolean activeUpgraded) {
+        for (int i = 0; i < activeSlots.length; i++) {
+            this.activeItemID[i] = activeSlots[i].itemId;
+            this.activeItemLevel[i] = activeSlots[i].level;
+            this.activeItemLocked[i] = activeSlots[i].locked;
         }
-        return -1;
-    }
-
-    private boolean isSlotFull(ItemType itemType) {
-        return switch (itemType) {
-            case ACTIVE -> activeUpgraded ? activeItemID[ACTIVE_MAX_UPGRADE - 1] != 0 : activeItemID[ACTIVE_MAX - 1] != 0;
-            case PASSIVE -> passiveItemID[PASSIVE_MAX - 1] != 0;
-            case CONSUMABLES -> true;
-        };
-    }
-
-    public int getEmptySlot(ItemType itemType) {
-        if (itemType == ItemType.ACTIVE) {
-            int active_max = (activeUpgraded) ? ACTIVE_MAX_UPGRADE : ACTIVE_MAX;
-            for (int i = 0; i < active_max; i++) {
-                if (activeItemID[i] == 0) return i;
-            }
-        } else if (itemType == ItemType.PASSIVE) {
-            for (int i = 0; i < PASSIVE_MAX; i++) {
-                if (passiveItemID[i] == 0) return i;
-            }
-        } return -1;
-    }
-
-    public void changeMainActiveItem() {
-        int num = 0;
-        for (int i = 0; i < ACTIVE_MAX_UPGRADE; i++) {
-            if (activeItemID[i] != 0) {
-                num++;
-            }
+        for (int i = 0; i < passiveSlots.length; i++) {
+            this.passiveItemID[i] = passiveSlots[i].itemId;
+            this.passiveItemLevel[i] = passiveSlots[i].level;
+            this.passiveItemLocked[i] = passiveSlots[i].locked;
         }
-        if (num == 0) return;
-
-        ModSlot mainItem = new ModSlot(activeItemID[0], activeItemLevel[0], activeItemLocked[0]);
-        for (int i = 0; i < num - 1; i++) {
-            activeItemID[i] = activeItemID[i+1];
-            activeItemLevel[i] = activeItemLevel[i+1];
-            activeItemLocked[i] = activeItemLocked[i+1];
-        }
-        activeItemID[num - 1] = mainItem.itemID;
-        activeItemLevel[num - 1] = mainItem.level;
-        activeItemLocked[num - 1] = mainItem.locked;
+        this.activeUpgraded = activeUpgraded;
     }
 
     public void reset() {
@@ -161,27 +66,56 @@ public class MyStuff {
         activeUpgraded = false;
     }
 
-    public boolean addItem(ModItem item) {
-        if (isSlotFull(item.itemType)) return false;
-        if (item.itemType == ItemType.CONSUMABLES) return false;
+    public void lockActiveSlot(int index, boolean locked) {
+        activeItemLocked[index] = locked;
+    }
+
+    public void lockPassiveSlot(int index, boolean locked) {
+        passiveItemLocked[index] = locked;
+    }
+
+    private boolean isFull(ItemType itemType) {
+        return switch (itemType) {
+            case ACTIVE -> activeUpgraded ? activeItemID[ACTIVE_MAX_UPGRADE - 1] != 0 : activeItemID[ACTIVE_MAX - 1] != 0;
+            case PASSIVE -> passiveItemID[PASSIVE_MAX - 1] != 0;
+            case CONSUMABLES -> true;
+        };
+    }
+
+    public int getEmptySlot(ItemType itemType) {
+        if (itemType == ItemType.ACTIVE) {
+            int l = (activeUpgraded) ? ACTIVE_MAX_UPGRADE : ACTIVE_MAX;
+            for (int i = 0; i < l; i++) {
+                if (activeItemID[i] == 0) return i;
+            }
+        } else if (itemType == ItemType.PASSIVE) {
+            for (int i = 0; i < PASSIVE_MAX; i++) {
+                if (passiveItemID[i] == 0) return i;
+            }
+        } return -1;
+    }
+
+    public boolean addItem(ModItem modItem) {
+        if (isFull(modItem.itemType)) return false;
+        if (modItem.itemType == ItemType.CONSUMABLES) return false;
 
         int index;
-        if (getSlotIfHas(item) == -1)  {
-            index = getEmptySlot(item.itemType);
+        if (getIndex(modItem) == -1)  {
+            index = getEmptySlot(modItem.itemType);
         } else {
-            index = getSlotIfHas(item);
+            index = getIndex(modItem);
         }
 
         int level;
-        if (item.itemType == ItemType.ACTIVE) {
+        if (modItem.itemType == ItemType.ACTIVE) {
             level = activeItemLevel[index];
             if (level >= 5) return false;
-            activeItemID[index] = item.ID;
+            activeItemID[index] = modItem.id;
             activeItemLevel[index] = level + 1;
         } else {
             level = passiveItemLevel[index];
             if (level >= 5) return false;
-            passiveItemID[index] = item.ID;
+            passiveItemID[index] = modItem.id;
             passiveItemLevel[index] = level + 1;
         }
         return true;
@@ -207,6 +141,57 @@ public class MyStuff {
             passiveItemLevel[PASSIVE_MAX - 1] = 0;
             passiveItemLocked[PASSIVE_MAX - 1] = false;
         }
+    }
+
+    public void changeMainActiveItem() {
+        int num = 0;
+        for (int i = 0; i < ACTIVE_MAX_UPGRADE; i++) {
+            if (activeItemID[i] != 0) {
+                num++;
+            }
+        }
+        if (num == 0) return;
+
+        ModSlot mainItem = new ModSlot(activeItemID[0], activeItemLevel[0], activeItemLocked[0]);
+        for (int i = 0; i < num - 1; i++) {
+            activeItemID[i] = activeItemID[i+1];
+            activeItemLevel[i] = activeItemLevel[i+1];
+            activeItemLocked[i] = activeItemLocked[i+1];
+        }
+        activeItemID[num - 1] = mainItem.itemId;
+        activeItemLevel[num - 1] = mainItem.level;
+        activeItemLocked[num - 1] = mainItem.locked;
+    }
+
+    public int getLevelById(int id) {
+        for (ModSlot modSlot : getActiveSlots()) {
+            if (modSlot.itemId == id) {
+                return modSlot.level;
+            }
+        }
+        for (ModSlot modSlot : getPassiveSlots()) {
+            if (modSlot.itemId == id) {
+                return modSlot.level;
+            }
+        }
+        return 0;
+    }
+
+    private int getIndex(ModItem modItem) {
+        if (modItem.itemType == ItemType.ACTIVE) {
+            for (int i = 0; i < ACTIVE_MAX_UPGRADE; i++) {
+                if (activeItemID[i] == modItem.id) {
+                    return i;
+                }
+            }
+        } else if (modItem.itemType == ItemType.PASSIVE) {
+            for (int i = 0; i < PASSIVE_MAX; i++) {
+                if (passiveItemID[i] == modItem.id) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     public void copyFrom(MyStuff myStuff) {

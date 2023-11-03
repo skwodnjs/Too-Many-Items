@@ -4,18 +4,15 @@ import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.*;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
+import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.item.passive.Aging;
 import net.jwn.jwn_items.item.passive.Battery5V;
 import net.jwn.jwn_items.item.passive.Mustache;
 import net.jwn.jwn_items.item.passive.RapidGrowth;
-import net.jwn.jwn_items.networking.ModMessages;
-import net.jwn.jwn_items.networking.packet.FoundStuffSyncS2CPacket;
-import net.jwn.jwn_items.networking.packet.MyStuffSyncS2CPacket;
-import net.jwn.jwn_items.networking.packet.OptionSyncS2CPacket;
-import net.jwn.jwn_items.networking.packet.StatSyncS2CPacket;
-import net.jwn.jwn_items.stat.StatType;
+import net.jwn.jwn_items.util.StatType;
+import net.jwn.jwn_items.util.Functions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -30,6 +27,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID)
@@ -38,43 +37,43 @@ public class ModEvents {
     public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
         if (event.phase == TickEvent.Phase.END) {
+            player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
             if (event.side == LogicalSide.SERVER) {
-                // cool time
-                player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
-
                 player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                    if (myStuff.hasItem(((ModItem) ModItems.MUSTACHE_ITEM.get()).getItemID())) {
-                        if (Math.random() < 0.01) Mustache.operateServer(player);
+                    // logic for passive item
+                    List<Integer> passiveId = Arrays.stream(myStuff.getPassiveSlots())
+                            .map(modSlot -> modSlot.itemId).toList();
+                    if (passiveId.contains(((ModItem) ModItems.MUSTACHE_ITEM.get()).id)) {
+                        int level = myStuff.getLevelById(((ModItem) ModItems.MUSTACHE_ITEM.get()).id);
+                        if (Math.random() < 0.01 + level * 0.01) Mustache.operateServer(player);
                     }
-                    if (myStuff.hasItem(((ModItem) ModItems.BATTERY_5V.get()).getItemID())) {
-                        if (Math.random() < 0.01) Battery5V.operateServer(player);
+                    if (passiveId.contains(((ModItem) ModItems.BATTERY_5V.get()).id)) {
+                        int level = myStuff.getLevelById(((ModItem) ModItems.BATTERY_5V.get()).id);
+                        if (Math.random() < 0.01 + level * 0.01) Battery5V.operateServer(player);
                     }
-                    if (myStuff.hasItem(((ModItem) ModItems.AGING.get()).getItemID())) {
-                        if (Math.random() < 0.01) Aging.operateServer(player);
+                    if (passiveId.contains(((ModItem) ModItems.AGING.get()).id)) {
+                        int level = myStuff.getLevelById(((ModItem) ModItems.AGING.get()).id);
+                        if (Math.random() < 0.01 + level * 0.01) Aging.operateServer(player);
                     }
-                    if (myStuff.hasItem(((ModItem) ModItems.RAPID_GROWTH.get()).getItemID())) {
-                        if (Math.random() < 0.5) RapidGrowth.operateServer(player);
+                    if (passiveId.contains(((ModItem) ModItems.RAPID_GROWTH.get()).id)) {
+                        int level = myStuff.getLevelById(((ModItem) ModItems.RAPID_GROWTH.get()).id);
+                        if (Math.random() < 0.5 + level * 0.01) RapidGrowth.operateServer(player);
                     }
-                });
-            } else {
-                player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-//                if (myStuff.hasItem(((ModItem) ModItems.BATTERY_5V.get()).getItemID())) {
-//                    Battery5V.operateServer(player);
-//                }
                 });
             }
-            // both side
+            // else {} for client side
         }
     }
 
     @SubscribeEvent
     public static void onModItemUsedSuccessfullyEvent(ModItemUsedSuccessfullyEvent event) {
+        // 도감에 등록
         Player player = event.player;
-        ModItem modItem = ModItems.ModItemsProvider.___getItemByID(event.id);
         player.getCapability(FoundStuffProvider.foundStuffCapability).ifPresent(foundStuff -> {
+            if (event.itemType == ItemType.CONSUMABLES) foundStuff.set(event.id, 1);
             player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                int myStuffLevel = myStuff.getSlotByItem(modItem).level;
-                if (foundStuff.getFoundStuffLevel()[event.id] < myStuffLevel) {
+                int myStuffLevel = myStuff.getLevelById(event.id);
+                if (foundStuff.get()[event.id] < myStuffLevel) {
                     foundStuff.set(event.id, myStuffLevel);
                 }
             });
@@ -84,8 +83,8 @@ public class ModEvents {
     @SubscribeEvent
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
-            if (!event.getObject().getCapability(PlayerStatsProvider.playerStatsCapability).isPresent()) {
-                event.addCapability(new ResourceLocation(Main.MOD_ID, "player_stats"), new PlayerStatsProvider());
+            if (!event.getObject().getCapability(PlayerStatProvider.playerStatsCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "player_stats"), new PlayerStatProvider());
             }
             if (!event.getObject().getCapability(MyStuffProvider.myStuffCapability).isPresent()) {
                 event.addCapability(new ResourceLocation(Main.MOD_ID, "my_stuff"), new MyStuffProvider());
@@ -93,8 +92,8 @@ public class ModEvents {
             if (!event.getObject().getCapability(CoolTimeProvider.coolTimeCapability).isPresent()) {
                 event.addCapability(new ResourceLocation(Main.MOD_ID, "cool_time"), new CoolTimeProvider());
             }
-            if (!event.getObject().getCapability(PlayerStatsProvider.playerStatsCapability).isPresent()) {
-                event.addCapability(new ResourceLocation(Main.MOD_ID, "player_options"), new PlayerOptionsProvider());
+            if (!event.getObject().getCapability(PlayerStatProvider.playerStatsCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "player_options"), new PlayerOptionProvider());
             }
             if (!event.getObject().getCapability(FoundStuffProvider.foundStuffCapability).isPresent()) {
                 event.addCapability(new ResourceLocation(Main.MOD_ID, "found_stuff"), new FoundStuffProvider());
@@ -104,100 +103,45 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onPlayerStatsChangedEvent(PlayerStatsChangedEvent event) {
+        // 스텟 실제로 적용
         if (!event.player.level().isClientSide) {
-            AtomicReference<Float> healthByConsumableValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> damageByConsumableValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> attackSpeedByConsumableValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> attackRangeByConsumableValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> movementSpeedByConsumableValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> miningSpeedByConsumableValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> luckByConsumableValue = new AtomicReference<>(0.0f);
+            event.player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
+                float healthValue = playerStats.getValue(0) + playerStats.getValue(7);
+                float damageValue = playerStats.getValue(1) + playerStats.getValue(8);
+                float attackSpeedValue = playerStats.getValue(2) + playerStats.getValue(9);
+                float attackRangeValue = playerStats.getValue(3) + playerStats.getValue(10);
+                float movementSpeedValue = playerStats.getValue(5) + playerStats.getValue(12);
 
-            AtomicReference<Float> healthByItemValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> damageByItemValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> attackSpeedByItemValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> attackRangeByItemValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> movementSpeedByItemValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> miningSpeedByItemValue = new AtomicReference<>(0.0f);
-            AtomicReference<Float> luckByItemValue = new AtomicReference<>(0.0f);
+                // HEALTH
+                float healthCorrectionValue = 20.0f + 2 * Math.min(healthValue, PlayerStat.MAX_HEALTH);
+                event.player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(healthCorrectionValue);
+                event.player.setHealth(event.player.getMaxHealth());
 
-            AtomicReference<Float> coinValue = new AtomicReference<>(0.0f);
+                // DAMAGE
+                float damageCorrectionValue = 2.0f + 4.0f / 60.0f * Math.min(damageValue, PlayerStat.MAX_STAT);
+                event.player.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(damageCorrectionValue);
 
-            event.player.getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
-                healthByConsumableValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.HEALTH_BY_CONSUMABLES));
-                damageByConsumableValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.DAMAGE_BY_CONSUMABLES));
-                attackSpeedByConsumableValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.ATTACK_SPEED_BY_CONSUMABLES));
-                attackRangeByConsumableValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.ATTACK_RANGE_BY_CONSUMABLES));
-                movementSpeedByConsumableValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.MOVEMENT_SPEED_BY_CONSUMABLES));
-                miningSpeedByConsumableValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.MINING_SPEED_BY_CONSUMABLES));
-                luckByConsumableValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.LUCK_BY_CONSUMABLES));
+                // MOVEMENT SPEED
+                float movementSpeedCorrectionValue = 0.1f + 0.06f / 60 * Math.min(movementSpeedValue, PlayerStat.MAX_STAT);
+                event.player.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(movementSpeedCorrectionValue);
 
-                healthByItemValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.HEALTH_BY_ITEM));
-                damageByItemValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.DAMAGE_BY_ITEM));
-                attackSpeedByItemValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.ATTACK_SPEED_BY_ITEM));
-                attackRangeByItemValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.ATTACK_RANGE_BY_ITEM));
-                movementSpeedByItemValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.MOVEMENT_SPEED_BY_ITEM));
-                miningSpeedByItemValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.MINING_SPEED_BY_ITEM));
-                luckByItemValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.LUCK_BY_ITEM));
+                // ATTACK RANGE
+                float attackRangeCorrectionValue = 3 + 2 / 60.0f * Math.min(attackRangeValue, PlayerStat.MAX_STAT);
+                event.player.getAttribute(ForgeMod.ENTITY_REACH.get()).setBaseValue(attackRangeCorrectionValue);
 
-                coinValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.COIN));
+                // ATTACK SPEED
+                float attackSpeedCorrectionValue = 4.0f + 0.8f / 60.0f * Math.min(attackSpeedValue, PlayerStat.MAX_STAT);
+                event.player.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(attackSpeedCorrectionValue);
             });
-
-            float healthValue = healthByConsumableValue.get() + healthByItemValue.get();
-            float damageValue = damageByConsumableValue.get() + damageByItemValue.get();
-            float movementSpeedValue = movementSpeedByConsumableValue.get() + movementSpeedByItemValue.get();
-            float attackRangeValue = attackRangeByConsumableValue.get() + attackRangeByItemValue.get();
-            float attackSpeedValue = attackSpeedByConsumableValue.get() + attackSpeedByItemValue.get();
-            // mining speed 와 luck 은 따로 적용할 능력치가 없음.
-
-            // HEALTH
-            float healthCorrectionValue = 20.0f + 2 * Math.min(healthValue, PlayerStats.MAX_HEALTH);
-            event.player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(healthCorrectionValue);
-            event.player.setHealth(event.player.getMaxHealth());
-
-            // DAMAGE
-            float damageCorrectionValue = 2.0f + 4.0f / 60.0f * Math.min(damageValue, PlayerStats.MAX_STAT);
-            event.player.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(damageCorrectionValue);
-
-            // MOVEMENT SPEED
-            float movementSpeedCorrectionValue = 0.1f + 0.06f / 60 * Math.min(movementSpeedValue, PlayerStats.MAX_STAT);
-            event.player.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(movementSpeedCorrectionValue);
-
-            // ATTACK RANGE
-            float attackRangeCorrectionValue = 3 + 2 / 60.0f * Math.min(attackRangeValue, PlayerStats.MAX_STAT);
-            event.player.getAttribute(ForgeMod.ENTITY_REACH.get()).setBaseValue(attackRangeCorrectionValue);
-
-            // ATTACK SPEED
-            float attackSpeedCorrectionValue = 4.0f + 0.8f / 60.0f * Math.min(attackSpeedValue, PlayerStats.MAX_STAT);
-            event.player.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(attackSpeedCorrectionValue);
-
-            float[] playerStats = new float[]{
-                healthByConsumableValue.get(),
-                damageByConsumableValue.get(),
-                attackSpeedByConsumableValue.get(),
-                attackRangeByConsumableValue.get(),
-                movementSpeedByConsumableValue.get(),
-                miningSpeedByConsumableValue.get(),
-                luckByConsumableValue.get(),
-                healthByItemValue.get(),
-                damageByItemValue.get(),
-                attackSpeedByItemValue.get(),
-                attackRangeByItemValue.get(),
-                movementSpeedByItemValue.get(),
-                miningSpeedByItemValue.get(),
-                luckByItemValue.get(),
-                coinValue.get()
-            };
-
-            ModMessages.sendToPlayer(new StatSyncS2CPacket(playerStats), (ServerPlayer) event.player);
         }
     }
 
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+        // mining speed 보정
         double miningSpeedCorrectionValue;
         AtomicReference<Double> miningSpeedAtomicValue = new AtomicReference<>(0.0);
-        event.getEntity().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
+        event.getEntity().getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
             miningSpeedAtomicValue.updateAndGet(stat -> stat + playerStats.getValue(StatType.MINING_SPEED_BY_ITEM) + playerStats.getValue(StatType.MINING_SPEED_BY_CONSUMABLES));
         });
         miningSpeedCorrectionValue = 1.0 + 0.4 / 60.0 * miningSpeedAtomicValue.get();
@@ -206,28 +150,15 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+        // sync capabilities, server to client
         if (!event.getEntity().level().isClientSide) {
             Player player = event.getEntity();
-            // Player Stat
-            player.getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(playerStats -> {
-                float[] stats = new float[15];
-                for (int i = 0; i < stats.length; i++) {
-                    stats[i] = playerStats.getValue(i);
-                }
-                MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
-            });
-            // My Stuff
-            player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                ModMessages.sendToPlayer(new MyStuffSyncS2CPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.isActiveUpgraded()), (ServerPlayer) player);
-            });
-            // Stuff I Found
-            player.getCapability(FoundStuffProvider.foundStuffCapability).ifPresent(foundStuff -> {
-                ModMessages.sendToPlayer(new FoundStuffSyncS2CPacket(foundStuff.getFoundStuffLevel()), (ServerPlayer) player);
-            });
-            // Player Option
-            player.getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(playerOptions -> {
-                ModMessages.sendToPlayer(new OptionSyncS2CPacket(playerOptions.getStatHudOption(), playerOptions.getStatHudDetailOptions()), (ServerPlayer) player);
-            });
+            Functions.syncPlayerStatS2C((ServerPlayer) player);
+            MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
+            Functions.syncMyStuffS2C((ServerPlayer) player);
+            Functions.syncFoundStuffS2C((ServerPlayer) player);
+            Functions.syncPlayerOptionS2C((ServerPlayer) player);
+            Functions.syncCoolTimeS2C((ServerPlayer) player);
         }
     }
 
@@ -236,12 +167,12 @@ public class ModEvents {
         if(event.isWasDeath()) {
             event.getOriginal().reviveCaps();
             // Player Stat
-            event.getOriginal().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(oldStore -> {
-                event.getEntity().getCapability(PlayerStatsProvider.playerStatsCapability).ifPresent(newStore -> {
+            event.getOriginal().getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
-                    MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(event.getEntity()));
                 });
             });
+            MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(event.getEntity()));
             // My Stuff
             event.getOriginal().getCapability(MyStuffProvider.myStuffCapability).ifPresent(oldStore -> {
                 event.getEntity().getCapability(MyStuffProvider.myStuffCapability).ifPresent(newStore -> {
@@ -249,8 +180,8 @@ public class ModEvents {
                 });
             });
             // Player Option
-            event.getOriginal().getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(oldStore -> {
-                event.getEntity().getCapability(PlayerOptionsProvider.playerOptionsCapability).ifPresent(newStore -> {
+            event.getOriginal().getCapability(PlayerOptionProvider.playerOptionsCapability).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerOptionProvider.playerOptionsCapability).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });

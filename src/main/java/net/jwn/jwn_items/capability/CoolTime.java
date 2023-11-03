@@ -1,18 +1,19 @@
 package net.jwn.jwn_items.capability;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.player.Player;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CoolTime {
     int time = 0;
 
-    public int getTime() {
+    public int get() {
         return time;
     }
 
-    public void addTime(int time) {
+    public void set(int coolTime) {
+        this.time = coolTime;
+    }
+
+    public void add(int time) {
         this.time += time;
     }
 
@@ -22,8 +23,12 @@ public class CoolTime {
         }
     }
 
-    public boolean canUseSkill(int coolTime, int stack) {
-        return coolTime * (stack - 1) >= time;
+    public void reset() {
+        this.time = 0;
+    }
+
+    public boolean canUseSkill(int cost, int chargeStack) {
+        return cost * chargeStack >= time + cost;
     }
 
     public void copyFrom(CoolTime coolTime) {
@@ -36,9 +41,5 @@ public class CoolTime {
 
     public void loadNBTData(CompoundTag nbt) {
         this.time = nbt.getInt("coolTime");
-    }
-
-    public void reset() {
-        this.time = 0;
     }
 }

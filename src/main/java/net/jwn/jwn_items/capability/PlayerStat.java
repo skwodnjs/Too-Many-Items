@@ -1,15 +1,15 @@
 package net.jwn.jwn_items.capability;
 
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
-import net.jwn.jwn_items.stat.Stat;
-import net.jwn.jwn_items.stat.StatType;
+import net.jwn.jwn_items.util.Stat;
+import net.jwn.jwn_items.util.StatType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Arrays;
 
-public class PlayerStats {
+public class PlayerStat {
     private float[] playerStats = new float[15];
 
     public static final float MAX_HEALTH = 30.0f;
@@ -17,12 +17,12 @@ public class PlayerStats {
     public static final float MIN_STAT = 0.0f;
     public static final float MAX_COIN = 99.0f;
 
-    public float[] getAll() {
-        float[] toReturn = new float[15];
-        for (int i = 0; i < 15; i++) {
-            toReturn[i] = getValue(i);
-        }
-        return toReturn;
+    public float[] get() {
+        return playerStats;
+    }
+
+    public void set(float[] playerStats) {
+        this.playerStats = playerStats;
     }
 
     public float getValue(StatType statType) {
@@ -59,34 +59,29 @@ public class PlayerStats {
 
         Stat newStat = new Stat(addStat.getStatType(), newValue);
         playerStats[index] = newStat.getValue();
-        Stat appliedStat = new Stat(addStat.getStatType(), playerStats[index] - oldValue);
+        Stat result = new Stat(addStat.getStatType(), playerStats[index] - oldValue);
 
         MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
-
-//        System.out.println(newStat.getStatType().getName());
-//        System.out.println("저장 전: " + oldValue);
-//        System.out.println("저장 후: " + playerStats[index]);
-        return appliedStat.getValue();
+        return result.getValue();
     }
 
-    public void set(Player player, Stat setStat) {
-        int index = setStat.getStatType().ordinal();
-        float setValue = setStat.getValue();
+//    public void setOnly(Player player, Stat setStat) {
+//        int index = setStat.getStatType().ordinal();
+//        float setValue = setStat.getValue();
+//
+//        if ((index == 0 || index == 7) && (setStat.getValue() < MIN_STAT || setStat.getValue() > MAX_HEALTH)) return;
+//        else if ((index == 14) && (setStat.getValue() < MIN_STAT || setStat.getValue() > MAX_COIN)) return;
+//        else if (setStat.getValue() < MIN_STAT || setStat.getValue() > MAX_STAT) return;
+//
+//        playerStats[index] = setValue;
+//        MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
+//    }
 
-        if ((index == 0 || index == 7) && (setStat.getValue() < MIN_STAT || setStat.getValue() > MAX_HEALTH)) return;
-        else if ((index == 14) && (setStat.getValue() < MIN_STAT || setStat.getValue() > MAX_COIN)) return;
-        else if (setStat.getValue() < MIN_STAT || setStat.getValue() > MAX_STAT) return;
-
-        playerStats[index] = setValue;
-        MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
-    }
-
-    public void reset(Player player) {
+    public void reset() {
         Arrays.fill(playerStats, 0);
-        MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
     }
 
-    public void copyFrom(PlayerStats source) {
+    public void copyFrom(PlayerStat source) {
         for (int index = 0; index < playerStats.length; index++) {
             playerStats[index] = source.getValue(index);
         }

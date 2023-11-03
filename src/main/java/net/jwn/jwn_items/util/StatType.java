@@ -1,4 +1,4 @@
-package net.jwn.jwn_items.stat;
+package net.jwn.jwn_items.util;
 
 public enum StatType {
     HEALTH_BY_CONSUMABLES,

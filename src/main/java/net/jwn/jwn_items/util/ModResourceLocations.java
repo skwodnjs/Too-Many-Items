@@ -4,6 +4,8 @@ import net.jwn.jwn_items.Main;
 import net.minecraft.resources.ResourceLocation;
 
 public class ModResourceLocations {
+    public static final ResourceLocation SCREEN_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/screen.png");
+
     public static final ResourceLocation HEALTH_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/health.png");
     public static final ResourceLocation DAMAGE_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/damage.png");
     public static final ResourceLocation ATTACK_SPEED_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/attack_speed.png");

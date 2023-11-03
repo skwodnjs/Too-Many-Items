@@ -11,23 +11,23 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerStatsProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<PlayerStats> playerStatsCapability = CapabilityManager.get(new CapabilityToken<PlayerStats>() {});
+public class PlayerOptionProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+    public static Capability<PlayerOption> playerOptionsCapability = CapabilityManager.get(new CapabilityToken<PlayerOption>() {});
 
-    private PlayerStats playerStats = null;
+    private PlayerOption playerOptions = null;
 
-    private final LazyOptional<PlayerStats> optional = LazyOptional.of(this::createPlayerStats);
+    private final LazyOptional<PlayerOption> optional = LazyOptional.of(this::createPlayerOptions);
 
-    private PlayerStats createPlayerStats() {
-        if (this.playerStats == null) {
-            this.playerStats = new PlayerStats();
+    private PlayerOption createPlayerOptions() {
+        if (this.playerOptions == null) {
+            this.playerOptions = new PlayerOption();
         }
-        return this.playerStats;
+        return this.playerOptions;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == playerStatsCapability) {
+        if (cap == playerOptionsCapability) {
             return optional.cast();
         }
         return LazyOptional.empty();
@@ -36,12 +36,12 @@ public class PlayerStatsProvider implements ICapabilityProvider, INBTSerializabl
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        createPlayerStats().saveNBTData(nbt);
+        createPlayerOptions().saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createPlayerStats().loadNBTData(nbt);
+        createPlayerOptions().loadNBTData(nbt);
     }
 }

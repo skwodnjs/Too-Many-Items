@@ -2,6 +2,7 @@ package net.jwn.jwn_items.gui;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.FoundStuffProvider;
+import net.jwn.jwn_items.item.ModItemProvider;
 import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.util.KeyBindings;
 import net.minecraft.client.Minecraft;
@@ -30,7 +31,7 @@ public class StuffIFoundScreen extends Screen {
     private void setting() {
         Player player = Minecraft.getInstance().player;
         player.getCapability(FoundStuffProvider.foundStuffCapability).ifPresent(foundStuff -> {
-            items = foundStuff.getFoundStuffLevel();
+            items = foundStuff.get();
         });
     }
 
@@ -51,7 +52,7 @@ public class StuffIFoundScreen extends Screen {
                             BACKGROUND_RESOURCE, 256, 256, pButton -> {});
                     item.setTooltip(Tooltip.create(Component.literal("Unknown")));
                 } else {
-                    ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + ModItems.ModItemsProvider.___getItemByID(i) + ".png");
+                    ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + ModItemProvider.getItemById(i) + ".png");
                     item = new ImageButton(leftPos + 8 + (i % 9) * 18, topPos + 18 + (i / 9) * 18 + (i / 27) * 12, 16, 16,0, 0, 0,
                             itemResourceLocation, 16, 16, pButton -> {});
                     item.setTooltip(Tooltip.create(Component.literal("level: " + items[i])));

@@ -1,4 +1,9 @@
-package net.jwn.jwn_items.stat;
+package net.jwn.jwn_items.util;
+
+import net.jwn.jwn_items.capability.PlayerStatProvider;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Stat {
     private final StatType statType;
@@ -25,6 +30,15 @@ public class Stat {
             newValue = Math.round(value * 10.0f) / 10.0f;
         }
         this.value = newValue;
+    }
+
+    public static float addSingleStat(Player player, Stat stat) {
+        AtomicReference<Float> toReturn = new AtomicReference<>(0f);
+        player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
+            float appliedValue = playerStats.add(player, stat);
+            toReturn.set(appliedValue);
+        });
+        return toReturn.get();
     }
 
     public StatType getStatType() {

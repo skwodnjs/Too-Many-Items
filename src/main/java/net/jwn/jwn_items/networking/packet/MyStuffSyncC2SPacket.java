@@ -1,15 +1,14 @@
 package net.jwn.jwn_items.networking.packet;
 
 import net.jwn.jwn_items.capability.MyStuffProvider;
-import net.jwn.jwn_items.inventory.ModSlot;
+import net.jwn.jwn_items.util.ModSlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-import static net.jwn.jwn_items.util.Options.ACTIVE_MAX_UPGRADE;
-import static net.jwn.jwn_items.util.Options.PASSIVE_MAX;
+import static net.jwn.jwn_items.capability.MyStuff.*;
 
 public class MyStuffSyncC2SPacket {
     ModSlot[] myStuffActiveSlots = new ModSlot[ACTIVE_MAX_UPGRADE];
@@ -24,12 +23,12 @@ public class MyStuffSyncC2SPacket {
 
     public void toBytes(FriendlyByteBuf buf) {
         for (int i = 0; i < myStuffActiveSlots.length; i++) {
-            buf.writeInt(myStuffActiveSlots[i].itemID);
+            buf.writeInt(myStuffActiveSlots[i].itemId);
             buf.writeInt(myStuffActiveSlots[i].level);
             buf.writeBoolean(myStuffActiveSlots[i].locked);
         }
         for (int i = 0; i < myStuffPassiveSlots.length; i++) {
-            buf.writeInt(myStuffPassiveSlots[i].itemID);
+            buf.writeInt(myStuffPassiveSlots[i].itemId);
             buf.writeInt(myStuffPassiveSlots[i].level);
             buf.writeBoolean(myStuffPassiveSlots[i].locked);
         }
