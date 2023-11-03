@@ -22,8 +22,8 @@ public class ActiveItemHubOverlay {
         player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
             ModSlot mainActiveSlot = myStuff.getActiveSlots()[0];
             ModSlot subActiveSlot = myStuff.getActiveSlots()[1];
-            ModItem mainItem = ModItems.ModItemsProvider.getItemByID(mainActiveSlot.itemID);
-            ModItem subItem = ModItems.ModItemsProvider.getItemByID(subActiveSlot.itemID);
+            ModItem mainItem = ModItems.ModItemsProvider.___getItemByID(mainActiveSlot.itemID);
+            ModItem subItem = ModItems.ModItemsProvider.___getItemByID(subActiveSlot.itemID);
             ResourceLocation mainItemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + mainItem + ".png");
             ResourceLocation subItemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + subItem + ".png");
             if (mainActiveSlot.itemID != 0) {

@@ -8,6 +8,10 @@
   "item.jwn_items.d1": "D1",
   "item.jwn_items.d6": "D6",
   "item.jwn_items.mustache": "콧수염",
+  "item.jwn_items.charged_tnt": "충전된 TNT",
+  "item.jwn_items.battery_5v": "5V 베터리",
+  "item.jwn_items.aging": "커저라!",
+  "item.jwn_items.rapid_growth": "급속 성장",
 
   "stat.jwn_items.health": "체력",
   "stat.jwn_items.damage": "데미지",

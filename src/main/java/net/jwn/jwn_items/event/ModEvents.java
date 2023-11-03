@@ -6,7 +6,10 @@ import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItems;
+import net.jwn.jwn_items.item.passive.Aging;
+import net.jwn.jwn_items.item.passive.Battery5V;
 import net.jwn.jwn_items.item.passive.Mustache;
+import net.jwn.jwn_items.item.passive.RapidGrowth;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.FoundStuffSyncS2CPacket;
 import net.jwn.jwn_items.networking.packet.MyStuffSyncS2CPacket;
@@ -33,26 +36,41 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ModEvents {
     @SubscribeEvent
     public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
-        if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END) {
-            // cool time
-            event.player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
+        Player player = event.player;
+        if (event.phase == TickEvent.Phase.END) {
+            if (event.side == LogicalSide.SERVER) {
+                // cool time
+                player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
 
-            // mustache
-            Mustache.operateServer(event.player);
-
-            //
-        } else {
-
+                player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+                    if (myStuff.hasItem(((ModItem) ModItems.MUSTACHE_ITEM.get()).getItemID())) {
+                        if (Math.random() < 0.01) Mustache.operateServer(player);
+                    }
+                    if (myStuff.hasItem(((ModItem) ModItems.BATTERY_5V.get()).getItemID())) {
+                        if (Math.random() < 0.01) Battery5V.operateServer(player);
+                    }
+                    if (myStuff.hasItem(((ModItem) ModItems.AGING.get()).getItemID())) {
+                        if (Math.random() < 0.01) Aging.operateServer(player);
+                    }
+                    if (myStuff.hasItem(((ModItem) ModItems.RAPID_GROWTH.get()).getItemID())) {
+                        if (Math.random() < 0.5) RapidGrowth.operateServer(player);
+                    }
+                });
+            } else {
+                player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+//                if (myStuff.hasItem(((ModItem) ModItems.BATTERY_5V.get()).getItemID())) {
+//                    Battery5V.operateServer(player);
+//                }
+                });
+            }
+            // both side
         }
-
-        // both side
-
     }
 
     @SubscribeEvent
     public static void onModItemUsedSuccessfullyEvent(ModItemUsedSuccessfullyEvent event) {
         Player player = event.player;
-        ModItem modItem = ModItems.ModItemsProvider.getItemByID(event.id);
+        ModItem modItem = ModItems.ModItemsProvider.___getItemByID(event.id);
         player.getCapability(FoundStuffProvider.foundStuffCapability).ifPresent(foundStuff -> {
             player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
                 int myStuffLevel = myStuff.getSlotByItem(modItem).level;

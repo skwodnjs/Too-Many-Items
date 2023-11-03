@@ -38,8 +38,8 @@ public class UseSkillC2SPacket {
             // HERE WE ARE ON THE SERVER!
             ServerPlayer player = context.getSender();
 
-            int itemCoolTime = ((ModActiveItem) ModItems.ModItemsProvider.getItemByID(ID)).getCoolTime(itemLevel);
-            int skillStack = ((ModActiveItem) ModItems.ModItemsProvider.getItemByID(ID)).getStack();
+            int itemCoolTime = ((ModActiveItem) ModItems.ModItemsProvider.___getItemByID(ID)).getCoolTime(itemLevel);
+            int skillStack = ((ModActiveItem) ModItems.ModItemsProvider.___getItemByID(ID)).getStack();
 
             AtomicBoolean canUseSkill = new AtomicBoolean(false);
             player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(coolTime -> {

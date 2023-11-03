@@ -35,6 +35,20 @@ public class MyStuff {
         this.activeUpgraded = activeUpgraded;
     }
 
+    public boolean hasItem(int id) {
+        for (int activeID : activeItemID) {
+            if (activeID == id) {
+                return true;
+            }
+        }
+        for (int passiveID : passiveItemID) {
+            if (passiveID == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void lockActiveSlot(int index, boolean locked) {
         activeItemLocked[index] = locked;
     }

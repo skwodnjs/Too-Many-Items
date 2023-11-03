@@ -51,7 +51,7 @@ public class StuffIFoundScreen extends Screen {
                             BACKGROUND_RESOURCE, 256, 256, pButton -> {});
                     item.setTooltip(Tooltip.create(Component.literal("Unknown")));
                 } else {
-                    ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + ModItems.ModItemsProvider.getItemByID(i) + ".png");
+                    ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + ModItems.ModItemsProvider.___getItemByID(i) + ".png");
                     item = new ImageButton(leftPos + 8 + (i % 9) * 18, topPos + 18 + (i / 9) * 18 + (i / 27) * 12, 16, 16,0, 0, 0,
                             itemResourceLocation, 16, 16, pButton -> {});
                     item.setTooltip(Tooltip.create(Component.literal("level: " + items[i])));

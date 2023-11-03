@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "net.jwn.jwn_items.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "jwn_items.refmap.json",
+  "mixins": [
+    "MixinMonster"
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8"
+}

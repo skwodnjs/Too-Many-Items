@@ -132,7 +132,7 @@ public class MyStuffScreen extends Screen {
     }
 
     public void drawSlot(int pX, int pY, int itemID, int slot, boolean locked, boolean deleted) {
-        ModItem item = ModItems.ModItemsProvider.getItemByID(itemID);
+        ModItem item = ModItems.ModItemsProvider.___getItemByID(itemID);
         ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + item + ".png");
         if (deleted) {
             ImageButton deletedBackground = new ImageButton(pX - 1, pY - 1, 18, 18, 36, 166, 0, BACKGROUND_RESOURCE, 256, 256, pButton -> makeItemRemovable(item.itemType, slot, false));

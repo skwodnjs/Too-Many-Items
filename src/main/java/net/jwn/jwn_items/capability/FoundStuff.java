@@ -2,10 +2,10 @@ package net.jwn.jwn_items.capability;
 
 import net.minecraft.nbt.CompoundTag;
 
-import static net.jwn.jwn_items.item.ModItems.ModItemsProvider.ITEM_TOTAL;
+import static net.jwn.jwn_items.item.ModItems.ModItemsProvider.___ITEM_TOTAL;
 
 public class FoundStuff {
-    int[] foundStuffLevel = new int[ITEM_TOTAL];
+    int[] foundStuffLevel = new int[___ITEM_TOTAL];
 
     public void set(int[] foundStuffLevel) {
         this.foundStuffLevel = foundStuffLevel;
@@ -24,13 +24,13 @@ public class FoundStuff {
     }
 
     public void saveNBTData(CompoundTag nbt) {
-        for (int i = 0; i < ITEM_TOTAL; i++) {
+        for (int i = 0; i < ___ITEM_TOTAL; i++) {
             nbt.putInt("found_stuff_" + i, foundStuffLevel[i]);
         }
     }
 
     public void loadNBTData(CompoundTag nbt) {
-        for (int i = 0; i < ITEM_TOTAL; i++) {
+        for (int i = 0; i < ___ITEM_TOTAL; i++) {
             foundStuffLevel[i] = nbt.getInt("found_stuff_" + i);
         }
     }

@@ -18,6 +18,7 @@ import net.jwn.jwn_items.capability.PlayerStatsProvider;
 import net.jwn.jwn_items.stat.StatType;
 import net.jwn.jwn_items.util.KeyBindings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -35,6 +36,12 @@ public class ClientEvents {
         public static void onKeyInput(InputEvent.Key event) {
             Player player = Minecraft.getInstance().player;
             if (KeyBindings.ACTIVE_SKILL_KEY.consumeClick()) {
+                player.sendSystemMessage(Component.literal("block X: " + player.getOnPos().getX()));
+                player.sendSystemMessage(Component.literal("block Y: " + player.getOnPos().getY()));
+                player.sendSystemMessage(Component.literal("block Z: " + player.getOnPos().getZ()));
+                player.sendSystemMessage(Component.literal("X: " + player.position().x));
+                player.sendSystemMessage(Component.literal("Y: " + player.position().y));
+                player.sendSystemMessage(Component.literal("Z: " + player.position().z));
                 player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
                     ModSkills.useSkill(player, myStuff.getActiveSlots()[0].itemID, myStuff.getActiveSlots()[0].level);
                 });
