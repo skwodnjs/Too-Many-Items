@@ -1,13 +1,11 @@
 package net.jwn.jwn_items.networking.packet;
 
 import net.jwn.jwn_items.capability.CoolTimeProvider;
-import net.jwn.jwn_items.item.ActiveItem;
+import net.jwn.jwn_items.item.active.ActiveItem;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItemProvider;
 import net.jwn.jwn_items.item.ModItems;
-import net.jwn.jwn_items.item.active.ChargedTNT;
-import net.jwn.jwn_items.item.active.D1;
-import net.jwn.jwn_items.item.active.D6;
+import net.jwn.jwn_items.item.active.ActiveSkill;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,7 +38,7 @@ public class UseSkillC2SPacket {
             ServerPlayer player = context.getSender();
 
             int adjustedCoolTime = ((ActiveItem) ModItemProvider.getItemById(id)).getCoolTime(itemLevel);
-            int skillStack = ((ActiveItem) ModItemProvider.getItemById(id)).getChargeStack();
+            int skillStack = ((ActiveItem) ModItemProvider.getItemById(id)).getMaxStack();
 
             AtomicBoolean canUseSkill = new AtomicBoolean(false);
             player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(coolTime -> {
@@ -54,11 +52,13 @@ public class UseSkillC2SPacket {
 
             if (canUseSkill.get()) {
                 if (id == ((ModItem) ModItems.D1_ITEM.get()).id) {
-                    D1.operateServer(player);
+                    ActiveSkill.operateD1Server(player);
                 } else if (id == ((ModItem) ModItems.D6_ITEM.get()).id) {
-                    D6.operateServer(player);
+                    ActiveSkill.operateD6Server(player);
                 } else if (id == ((ModItem) ModItems.CHARGED_TNT_ITEM.get()).id) {
-                    ChargedTNT.operateServer(player);
+                    ActiveSkill.operateChargedTNT(player);
+                } else if (id == ((ModItem) ModItems.PRESCRIPTION.get()).id) {
+                    ActiveSkill.operatePrescriptionServer(player);
                 }
             }
         });

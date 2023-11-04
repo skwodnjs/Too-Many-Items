@@ -1,11 +1,14 @@
 package net.jwn.jwn_items.util;
 
 import net.jwn.jwn_items.capability.*;
+import net.jwn.jwn_items.item.active.ActiveItem;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import static net.jwn.jwn_items.capability.MyStuff.*;
 
@@ -121,5 +124,24 @@ public class Functions {
         player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStat -> {
             ModMessages.sendToServer(new PlayerStatsSyncC2SPacket(playerStat.get()));
         });
+    }
+
+    // screen
+    public static int getChargedStack(int playerCoolTime, ActiveItem activeItem, int level) {
+        int maxStack = activeItem.getMaxStack();
+        return (playerCoolTime == 0) ? maxStack : maxStack - 1 - ((playerCoolTime - 1) / 20) / (activeItem.getCoolTime(level) / 20);
+    }
+    public static int getWaitingTime(int playerCoolTime, ActiveItem activeItem, int level) {
+        return (playerCoolTime == 0) ? 0 : (playerCoolTime / 20) % (activeItem.getCoolTime(level) / 20) + 1;
+    }
+
+    //
+    public static float addSingleStat(Player player, Stat stat) {
+        AtomicReference<Float> toReturn = new AtomicReference<>(0f);
+        player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
+            float appliedValue = playerStats.add(player, stat);
+            toReturn.set(appliedValue);
+        });
+        return toReturn.get();
     }
 }

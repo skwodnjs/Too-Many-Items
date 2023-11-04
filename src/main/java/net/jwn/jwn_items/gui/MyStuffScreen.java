@@ -5,6 +5,8 @@ import net.jwn.jwn_items.capability.CoolTimeProvider;
 import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.capability.PlayerStatProvider;
 import net.jwn.jwn_items.item.*;
+import net.jwn.jwn_items.item.active.ActiveItem;
+import net.jwn.jwn_items.util.Functions;
 import net.jwn.jwn_items.util.ModSlot;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.MyStuffSyncC2SPacket;
@@ -33,23 +35,23 @@ public class MyStuffScreen extends Screen {
     private int leftPos, topPos;
     private final boolean[] removableActiveSlot = new boolean[ACTIVE_MAX_UPGRADE];
     private final boolean[] removablePassiveSlot = new boolean[PASSIVE_MAX];
+    private boolean isActiveUpgraded = false;
     private boolean removeMode = false;
 
     private ModSlot[] activeSlot;
     private ModSlot[] passiveSlot;
     private float[] stats;
 
-    private int leftCoolTimeSecond;
+    private int waitingTime;
     private int chargedStack;
-    private int maxCharged;
-
-    private static final ResourceLocation BACKGROUND_RESOURCE = new ResourceLocation(Main.MOD_ID, "textures/gui/screen.png");
+    private int maxStack;
 
     private void setting() {
         Player player = Minecraft.getInstance().player;
         player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
             activeSlot = myStuff.getActiveSlots();
             passiveSlot = myStuff.getPassiveSlots();
+            isActiveUpgraded = myStuff.isActiveUpgraded();
         });
         player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
             stats = playerStats.get();
@@ -95,7 +97,7 @@ public class MyStuffScreen extends Screen {
         addRenderableWidget(coin);
 
         mode = new ImageButton(leftPos + 132, topPos + 19, 16, 16, (removeMode) ? (isRemovableItemExists()) ? 59 : 43 : 27, 166, 0,
-                BACKGROUND_RESOURCE, 256, 256, pButton -> {
+                SCREEN_RESOURCE, 256, 256, pButton -> {
             if (isRemovableItemExists()) removeItem();
             else changeMode();
         });
@@ -117,8 +119,13 @@ public class MyStuffScreen extends Screen {
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         renderBackground(pGuiGraphics);
-        pGuiGraphics.blit(BACKGROUND_RESOURCE, leftPos, topPos, 0, 0, 176, 166);
+        pGuiGraphics.blit(SCREEN_RESOURCE, leftPos, topPos, 0, 0, 176, 166);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+
+        if (isActiveUpgraded) {
+            pGuiGraphics.blit(SCREEN_RESOURCE, leftPos + 82, topPos + 17, 75, 166, 18, 18);
+            pGuiGraphics.blit(SCREEN_RESOURCE, leftPos + 107, topPos + 17, 75, 166, 18, 18);
+        }
 
         String title = I18n.get("title." + Main.MOD_ID + ".my_stuff");
         pGuiGraphics.drawString(font, title, leftPos + 7, topPos + 7, 0x404040, false);
@@ -127,14 +134,12 @@ public class MyStuffScreen extends Screen {
         player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(coolTime -> {
             if (activeSlot[0].itemId != 0) {
                 ActiveItem activeItem = (ActiveItem) ModItemProvider.getItemById(activeSlot[0].itemId);
-                maxCharged = activeItem.getChargeStack();
-                leftCoolTimeSecond = (coolTime.get() == 0) ? 0 :
-                        (coolTime.get() / 20) % (activeItem.getCoolTime(activeSlot[0].level) / 20) + 1;
-                chargedStack = (coolTime.get() == 0) ? maxCharged :
-                        maxCharged - 1 - ((coolTime.get() - 1) / 20) / (activeItem.getCoolTime(activeSlot[0].level) / 20);
+                maxStack = activeItem.getMaxStack();
+                waitingTime = Functions.getWaitingTime(coolTime.get(), activeItem, activeSlot[0].level);
+                chargedStack = Functions.getChargedStack(coolTime.get(), activeItem, activeSlot[0].level);
             }
         });
-        pGuiGraphics.drawString(font, chargedStack + "/"  + maxCharged + "  " + leftCoolTimeSecond + " sec left", leftPos + 7, topPos + 42, 0x404040, false);
+        pGuiGraphics.drawString(font, chargedStack + "/"  + maxStack + "  " + waitingTime + " sec left", leftPos + 7, topPos + 42, 0x404040, false);
     }
 
     public void drawSlot(int pX, int pY, ItemType itemType, int slot) {
@@ -144,7 +149,7 @@ public class MyStuffScreen extends Screen {
         ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + item + ".png");
         if (isRemovable) {
             ImageButton removableSign = new ImageButton(pX - 1, pY - 1, 18, 18, 9, 166, 0,
-                    BACKGROUND_RESOURCE, 256, 256, pButton -> makeItemRemovable(item.itemType, slot, false));
+                    SCREEN_RESOURCE, 256, 256, pButton -> makeItemRemovable(item.itemType, slot, false));
             addRenderableWidget(removableSign);
         }
         ImageButton imageButton;
@@ -154,12 +159,12 @@ public class MyStuffScreen extends Screen {
         addRenderableWidget(imageButton);
         if (locked) {
             ImageButton lock = new ImageButton(pX + 10, pY + 10, 7, 7, 2, 166, 0,
-                    BACKGROUND_RESOURCE, 256, 256, pButton -> lockItem(itemType, slot, false));
+                    SCREEN_RESOURCE, 256, 256, pButton -> lockItem(itemType, slot, false));
             addRenderableWidget(lock);
         }
         int level = (itemType == ItemType.ACTIVE) ? activeSlot[slot].level : passiveSlot[slot].level;
         for (int i = 0; i < level; i++) {
-            ImageButton levelButton = new ImageButton(pX + 1 + 3 * i, pY + 19, 2, 2, 0, 166, 0, BACKGROUND_RESOURCE, 256, 256, pButton -> {});
+            ImageButton levelButton = new ImageButton(pX + 1 + 3 * i, pY + 19, 2, 2, 0, 166, 0, SCREEN_RESOURCE, 256, 256, pButton -> {});
             addRenderableWidget(levelButton);
         }
     }

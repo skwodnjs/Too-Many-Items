@@ -1,8 +1,10 @@
-package net.jwn.jwn_items.item;
+package net.jwn.jwn_items.item.passive;
 
 import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.capability.PlayerStatProvider;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
+import net.jwn.jwn_items.item.ItemType;
+import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.util.Stat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;

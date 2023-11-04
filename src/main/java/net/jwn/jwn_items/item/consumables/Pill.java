@@ -4,9 +4,9 @@ import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.PlayerStatProvider;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
-import net.jwn.jwn_items.item.ConsumableItem;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.PlayerStatsSyncS2CPacket;
+import net.jwn.jwn_items.util.Functions;
 import net.jwn.jwn_items.util.Stat;
 import net.jwn.jwn_items.util.StatType;
 import net.minecraft.client.resources.language.I18n;
@@ -64,7 +64,7 @@ public class Pill extends ConsumableItem {
                 float sign = (Math.random() < 0.5) ? -1.0f : 1.0f;
                 Stat randomStat = new Stat(statTypes.get(i), sign * value);
 
-                float result = Stat.addSingleStat(pPlayer, randomStat);
+                float result = Functions.addSingleStat(pPlayer, randomStat);
                 pPlayer.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
                     ModMessages.sendToPlayer(new PlayerStatsSyncS2CPacket(playerStats.get()), (ServerPlayer) pPlayer);
                 });

@@ -20,27 +20,6 @@ public class Stat {
         }
     }
 
-    public void setValue(float value) {
-        float newValue;
-        if (statType == StatType.HEALTH_BY_CONSUMABLES || statType == StatType.HEALTH_BY_ITEM) {
-            newValue = Math.round(value * 2.0f) / 2.0f;
-        } else if (statType == StatType.COIN) {
-            newValue = Math.round(value);
-        } else {
-            newValue = Math.round(value * 10.0f) / 10.0f;
-        }
-        this.value = newValue;
-    }
-
-    public static float addSingleStat(Player player, Stat stat) {
-        AtomicReference<Float> toReturn = new AtomicReference<>(0f);
-        player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
-            float appliedValue = playerStats.add(player, stat);
-            toReturn.set(appliedValue);
-        });
-        return toReturn.get();
-    }
-
     public StatType getStatType() {
         return statType;
     }

@@ -5,6 +5,7 @@ import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.capability.PlayerOptionProvider;
 import net.jwn.jwn_items.gui.MyStuffScreen;
 import net.jwn.jwn_items.gui.StuffIFoundScreen;
+import net.jwn.jwn_items.hud.ActiveItemHubOverlay;
 import net.jwn.jwn_items.hud.StatHudOverLay;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.*;
@@ -74,7 +75,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onRegisterGuiOverlaysEvent(RegisterGuiOverlaysEvent event) {
             event.registerAboveAll("stat_hud", StatHudOverLay.STAT_HUD);
-//            event.registerAboveAll("active_item_hud", ActiveItemHubOverlay.ACTIVE_ITEM_HUD);
+            event.registerAboveAll("active_item_hud", ActiveItemHubOverlay.ACTIVE_ITEM_HUD);
         }
     }
 }

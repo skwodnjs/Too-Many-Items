@@ -5,16 +5,13 @@ import net.jwn.jwn_items.capability.*;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
 import net.jwn.jwn_items.item.ItemType;
-import net.jwn.jwn_items.item.ModItem;
-import net.jwn.jwn_items.item.ModItems;
-import net.jwn.jwn_items.item.passive.Aging;
-import net.jwn.jwn_items.item.passive.Battery5V;
-import net.jwn.jwn_items.item.passive.Mustache;
-import net.jwn.jwn_items.item.passive.RapidGrowth;
+import net.jwn.jwn_items.item.passive.*;
 import net.jwn.jwn_items.util.StatType;
 import net.jwn.jwn_items.util.Functions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -22,6 +19,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -31,6 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static net.jwn.jwn_items.item.passive.PassiveSkill.operateServerTick;
+
 @Mod.EventBusSubscriber(modid = Main.MOD_ID)
 public class ModEvents {
     @SubscribeEvent
@@ -39,29 +39,8 @@ public class ModEvents {
         if (event.phase == TickEvent.Phase.END) {
             player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
             if (event.side == LogicalSide.SERVER) {
-                player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
-                    // logic for passive item
-                    List<Integer> passiveId = Arrays.stream(myStuff.getPassiveSlots())
-                            .map(modSlot -> modSlot.itemId).toList();
-                    if (passiveId.contains(((ModItem) ModItems.MUSTACHE_ITEM.get()).id)) {
-                        int level = myStuff.getLevelById(((ModItem) ModItems.MUSTACHE_ITEM.get()).id);
-                        if (Math.random() < 0.01 + level * 0.01) Mustache.operateServer(player);
-                    }
-                    if (passiveId.contains(((ModItem) ModItems.BATTERY_5V.get()).id)) {
-                        int level = myStuff.getLevelById(((ModItem) ModItems.BATTERY_5V.get()).id);
-                        if (Math.random() < 0.01 + level * 0.01) Battery5V.operateServer(player);
-                    }
-                    if (passiveId.contains(((ModItem) ModItems.AGING.get()).id)) {
-                        int level = myStuff.getLevelById(((ModItem) ModItems.AGING.get()).id);
-                        if (Math.random() < 0.01 + level * 0.01) Aging.operateServer(player);
-                    }
-                    if (passiveId.contains(((ModItem) ModItems.RAPID_GROWTH.get()).id)) {
-                        int level = myStuff.getLevelById(((ModItem) ModItems.RAPID_GROWTH.get()).id);
-                        if (Math.random() < 0.5 + level * 0.01) RapidGrowth.operateServer(player);
-                    }
-                });
+                PassiveSkill.operateServerTick(player);
             }
-            // else {} for client side
         }
     }
 

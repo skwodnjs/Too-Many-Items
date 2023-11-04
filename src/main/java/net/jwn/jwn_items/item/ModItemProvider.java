@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ModItemProvider {
-    public static final int ITEM_TOTAL = 8;
+    public static final int ITEM_TOTAL = 12;
 
     public static ModItem getRandomItem(ItemType itemType, int quality) {
         ArrayList<ModItem> modItems = new ArrayList<>();
@@ -28,6 +28,10 @@ public class ModItemProvider {
             case 5: return (ModItem) ModItems.BATTERY_5V.get();
             case 6: return (ModItem) ModItems.AGING.get();
             case 7: return (ModItem) ModItems.RAPID_GROWTH.get();
+            case 8: return (ModItem) ModItems.AUTO_PORTION.get();
+            case 9: return (ModItem) ModItems.COIN.get();
+            case 10: return (ModItem) ModItems.COIN10.get();
+            case 11: return (ModItem) ModItems.PRESCRIPTION.get();
         };
         return null;
     }

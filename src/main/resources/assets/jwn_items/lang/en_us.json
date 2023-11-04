@@ -4,7 +4,6 @@
 
   "item.jwn_items.test": "Test",
   "item.jwn_items.pill": "Pill",
-  "item.jwn_items.coin": "Coin",
   "item.jwn_items.d1": "D1",
   "item.jwn_items.d6": "D6",
   "item.jwn_items.mustache": "Mustache",
@@ -12,6 +11,10 @@
   "item.jwn_items.battery_5v": "5V Battery",
   "item.jwn_items.aging": "Aging",
   "item.jwn_items.rapid_growth": "Rapid Growth",
+  "item.jwn_items.auto_portion": "Auto Portion",
+  "item.jwn_items.coin": "Coin",
+  "item.jwn_items.coin10": "A Bundle of Coins",
+  "item.jwn_items.prescription": "Prescription",
 
   "stat.jwn_items.health": "Health",
   "stat.jwn_items.damage": "Damage",
