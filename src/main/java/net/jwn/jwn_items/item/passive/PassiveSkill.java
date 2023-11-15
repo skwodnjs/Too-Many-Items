@@ -3,13 +3,14 @@ package net.jwn.jwn_items.item.passive;
 import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItems;
+import net.jwn.jwn_items.networking.ModMessages;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -18,6 +19,24 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PassiveSkill {
+    /**
+     * called from server side, add tag to both side.
+     * add tag to monsters around the player, with r chance
+     * @param player
+     * @param tag
+     * @param r
+     */
+    private static void addTagToMonster(ServerPlayer player, String tag, double r) {
+        Vec3 pStart = player.position().add(-5, -1, -5);
+        Vec3 pEnd = player.position().add(5, 1, 5);
+        AABB aabb = new AABB(pStart, pEnd);
+        player.level().getEntities(player, aabb).forEach(entity -> {
+            if (entity instanceof Monster && !entity.getTags().contains(tag) && Math.random() < r) {
+                entity.addTag(tag);
+                ModMessages.sendToPlayer(new AddTagS2CPacket(entity.getId(), tag), player);
+            }
+        });
+    }
     private static void agingServerTick(Player player) {
         Vec3 pStart = player.position().add(-5, -1, -5);
         Vec3 pEnd = player.position().add(5, 1, 5);
@@ -27,26 +46,6 @@ public class PassiveSkill {
                 if (ageableMob.getAge() < 0) {
                     ((AgeableMob) entity).setAge(-1);
                 }
-            }
-        });
-    }
-    private static void battery5vServerTick(Player player) {
-        Vec3 pStart = player.position().add(-5, -1, -5);
-        Vec3 pEnd = player.position().add(5, 1, 5);
-        AABB aabb = new AABB(pStart, pEnd);
-        player.level().getEntities(player, aabb).forEach(entity -> {
-            if (entity instanceof Monster) {
-                entity.addTag("shocked");
-            }
-        });
-    }
-    private static void mustacheServerTick(Player player) {
-        Vec3 pStart = player.position().add(-5, -1, -5);
-        Vec3 pEnd = player.position().add(5, 1, 5);
-        AABB aabb = new AABB(pStart, pEnd);
-        player.level().getEntities(player, aabb).forEach(entity -> {
-            if (entity instanceof Monster) {
-                entity.addTag("ahchoo");
             }
         });
     }
@@ -71,16 +70,16 @@ public class PassiveSkill {
         }
     }
 
-    public static void operateServerTick(Player player) {
+    public static void operateServerTick(ServerPlayer player) {
         player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
             List<Integer> passiveId = Arrays.stream(myStuff.getPassiveSlots()).map(modSlot -> modSlot.itemId).toList();
             if (passiveId.contains(((ModItem) ModItems.MUSTACHE_ITEM.get()).id)) {
                 int level = myStuff.getLevelById(((ModItem) ModItems.MUSTACHE_ITEM.get()).id);
-                if (Math.random() < 0.01 + level * 0.01) mustacheServerTick(player);
+                if (Math.random() < 0.01 + level * 0.01) addTagToMonster(player, "ahchoo", 0.5);
             }
             if (passiveId.contains(((ModItem) ModItems.BATTERY_5V.get()).id)) {
                 int level = myStuff.getLevelById(((ModItem) ModItems.BATTERY_5V.get()).id);
-                if (Math.random() < 0.01 + level * 0.01) battery5vServerTick(player);
+                if (Math.random() < 0.01 + level * 0.01) addTagToMonster(player, "shocked", 0.5);
             }
             if (passiveId.contains(((ModItem) ModItems.AGING.get()).id)) {
                 int level = myStuff.getLevelById(((ModItem) ModItems.AGING.get()).id);
@@ -95,5 +94,13 @@ public class PassiveSkill {
                 if (Math.random() < 0.01 + level * 0.01) autoPortionServerTick(player, level);
             }
         });
+    }
+
+    public static void operateTick(Player player) {
+
+    }
+
+    public static void operateClientTick(Player player) {
+
     }
 }

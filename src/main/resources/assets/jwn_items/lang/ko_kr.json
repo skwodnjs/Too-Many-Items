@@ -16,6 +16,9 @@
   "item.jwn_items.coin10": "동전 뭉치",
   "item.jwn_items.prescription": "처방전",
 
+  "block.jwn_items.test_flooring": "테스트 장판",
+  "block.jwn_items.poop": "똥",
+
   "stat.jwn_items.health": "체력",
   "stat.jwn_items.damage": "데미지",
   "stat.jwn_items.attack_speed": "공격속도",

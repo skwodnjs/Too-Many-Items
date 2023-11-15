@@ -1,6 +1,5 @@
 package net.jwn.jwn_items.item.active;
 
-import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItemProvider;

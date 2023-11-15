@@ -1,0 +1,21 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "floor": "jwn_items:block/test_flooring",
+    "particle": "jwn_items:block/test_flooring"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 4, 16 ],
+      "faces": {
+        "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#floor", "cullface": "down" },
+        "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#floor" },
+        "north": { "uv": [ 0, 4, 16, 16 ], "texture": "#floor", "cullface": "north" },
+        "south": { "uv": [ 0, 4, 16, 16 ], "texture": "#floor", "cullface": "south" },
+        "west":  { "uv": [ 0, 4, 16, 16 ], "texture": "#floor", "cullface": "west" },
+        "east":  { "uv": [ 0, 4, 16, 16 ], "texture": "#floor", "cullface": "east" }
+      }
+    }
+  ]
+}

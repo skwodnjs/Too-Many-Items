@@ -1,6 +1,7 @@
 package net.jwn.jwn_items.networking;
 
 import net.jwn.jwn_items.Main;
+import net.jwn.jwn_items.item.passive.AddTagS2CPacket;
 import net.jwn.jwn_items.networking.packet.*;
 import net.jwn.jwn_items.networking.packet.UseSkillC2SPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -107,6 +108,11 @@ public class ModMessages {
                 .decoder(UseSkillC2SPacket::new)
                 .encoder(UseSkillC2SPacket::toBytes)
                 .consumerMainThread(UseSkillC2SPacket::handle)
+                .add();
+        net.messageBuilder(AddTagS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(AddTagS2CPacket::new)
+                .encoder(AddTagS2CPacket::toBytes)
+                .consumerMainThread(AddTagS2CPacket::handle)
                 .add();
     }
 

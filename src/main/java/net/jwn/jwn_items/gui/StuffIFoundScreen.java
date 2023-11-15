@@ -3,7 +3,6 @@ package net.jwn.jwn_items.gui;
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.FoundStuffProvider;
 import net.jwn.jwn_items.item.ModItemProvider;
-import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.util.KeyBindings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,6 +13,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFW;
 
 public class StuffIFoundScreen extends Screen {

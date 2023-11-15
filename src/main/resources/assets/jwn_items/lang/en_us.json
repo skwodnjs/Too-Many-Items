@@ -16,6 +16,9 @@
   "item.jwn_items.coin10": "A Bundle of Coins",
   "item.jwn_items.prescription": "Prescription",
 
+  "block.jwn_items.test_flooring": "Test Flooring",
+  "block.jwn_items.poop": "Poop",
+
   "stat.jwn_items.health": "Health",
   "stat.jwn_items.damage": "Damage",
   "stat.jwn_items.attack_speed": "Attack Speed",

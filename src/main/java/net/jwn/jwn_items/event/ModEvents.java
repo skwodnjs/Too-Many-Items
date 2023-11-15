@@ -10,8 +10,6 @@ import net.jwn.jwn_items.util.StatType;
 import net.jwn.jwn_items.util.Functions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -19,17 +17,12 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static net.jwn.jwn_items.item.passive.PassiveSkill.operateServerTick;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID)
 public class ModEvents {
@@ -38,8 +31,11 @@ public class ModEvents {
         Player player = event.player;
         if (event.phase == TickEvent.Phase.END) {
             player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
+            PassiveSkill.operateTick(player);
             if (event.side == LogicalSide.SERVER) {
-                PassiveSkill.operateServerTick(player);
+                PassiveSkill.operateServerTick((ServerPlayer) player);
+            } else {
+                PassiveSkill.operateClientTick(player);
             }
         }
     }
