@@ -33,14 +33,16 @@ public class ModItems {
 
     public static final RegistryObject<Item> MUSTACHE_ITEM = ITEMS.register("mustache",
             () -> new PassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 3, 0,
-                    List.of(new Stat(StatType.LUCK_BY_ITEM, 3))
+                    List.of(new Stat(StatType.LUCK_BY_ITEM, 40))
             ));
 
     public static final RegistryObject<Item> CHARGED_TNT_ITEM = ITEMS.register("charged_tnt",
             () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 4, 0, 30, 3, 5));
 
     public static final RegistryObject<Item> BATTERY_5V = ITEMS.register("battery_5v",
-            () -> new PassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 5, 0, List.of()));
+            () -> new PassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 5, 0,
+                    List.of(new Stat(StatType.ATTACK_SPEED_BY_ITEM, 3))
+            ));
 
     public static final RegistryObject<Item> AGING = ITEMS.register("aging",
             () -> new PassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 6, 0, List.of()));
@@ -59,6 +61,9 @@ public class ModItems {
 
     public static final RegistryObject<Item> PRESCRIPTION = ITEMS.register("prescription",
             () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 11, 0, 50, 1, 10));
+
+    public static final RegistryObject<Item> RADAR = ITEMS.register("radar",
+            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 12, 0, 1, 1, 0));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

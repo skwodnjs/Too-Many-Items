@@ -59,6 +59,8 @@ public class UseSkillC2SPacket {
                     ActiveSkill.operateChargedTNT(player);
                 } else if (id == ((ModItem) ModItems.PRESCRIPTION.get()).id) {
                     ActiveSkill.operatePrescriptionServer(player);
+                } else if (id == ((ModItem) ModItems.RADAR.get()).id) {
+                    ActiveSkill.operateRadarServer(player);
                 }
             }
         });

@@ -15,6 +15,7 @@
   "item.jwn_items.coin": "Coin",
   "item.jwn_items.coin10": "A Bundle of Coins",
   "item.jwn_items.prescription": "Prescription",
+  "item.jwn_items.radar": "Radar",
 
   "block.jwn_items.test_flooring": "Test Flooring",
   "block.jwn_items.poop": "Poop",
@@ -30,5 +31,23 @@
 
   "item.jwn_items.message_no_stat_changed": "No Stat Changed",
 
-  "item.jwn_items.message_pill_random_stat_change": "random stat change"
+  "message.jwn_items.ea": "",
+  "message.jwn_items.nothing": "Nothing",
+
+  "item.jwn_items.message_pill_random_stat_change": "random stat change",
+
+  "tooltip.jwn_items.unknown": "???",
+  "tooltip.jwn_items.pill": "Pill tooltip",
+  "tooltip.jwn_items.d1": "D1 tooltip",
+  "tooltip.jwn_items.d6": "D6 tooltip",
+  "tooltip.jwn_items.mustache": "Mustache tooltip",
+  "tooltip.jwn_items.charged_tnt": "Charged TNT tooltip",
+  "tooltip.jwn_items.battery_5v": "5V Battery tooltip",
+  "tooltip.jwn_items.aging": "Aging tooltip",
+  "tooltip.jwn_items.rapid_growth": "Rapid Growth tooltip",
+  "tooltip.jwn_items.auto_portion": "Auto Portion tooltip",
+  "tooltip.jwn_items.coin": "Coin tooltip",
+  "tooltip.jwn_items.coin10": "A Bundle of Coins tooltip",
+  "tooltip.jwn_items.prescription": "Prescription tooltip",
+  "tooltip.jwn_items.radar": "Radar tooltip"
 }

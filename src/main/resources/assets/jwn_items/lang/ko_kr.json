@@ -15,6 +15,7 @@
   "item.jwn_items.coin": "동전",
   "item.jwn_items.coin10": "동전 뭉치",
   "item.jwn_items.prescription": "처방전",
+  "item.jwn_items.radar": "레이더",
 
   "block.jwn_items.test_flooring": "테스트 장판",
   "block.jwn_items.poop": "똥",
@@ -30,5 +31,23 @@
 
   "item.jwn_items.message_no_stat_changed": "스텟 변동 없음",
 
-  "item.jwn_items.message_pill_random_stat_change": "스텟 랜덤 변경"
+  "message.jwn_items.ea": "개",
+  "message.jwn_items.nothing": "주변에 광물이 없습니다.",
+
+  "item.jwn_items.message_pill_random_stat_change": "스텟 랜덤 변경",
+
+  "tooltip.jwn_items.unknown": "???",
+  "tooltip.jwn_items.pill": "먹으면 스텟이 변경됩니다.\n증가할 수도, 감소할 수도 있습니다!",
+  "tooltip.jwn_items.d1": "아직 사용하지 않은 아이템 하나를 \n동일한 등급의 아이템으로 변경합니다.",
+  "tooltip.jwn_items.d6": "아직 사용하지 않은 모든 아이템을 \n동일한 등급의 아이템으로 변경합니다.",
+  "tooltip.jwn_items.mustache": "행운이 3 증가합니다.\n주변 몬스터가 재채기를 할 지도 모릅니다!",
+  "tooltip.jwn_items.charged_tnt": "스킬 사용 시 점화된 TNT를 생성합니다.",
+  "tooltip.jwn_items.battery_5v": "공격속도가 3 증가합니다.\n주변 몬스터가 감전될 지도 모릅니다!",
+  "tooltip.jwn_items.aging": "주변 작물을 확률적으로 빠르게 성장시킵니다.",
+  "tooltip.jwn_items.rapid_growth": "주변 몹을 확률적으로 빠르게 성장시킵니다.",
+  "tooltip.jwn_items.auto_portion": "물에 빠졌다면 수중 호흡 효과를, 불에 타고 있다면 \n화염 저항 효과를 확률적으로 얻습니다.",
+  "tooltip.jwn_items.coin": "슬롯머신을 본 적 있나요? \n곳곳에 숨겨진 슬롯머신을 돌려 자신의 행운을 시험해보세요!",
+  "tooltip.jwn_items.coin10": "코인을 10개 얻습니다.",
+  "tooltip.jwn_items.prescription": "스킬 사용 시 3 ~ 5개의 알약을 얻을 수 있습니다.",
+  "tooltip.jwn_items.radar": "스킬 사용 시 주변 광물을 탐지합니다. \n주변에서 가장 가치가 높은 광물과 그 갯수를 알 수 있습니다."
 }

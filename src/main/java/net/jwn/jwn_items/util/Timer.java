@@ -1,4 +1,4 @@
-package net.jwn.jwn_items;
+package net.jwn.jwn_items.util;
 
 import java.util.HashMap;
 

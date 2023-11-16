@@ -16,6 +16,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PassiveItem extends ModItem {
     public final List<Stat> statList;
@@ -29,18 +30,22 @@ public class PassiveItem extends ModItem {
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         AtomicBoolean success = new AtomicBoolean(false);
         Component message;
+        AtomicInteger itemLevel = new AtomicInteger();
         pPlayer.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
             success.set(myStuff.addItem(this));
+            itemLevel.set(myStuff.getLevelById(this.id));
         });
         if (!success.get()) {
             message = Component.literal("fail");
         } else {
             message = Component.literal("success");
-            pPlayer.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
-                statList.forEach(stat -> {
-                    playerStats.add(pPlayer, stat);
+            if (itemLevel.get() == 1) {
+                pPlayer.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
+                    statList.forEach(stat -> {
+                        playerStats.add(pPlayer, stat);
+                    });
                 });
-            });
+            }
             MinecraftForge.EVENT_BUS.post(new ModItemUsedSuccessfullyEvent(pPlayer, itemType, this.id));
         }
         pPlayer.displayClientMessage(message, true);

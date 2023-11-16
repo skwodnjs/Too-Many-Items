@@ -1,13 +1,11 @@
 package net.jwn.jwn_items.mixin;
 
-import net.jwn.jwn_items.Timer;
+import net.jwn.jwn_items.util.Timer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
-
-import java.util.HashMap;
 
 @Mixin(Monster.class)
 public abstract class MixinMonster extends PathfinderMob implements Timer {
@@ -23,7 +21,7 @@ public abstract class MixinMonster extends PathfinderMob implements Timer {
     }
 
     private void tagStunCycle(String tag, int duration) {
-        String newTag = tag + (level().isClientSide ? "Client" : "Server");
+        String newTag = tag + (level().isClientSide ? "Client" : "Server") + getId();
         if (!timer.containsKey(newTag)) timer.put(newTag, 0);
         timer.compute(newTag, (k, v) -> v + 1);
 

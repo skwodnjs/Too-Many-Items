@@ -2,6 +2,7 @@ package net.jwn.jwn_items.gui;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.FoundStuffProvider;
+import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItemProvider;
 import net.jwn.jwn_items.util.KeyBindings;
 import net.minecraft.client.Minecraft;
@@ -13,7 +14,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import org.lwjgl.glfw.GLFW;
+import net.minecraft.world.item.Item;
 import org.lwjgl.glfw.GLFW;
 
 public class StuffIFoundScreen extends Screen {
@@ -39,25 +40,15 @@ public class StuffIFoundScreen extends Screen {
     protected void init() {
         super.init();
         setting();
+        System.out.println(items.length);
 
         this.leftPos = (width - 176) / 2;
         this.topPos = (height - 166) / 2;
 
         for (int i = 0; i < 54; i++) {
-            int id = (page - 1) * 54 + i;
-            if (id < items.length) {
-                ImageButton item;
-                if (items[i] == 0) {
-                    item = new ImageButton(leftPos + 8 + (i % 9) * 18, topPos + 18 + (i / 9) * 18 + (i / 27) * 12, 16, 16, 0, 166, 0,
-                            BACKGROUND_RESOURCE, 256, 256, pButton -> {});
-                    item.setTooltip(Tooltip.create(Component.literal("Unknown")));
-                } else {
-                    ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + ModItemProvider.getItemById(i) + ".png");
-                    item = new ImageButton(leftPos + 8 + (i % 9) * 18, topPos + 18 + (i / 9) * 18 + (i / 27) * 12, 16, 16,0, 0, 0,
-                            itemResourceLocation, 16, 16, pButton -> {});
-                    item.setTooltip(Tooltip.create(Component.literal("level: " + items[i])));
-                }
-                addRenderableWidget(item);
+            int itemId = (page - 1) * 54 + i;
+            if (itemId < items.length) {
+                drawSlot(leftPos + 7 + (i % 9) * 18, topPos + 17 + (i / 9) * 22, items[itemId] == 0 ? -1 : i, items[itemId] == 5 || (items[itemId] != 0 && ModItemProvider.getItemById(itemId).itemType == ItemType.CONSUMABLES));
             }
         }
     }
@@ -72,6 +63,26 @@ public class StuffIFoundScreen extends Screen {
         pGuiGraphics.drawString(font, title, leftPos + 7, topPos + 7, 0x404040, false);
 
         pGuiGraphics.drawString(font, "-" + page + "-", leftPos + 83, topPos + 150, 0x404040, false);
+    }
+
+    private void drawSlot(int pX, int pY, int itemId, boolean isLvMax) {
+        ImageButton background = new ImageButton(pX, pY, 18, 18, (isLvMax) ? 34 : 16, 166, 0,
+                BACKGROUND_RESOURCE, 256, 256, pButton -> {});
+        ImageButton item;
+        if (itemId == -1) {
+            item = new ImageButton(pX + 1, pY + 1, 16, 16, 0, 166, 0,
+                    BACKGROUND_RESOURCE, 256, 256, pButton -> {});
+            item.setTooltip(Tooltip.create(Component.translatable("tooltip.jwn_items.unknown")));
+        } else {
+            ResourceLocation itemResourceLocation = new ResourceLocation(Main.MOD_ID, "textures/item/" + ModItemProvider.getItemById(itemId) + ".png");
+            item = new ImageButton(pX + 1, pY + 1, 16, 16, 0, 0, 0,
+                    itemResourceLocation, 16, 16, pButton -> {});
+            String name = I18n.get("item.jwn_items." + ModItemProvider.getItemById(itemId));
+            String tooltip = I18n.get("tooltip.jwn_items." + ModItemProvider.getItemById(itemId));
+            item.setTooltip(Tooltip.create(Component.literal(name + "\n" + tooltip)));
+        }
+        addRenderableWidget(background);
+        addRenderableWidget(item);
     }
 
     @Override

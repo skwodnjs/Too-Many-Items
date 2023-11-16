@@ -65,7 +65,7 @@ public class Functions {
         player.getCapability(FoundStuffProvider.foundStuffCapability).ifPresent(foundStuff -> {
             for (int i = 0; i < foundStuff.get().length; i++) {
                 System.out.printf("%d ", foundStuff.get()[i]);
-                if (i % 10 == 0) System.out.println();
+                if (i % 10 == 0 && i > 1) System.out.println();
             }
         });
     }

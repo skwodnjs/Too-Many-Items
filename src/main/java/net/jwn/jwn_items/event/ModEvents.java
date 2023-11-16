@@ -109,6 +109,15 @@ public class ModEvents {
                 event.player.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(attackSpeedCorrectionValue);
             });
         }
+        // 스텟 확인
+        event.player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStat -> {
+            event.player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+                float luck = playerStat.getValue(StatType.LUCK_BY_CONSUMABLES) + playerStat.getValue(StatType.LUCK_BY_ITEM);
+                if (luck >= 40) {
+                    myStuff.activeUpgrade();
+                }
+            });
+        });
     }
 
     @SubscribeEvent

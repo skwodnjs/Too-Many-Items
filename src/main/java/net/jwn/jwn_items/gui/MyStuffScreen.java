@@ -123,8 +123,8 @@ public class MyStuffScreen extends Screen {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 
         if (isActiveUpgraded) {
-            pGuiGraphics.blit(SCREEN_RESOURCE, leftPos + 82, topPos + 17, 75, 166, 18, 18);
-            pGuiGraphics.blit(SCREEN_RESOURCE, leftPos + 107, topPos + 17, 75, 166, 18, 18);
+            pGuiGraphics.blit(SCREEN_RESOURCE, leftPos + 82, topPos + 17, 93, 166, 18, 18);
+            pGuiGraphics.blit(SCREEN_RESOURCE, leftPos + 107, topPos + 17, 93, 166, 18, 18);
         }
 
         String title = I18n.get("title." + Main.MOD_ID + ".my_stuff");
@@ -142,7 +142,7 @@ public class MyStuffScreen extends Screen {
         pGuiGraphics.drawString(font, chargedStack + "/"  + maxStack + "  " + waitingTime + " sec left", leftPos + 7, topPos + 42, 0x404040, false);
     }
 
-    public void drawSlot(int pX, int pY, ItemType itemType, int slot) {
+    private void drawSlot(int pX, int pY, ItemType itemType, int slot) {
         boolean locked = (itemType == ItemType.ACTIVE) ? activeSlot[slot].locked : passiveSlot[slot].locked;
         boolean isRemovable = (itemType == ItemType.ACTIVE) ? removableActiveSlot[slot] : removablePassiveSlot[slot];
         ModItem item = ModItemProvider.getItemById((itemType == ItemType.ACTIVE) ? activeSlot[slot].itemId : passiveSlot[slot].itemId);

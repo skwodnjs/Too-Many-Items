@@ -4,16 +4,21 @@ import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItemProvider;
 import net.jwn.jwn_items.item.ModItems;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class ActiveSkill {
     public static void operateD1Server(Player player) {
@@ -62,6 +67,91 @@ public class ActiveSkill {
             ItemEntity itemEntity = new ItemEntity(player.level(), spawnPlace.x, player.position().y, spawnPlace.z,
                     ModItems.PILL_ITEM.get().getDefaultInstance(), 0, 0.1, 0);
             player.level().addFreshEntity(itemEntity);
+        }
+    }
+    public static void operateRadarServer(Player player) {
+        List<Block> blocksToDetect = Arrays.asList(
+                Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE,
+                Blocks.IRON_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.RAW_IRON_BLOCK,
+                Blocks.COPPER_ORE, Blocks.DEEPSLATE_COPPER_ORE, Blocks.RAW_COPPER_BLOCK,
+                Blocks.GOLD_ORE, Blocks.DEEPSLATE_GOLD_ORE,
+                Blocks.REDSTONE_ORE, Blocks.DEEPSLATE_REDSTONE_ORE,
+                Blocks.LAPIS_ORE, Blocks.DEEPSLATE_LAPIS_ORE,
+                Blocks.EMERALD_ORE, Blocks.DEEPSLATE_EMERALD_ORE,
+                Blocks.DIAMOND_ORE, Blocks.DEEPSLATE_DIAMOND_ORE
+        );
+
+        Map<Block, Integer> detectedBlock = new HashMap<>();
+
+        detectedBlock.put(Blocks.COAL_ORE, 0);
+        detectedBlock.put(Blocks.DEEPSLATE_COAL_ORE, 0);
+        detectedBlock.put(Blocks.IRON_ORE, 0);
+        detectedBlock.put(Blocks.DEEPSLATE_IRON_ORE, 0);
+        detectedBlock.put(Blocks.RAW_IRON_BLOCK, 0);
+        detectedBlock.put(Blocks.COPPER_ORE, 0);
+        detectedBlock.put(Blocks.DEEPSLATE_COPPER_ORE, 0);
+        detectedBlock.put(Blocks.RAW_COPPER_BLOCK, 0);
+        detectedBlock.put(Blocks.GOLD_ORE, 0);
+        detectedBlock.put(Blocks.DEEPSLATE_GOLD_ORE, 0);
+        detectedBlock.put(Blocks.REDSTONE_ORE, 0);
+        detectedBlock.put(Blocks.DEEPSLATE_REDSTONE_ORE, 0);
+        detectedBlock.put(Blocks.LAPIS_ORE, 0);
+        detectedBlock.put(Blocks.DEEPSLATE_LAPIS_ORE, 0);
+        detectedBlock.put(Blocks.EMERALD_ORE, 0);
+        detectedBlock.put(Blocks.DEEPSLATE_EMERALD_ORE, 0);
+        detectedBlock.put(Blocks.DIAMOND_ORE, 0);
+        detectedBlock.put(Blocks.DEEPSLATE_DIAMOND_ORE, 0);
+
+        for (int i = -5; i <= 5; i++) {
+            for (int j = -5; j <= 5; j++) {
+                for (int k = -5; k <= 5; k++) {
+                    BlockPos targetBlockPos = player.getOnPos().offset(i, k, j);
+                    Block targetBlock = player.level().getBlockState(targetBlockPos).getBlock();
+                    if (blocksToDetect.contains(targetBlock)) {
+                        detectedBlock.compute(targetBlock, (key, value) -> value + 1);
+                    }
+                }
+            }
+        }
+
+        if (detectedBlock.get(Blocks.DEEPSLATE_DIAMOND_ORE) != 0 || detectedBlock.get(Blocks.DIAMOND_ORE) != 0) {
+            String ore = I18n.get(Blocks.DIAMOND_ORE.getDescriptionId());
+            String ea = I18n.get("message.jwn_items.ea");
+            int count = detectedBlock.get(Blocks.DEEPSLATE_DIAMOND_ORE) + detectedBlock.get(Blocks.DIAMOND_ORE);
+            player.sendSystemMessage(Component.literal(ore + ": " + count + ea));
+        } else if (detectedBlock.get(Blocks.DEEPSLATE_GOLD_ORE) != 0 || detectedBlock.get(Blocks.GOLD_ORE) != 0) {
+            String ore = I18n.get(Blocks.GOLD_ORE.getDescriptionId());
+            String ea = I18n.get("message.jwn_items.ea");
+            int count = detectedBlock.get(Blocks.DEEPSLATE_GOLD_ORE) + detectedBlock.get(Blocks.GOLD_ORE);
+            player.sendSystemMessage(Component.literal(ore + ": " + count + ea));
+        } else if (detectedBlock.get(Blocks.DEEPSLATE_IRON_ORE) != 0 || detectedBlock.get(Blocks.IRON_ORE) != 0 || detectedBlock.get(Blocks.RAW_IRON_BLOCK) != 0) {
+            String ore = I18n.get(Blocks.IRON_ORE.getDescriptionId());
+            String ea = I18n.get("message.jwn_items.ea");
+            int count = detectedBlock.get(Blocks.DEEPSLATE_IRON_ORE) + detectedBlock.get(Blocks.IRON_ORE) + detectedBlock.get(Blocks.RAW_IRON_BLOCK);
+            player.sendSystemMessage(Component.literal(ore + ": " + count + ea));
+        } else if (detectedBlock.get(Blocks.DEEPSLATE_EMERALD_ORE) != 0 || detectedBlock.get(Blocks.EMERALD_ORE) != 0
+        || detectedBlock.get(Blocks.DEEPSLATE_LAPIS_ORE) != 0 || detectedBlock.get(Blocks.LAPIS_ORE) != 0
+        || detectedBlock.get(Blocks.DEEPSLATE_REDSTONE_ORE) != 0 || detectedBlock.get(Blocks.REDSTONE_ORE) != 0) {
+            String emerald_ore = I18n.get(Blocks.EMERALD_ORE.getDescriptionId());
+            String lapis_ore = I18n.get(Blocks.LAPIS_ORE.getDescriptionId());
+            String redstone_ore = I18n.get(Blocks.REDSTONE_ORE.getDescriptionId());
+            String ea = I18n.get("message.jwn_items.ea");
+            int emerald_count = detectedBlock.get(Blocks.DEEPSLATE_EMERALD_ORE) + detectedBlock.get(Blocks.EMERALD_ORE);
+            int lapis_count = detectedBlock.get(Blocks.DEEPSLATE_LAPIS_ORE) + detectedBlock.get(Blocks.LAPIS_ORE);
+            int redstone_count = detectedBlock.get(Blocks.DEEPSLATE_REDSTONE_ORE) + detectedBlock.get(Blocks.REDSTONE_ORE);
+            player.sendSystemMessage(Component.literal(emerald_ore + ": " + emerald_count + ea + " / " + lapis_ore + ": " + lapis_count + ea + " / " + redstone_ore + ": " + redstone_count + ea));
+        } else if (detectedBlock.get(Blocks.DEEPSLATE_COPPER_ORE) != 0 || detectedBlock.get(Blocks.COPPER_ORE) != 0 || detectedBlock.get(Blocks.RAW_COPPER_BLOCK) != 0) {
+            String ore = I18n.get(Blocks.COPPER_ORE.getDescriptionId());
+            String ea = I18n.get("message.jwn_items.ea");
+            int count = detectedBlock.get(Blocks.DEEPSLATE_COPPER_ORE) + detectedBlock.get(Blocks.COPPER_ORE) + detectedBlock.get(Blocks.RAW_COPPER_BLOCK);
+            player.sendSystemMessage(Component.literal(ore + ": " + count + ea));
+        } else if (detectedBlock.get(Blocks.DEEPSLATE_COAL_ORE) != 0 || detectedBlock.get(Blocks.COAL_ORE) != 0) {
+            String ore = I18n.get(Blocks.COAL_ORE.getDescriptionId());
+            String ea = I18n.get("message.jwn_items.ea");
+            int count = detectedBlock.get(Blocks.DEEPSLATE_COAL_ORE) + detectedBlock.get(Blocks.COAL_ORE);
+            player.sendSystemMessage(Component.literal(ore + ": " + count + ea));
+        } else {
+            player.sendSystemMessage(Component.translatable("message.jwn_items.nothing"));
         }
     }
 }

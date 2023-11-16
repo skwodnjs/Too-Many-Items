@@ -56,6 +56,10 @@ public class MyStuff {
         this.activeUpgraded = activeUpgraded;
     }
 
+    public void activeUpgrade() {
+        this.activeUpgraded = true;
+    }
+
     public void reset() {
         Arrays.fill(activeItemID, 0);
         Arrays.fill(activeItemLevel, 0);
@@ -74,14 +78,6 @@ public class MyStuff {
         passiveItemLocked[index] = locked;
     }
 
-    private boolean isFull(ItemType itemType) {
-        return switch (itemType) {
-            case ACTIVE -> activeUpgraded ? activeItemID[ACTIVE_MAX_UPGRADE - 1] != 0 : activeItemID[ACTIVE_MAX - 1] != 0;
-            case PASSIVE -> passiveItemID[PASSIVE_MAX - 1] != 0;
-            case CONSUMABLES -> true;
-        };
-    }
-
     public int getEmptySlot(ItemType itemType) {
         if (itemType == ItemType.ACTIVE) {
             int l = (activeUpgraded) ? ACTIVE_MAX_UPGRADE : ACTIVE_MAX;
@@ -96,7 +92,6 @@ public class MyStuff {
     }
 
     public boolean addItem(ModItem modItem) {
-        if (isFull(modItem.itemType)) return false;
         if (modItem.itemType == ItemType.CONSUMABLES) return false;
 
         int index;
@@ -105,6 +100,7 @@ public class MyStuff {
         } else {
             index = getIndex(modItem);
         }
+        if (index == -1) return false;
 
         int level;
         if (modItem.itemType == ItemType.ACTIVE) {
