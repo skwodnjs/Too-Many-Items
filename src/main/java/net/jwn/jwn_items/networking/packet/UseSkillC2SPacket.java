@@ -6,6 +6,8 @@ import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItemProvider;
 import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.item.active.ActiveSkill;
+import net.jwn.jwn_items.util.Functions;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,16 +39,19 @@ public class UseSkillC2SPacket {
             // HERE WE ARE ON THE SERVER!
             ServerPlayer player = context.getSender();
 
-            int adjustedCoolTime = ((ActiveItem) ModItemProvider.getItemById(id)).getCoolTime(itemLevel);
+            int levelCoolTime = ((ActiveItem) ModItemProvider.getItemById(id)).getCoolTime(itemLevel);
             int skillStack = ((ActiveItem) ModItemProvider.getItemById(id)).getMaxStack();
 
             AtomicBoolean canUseSkill = new AtomicBoolean(false);
             player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(coolTime -> {
-                if (coolTime.canUseSkill(adjustedCoolTime, skillStack)) {
+                if (coolTime.canUseSkill(levelCoolTime, skillStack)) {
                     canUseSkill.set(true);
-                    coolTime.add(adjustedCoolTime);
+                    coolTime.add(levelCoolTime);
                 } else {
-                    player.sendSystemMessage(Component.literal("can't use now"));
+                    String message = I18n.get("message.jwn_items.coolTimeLeft");
+                    String secondLeft = I18n.get("message.jwn_items.secondLeft");
+                    ModItem item = ModItemProvider.getItemById(id);
+                    player.sendSystemMessage(Component.literal(message + " (" + Functions.getWaitingTime(coolTime.get(), (ActiveItem) item, itemLevel) + secondLeft + ")"));
                 }
             });
 

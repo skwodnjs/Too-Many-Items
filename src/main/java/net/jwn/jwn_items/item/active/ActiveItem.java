@@ -27,7 +27,7 @@ public class ActiveItem extends ModItem {
     }
 
     public int getCoolTime(int level) {
-        return (coolTimeDefault - (level - 1) * levelWeight) * 20;
+        return coolTimeDefault - (level - 1) * levelWeight;
     }
 
     public int getMaxStack() {

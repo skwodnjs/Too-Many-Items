@@ -28,7 +28,7 @@ public class CoolTime {
     }
 
     public boolean canUseSkill(int cost, int chargeStack) {
-        return cost * chargeStack >= time + cost;
+        return cost * chargeStack - time >= cost;
     }
 
     public void copyFrom(CoolTime coolTime) {

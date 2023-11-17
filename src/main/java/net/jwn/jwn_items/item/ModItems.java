@@ -26,10 +26,10 @@ public class ModItems {
             () -> new Pill(new Item.Properties().stacksTo(ITEM_STACK), 0, 0));
 
     public static final RegistryObject<Item> D1_ITEM = ITEMS.register("d1",
-            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 1, 0, 50, 1, 10));
+            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 1, 0, 45 * 20, 1, 10 * 20));
 
     public static final RegistryObject<Item> D6_ITEM = ITEMS.register("d6",
-            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 2, 0, 50, 1, 10));
+            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 2, 0, 45 * 20, 1, 10 * 20));
 
     public static final RegistryObject<Item> MUSTACHE_ITEM = ITEMS.register("mustache",
             () -> new PassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 3, 0,
@@ -37,7 +37,7 @@ public class ModItems {
             ));
 
     public static final RegistryObject<Item> CHARGED_TNT_ITEM = ITEMS.register("charged_tnt",
-            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 4, 0, 30, 3, 5));
+            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 4, 0, 30 * 20, 3, 5 * 20));
 
     public static final RegistryObject<Item> BATTERY_5V = ITEMS.register("battery_5v",
             () -> new PassiveItem(new Item.Properties().stacksTo(ITEM_STACK), 5, 0,
@@ -60,10 +60,10 @@ public class ModItems {
             () -> new Coin(new Item.Properties().stacksTo(ITEM_STACK), 10, 0, 10));
 
     public static final RegistryObject<Item> PRESCRIPTION = ITEMS.register("prescription",
-            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 11, 0, 50, 1, 10));
+            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 11, 0, 50 * 20, 1, 10 * 20));
 
     public static final RegistryObject<Item> RADAR = ITEMS.register("radar",
-            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 12, 0, 1, 1, 0));
+            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 12, 0, 50 * 20, 1, 10 * 20));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

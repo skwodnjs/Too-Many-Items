@@ -11,11 +11,11 @@ public class ModSkills {
     public static void useSkill(Player player, int id, int itemLevel) {
         // you should play sound in both side
         // on client
-        int adjustedCoolTime = ((ActiveItem) ModItemProvider.getItemById(id)).getCoolTime(itemLevel);
+        int levelCoolTime = ((ActiveItem) ModItemProvider.getItemById(id)).getCoolTime(itemLevel);
         int skillStack = ((ActiveItem) ModItemProvider.getItemById(id)).getMaxStack();
         player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(coolTime -> {
-            if (coolTime.canUseSkill(adjustedCoolTime, skillStack)) {
-                coolTime.add(adjustedCoolTime);
+            if (coolTime.canUseSkill(levelCoolTime, skillStack)) {
+                coolTime.add(levelCoolTime);
             }
         });
 

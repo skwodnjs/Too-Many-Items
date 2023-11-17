@@ -33,6 +33,8 @@
 
   "message.jwn_items.ea": "",
   "message.jwn_items.nothing": "Nothing",
+  "message.jwn_items.coolTimeLeft": "Can't use now",
+  "message.jwn_items.secondLeft": "sec left",
 
   "item.jwn_items.message_pill_random_stat_change": "random stat change",
 

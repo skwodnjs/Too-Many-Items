@@ -33,6 +33,8 @@
 
   "message.jwn_items.ea": "개",
   "message.jwn_items.nothing": "주변에 광물이 없습니다.",
+  "message.jwn_items.coolTimeLeft": "아직 스킬을 사용할 수 없습니다.",
+  "message.jwn_items.secondLeft": "초 남음",
 
   "item.jwn_items.message_pill_random_stat_change": "스텟 랜덤 변경",
 

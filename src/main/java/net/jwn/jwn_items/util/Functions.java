@@ -127,15 +127,19 @@ public class Functions {
     }
 
     // screen
-    public static int getChargedStack(int playerCoolTime, ActiveItem activeItem, int level) {
-        int maxStack = activeItem.getMaxStack();
-        return (playerCoolTime == 0) ? maxStack : maxStack - 1 - ((playerCoolTime - 1) / 20) / (activeItem.getCoolTime(level) / 20);
+    public static int getChargedStack(int coolTime, ActiveItem activeItem, int level) {
+        int maxValue = activeItem.getMaxStack() * activeItem.getCoolTime(level);
+        int usableTime = maxValue - coolTime;
+        return usableTime / activeItem.getCoolTime(level);
     }
-    public static int getWaitingTime(int playerCoolTime, ActiveItem activeItem, int level) {
-        return (playerCoolTime == 0) ? 0 : (playerCoolTime / 20) % (activeItem.getCoolTime(level) / 20) + 1;
+    public static int getWaitingTime(int coolTime, ActiveItem activeItem, int level) {
+        int leftSec = coolTime % activeItem.getCoolTime(level) / 20 + 1;
+        if (leftSec == 1 && getChargedStack(coolTime, activeItem, level) == activeItem.getMaxStack()) {
+            return 0;
+        }
+        return leftSec;
     }
 
-    //
     public static float addSingleStat(Player player, Stat stat) {
         AtomicReference<Float> toReturn = new AtomicReference<>(0f);
         player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
