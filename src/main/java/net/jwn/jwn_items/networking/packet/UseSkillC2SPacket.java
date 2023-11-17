@@ -68,10 +68,10 @@ public class UseSkillC2SPacket {
                     ActiveSkill.operateRadarServer(player);
                 } else if (id == ((ModItem) ModItems.STAR.get()).id) {
                     ActiveSkill.operateStar(player, itemLevel);
+                } else if (id == ((ModItem) ModItems.LAVA_WALKER.get()).id) {
+                    ActiveSkill.operateLavaWalker(player);
                 }
             }
-
-            Functions.printModItemData(player);
         });
         return true;
     }

@@ -30,6 +30,8 @@ public class ModSkills {
         if (canUseSkill.get()) {
             if (id == ((ModItem) ModItems.STAR.get()).id) {
                 ActiveSkill.operateStar(player, itemLevel);
+            } else if (id == ((ModItem) ModItems.LAVA_WALKER.get()).id) {
+                ActiveSkill.operateLavaWalker(player);
             }
         }
 
