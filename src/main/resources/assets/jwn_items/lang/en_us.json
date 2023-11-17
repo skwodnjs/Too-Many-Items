@@ -20,6 +20,7 @@
 
   "block.jwn_items.test_flooring": "Test Flooring",
   "block.jwn_items.poop": "Poop",
+  "block.jwn_items.cold_lava": "cold_lava",
 
   "stat.jwn_items.health": "Health",
   "stat.jwn_items.damage": "Damage",

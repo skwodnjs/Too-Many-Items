@@ -165,4 +165,7 @@ public class ActiveSkill {
         });
         player.addEffect(new MobEffectInstance(ModEffects.STAR_EFFECT.get(), (15 + itemLevel * 5) * 20));
     }
+    public static void operateLavaWalker(Player player) {
+        player.addEffect(new MobEffectInstance(ModEffects.LAVA_WALKER_EFFECT.get(), 60 * 20));
+    }
 }

@@ -20,6 +20,7 @@
 
   "block.jwn_items.test_flooring": "테스트 장판",
   "block.jwn_items.poop": "똥",
+  "block.jwn_items.cold_lava": "식은 용암",
 
   "stat.jwn_items.health": "체력",
   "stat.jwn_items.damage": "데미지",

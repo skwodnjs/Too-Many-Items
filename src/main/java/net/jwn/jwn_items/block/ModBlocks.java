@@ -1,6 +1,7 @@
 package net.jwn.jwn_items.block;
 
 import net.jwn.jwn_items.Main;
+import net.jwn.jwn_items.block.custom.ColdLava;
 import net.jwn.jwn_items.block.custom.Flooring;
 import net.jwn.jwn_items.block.custom.Poop;
 import net.jwn.jwn_items.item.ModItems;
@@ -27,6 +28,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> POOP_BLOCK = registerBlock("poop",
             () -> new Poop(BlockBehaviour.Properties.of().noOcclusion()));
+
+    public static final RegistryObject<Block> COLD_LAVA = registerBlock("cold_lava",
+            () -> new ColdLava(BlockBehaviour.Properties.of().noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

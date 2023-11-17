@@ -68,6 +68,9 @@ public class ModItems {
     public static final RegistryObject<Item> STAR = ITEMS.register("star",
             () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 13, 0, 300 * 20, 1, 0));
 
+    public static final RegistryObject<Item> LAVA_WALKER = ITEMS.register("lava_walker",
+            () -> new ActiveItem(new Item.Properties().stacksTo(ITEM_STACK), 14, 0, 130 * 20, 1, 20 * 20));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
