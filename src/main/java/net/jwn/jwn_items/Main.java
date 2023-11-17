@@ -2,6 +2,7 @@ package net.jwn.jwn_items;
 
 import com.mojang.logging.LogUtils;
 import net.jwn.jwn_items.block.ModBlocks;
+import net.jwn.jwn_items.effect.ModEffects;
 import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -33,6 +34,7 @@ public class Main
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModEffects.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);

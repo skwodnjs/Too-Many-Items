@@ -69,6 +69,16 @@ public class Functions {
             }
         });
     }
+    public static void printModItemData(Player player) {
+        System.out.println("MOD ITEM DATA");
+        System.out.println((player.level().isClientSide) ? "CLIENT" : "SERVER");
+        player.getCapability(ModItemDataProvider.modItemDataCapability).ifPresent(modItemData -> {
+            for (int i = 0; i < modItemData.getStarStat().length; i++) {
+                System.out.printf("%f ", modItemData.getStarStat()[i]);
+            }
+            System.out.println();
+        });
+    }
 
     // sync
     public static void syncCoolTimeS2C(ServerPlayer player) {
@@ -126,13 +136,32 @@ public class Functions {
         });
     }
 
+    public static void syncModItemDataS2C(ServerPlayer player) {
+        player.getCapability(ModItemDataProvider.modItemDataCapability).ifPresent(modItemData -> {
+            float[][] floats = new float[][]{
+                    modItemData.getStarStat()
+            };
+            ModMessages.sendToPlayer(new ModItemDataSyncS2CPacket(floats), player);
+        });
+    }
+    public static void syncModItemDataC2S(Player player) {
+        player.getCapability(ModItemDataProvider.modItemDataCapability).ifPresent(modItemData -> {
+            float[][] floats = new float[][]{
+                    modItemData.getStarStat()
+            };
+            ModMessages.sendToServer(new ModItemDataSyncC2SPacket(floats));
+        });
+    }
+
     // screen
     public static int getChargedStack(int coolTime, ActiveItem activeItem, int level) {
+        if (activeItem.getCoolTime(level) == 0) return 1;
         int maxValue = activeItem.getMaxStack() * activeItem.getCoolTime(level);
         int usableTime = maxValue - coolTime;
         return usableTime / activeItem.getCoolTime(level);
     }
     public static int getWaitingTime(int coolTime, ActiveItem activeItem, int level) {
+        if (activeItem.getCoolTime(level) == 0) return 0;
         int leftSec = coolTime % activeItem.getCoolTime(level) / 20 + 1;
         if (leftSec == 1 && getChargedStack(coolTime, activeItem, level) == activeItem.getMaxStack()) {
             return 0;

@@ -20,6 +20,7 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = Main.MOD_ID, value = Dist.CLIENT)

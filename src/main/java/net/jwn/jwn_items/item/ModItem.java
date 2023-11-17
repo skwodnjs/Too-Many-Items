@@ -1,6 +1,5 @@
 package net.jwn.jwn_items.item;
 
-
 import net.minecraft.world.item.Item;
 
 public class ModItem extends Item {
@@ -14,4 +13,6 @@ public class ModItem extends Item {
         this.id = id;
         this.quality = quality;
     }
+
+    // if (pPlayer.hasEffect(ModEffects.STAR_EFFECT.get())) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
 }

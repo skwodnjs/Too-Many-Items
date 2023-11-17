@@ -16,6 +16,7 @@
   "item.jwn_items.coin10": "A Bundle of Coins",
   "item.jwn_items.prescription": "Prescription",
   "item.jwn_items.radar": "Radar",
+  "item.jwn_items.star": "Star",
 
   "block.jwn_items.test_flooring": "Test Flooring",
   "block.jwn_items.poop": "Poop",
@@ -29,12 +30,16 @@
   "stat.jwn_items.luck": "Luck",
   "stat.jwn_items.coin": "Coin",
 
+  "effect.jwn_items.star_effect": "Star",
+
   "item.jwn_items.message_no_stat_changed": "No Stat Changed",
 
   "message.jwn_items.ea": "",
   "message.jwn_items.nothing": "Nothing",
   "message.jwn_items.coolTimeLeft": "Can't use now",
   "message.jwn_items.secondLeft": "sec left",
+  "message.jwn_items.full_inventory": "Full inventory",
+  "message.jwn_items.cannot_use": "Can't use now",
 
   "item.jwn_items.message_pill_random_stat_change": "random stat change",
 
@@ -51,5 +56,6 @@
   "tooltip.jwn_items.coin": "Coin tooltip",
   "tooltip.jwn_items.coin10": "A Bundle of Coins tooltip",
   "tooltip.jwn_items.prescription": "Prescription tooltip",
-  "tooltip.jwn_items.radar": "Radar tooltip"
+  "tooltip.jwn_items.radar": "Radar tooltip",
+  "tooltip.jwn_items.star": "Star tooltip"
 }

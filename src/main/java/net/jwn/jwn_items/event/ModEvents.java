@@ -2,12 +2,17 @@ package net.jwn.jwn_items.event;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.*;
+import net.jwn.jwn_items.effect.ModEffects;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
 import net.jwn.jwn_items.item.ItemType;
+import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.passive.*;
+import net.jwn.jwn_items.networking.ModMessages;
+import net.jwn.jwn_items.networking.packet.PlayerStatsSyncS2CPacket;
 import net.jwn.jwn_items.util.StatType;
 import net.jwn.jwn_items.util.Functions;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -17,7 +22,9 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -27,15 +34,25 @@ import java.util.concurrent.atomic.AtomicReference;
 @Mod.EventBusSubscriber(modid = Main.MOD_ID)
 public class ModEvents {
     @SubscribeEvent
-    public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
-        Player player = event.player;
-        if (event.phase == TickEvent.Phase.END) {
-            player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
-            PassiveSkill.operateTick(player);
-            if (event.side == LogicalSide.SERVER) {
-                PassiveSkill.operateServerTick((ServerPlayer) player);
-            } else {
-                PassiveSkill.operateClientTick(player);
+    public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof Player) {
+            if (!event.getObject().getCapability(PlayerStatProvider.playerStatsCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "player_stats"), new PlayerStatProvider());
+            }
+            if (!event.getObject().getCapability(MyStuffProvider.myStuffCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "my_stuff"), new MyStuffProvider());
+            }
+            if (!event.getObject().getCapability(CoolTimeProvider.coolTimeCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "cool_time"), new CoolTimeProvider());
+            }
+            if (!event.getObject().getCapability(PlayerStatProvider.playerStatsCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "player_options"), new PlayerOptionProvider());
+            }
+            if (!event.getObject().getCapability(FoundStuffProvider.foundStuffCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "found_stuff"), new FoundStuffProvider());
+            }
+            if (!event.getObject().getCapability(ModItemDataProvider.modItemDataCapability).isPresent()) {
+                event.addCapability(new ResourceLocation(Main.MOD_ID, "mod_item_data"), new ModItemDataProvider());
             }
         }
     }
@@ -56,22 +73,15 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
-            if (!event.getObject().getCapability(PlayerStatProvider.playerStatsCapability).isPresent()) {
-                event.addCapability(new ResourceLocation(Main.MOD_ID, "player_stats"), new PlayerStatProvider());
-            }
-            if (!event.getObject().getCapability(MyStuffProvider.myStuffCapability).isPresent()) {
-                event.addCapability(new ResourceLocation(Main.MOD_ID, "my_stuff"), new MyStuffProvider());
-            }
-            if (!event.getObject().getCapability(CoolTimeProvider.coolTimeCapability).isPresent()) {
-                event.addCapability(new ResourceLocation(Main.MOD_ID, "cool_time"), new CoolTimeProvider());
-            }
-            if (!event.getObject().getCapability(PlayerStatProvider.playerStatsCapability).isPresent()) {
-                event.addCapability(new ResourceLocation(Main.MOD_ID, "player_options"), new PlayerOptionProvider());
-            }
-            if (!event.getObject().getCapability(FoundStuffProvider.foundStuffCapability).isPresent()) {
-                event.addCapability(new ResourceLocation(Main.MOD_ID, "found_stuff"), new FoundStuffProvider());
+    public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
+        Player player = event.player;
+        if (event.phase == TickEvent.Phase.END) {
+            player.getCapability(CoolTimeProvider.coolTimeCapability).ifPresent(CoolTime::sub);
+            PassiveSkill.operateTick(player);
+            if (event.side == LogicalSide.SERVER) {
+                PassiveSkill.operateServerTick((ServerPlayer) player);
+            } else {
+                PassiveSkill.operateClientTick(player);
             }
         }
     }
@@ -143,6 +153,7 @@ public class ModEvents {
             Functions.syncFoundStuffS2C((ServerPlayer) player);
             Functions.syncPlayerOptionS2C((ServerPlayer) player);
             Functions.syncCoolTimeS2C((ServerPlayer) player);
+            Functions.syncModItemDataS2C((ServerPlayer) player);
         }
     }
 
@@ -181,7 +192,34 @@ public class ModEvents {
                     newStore.copyFrom(oldStore);
                 });
             });
+            // Mod Item Data
+            event.getOriginal().getCapability(ModItemDataProvider.modItemDataCapability).ifPresent(oldStore -> {
+                event.getEntity().getCapability(ModItemDataProvider.modItemDataCapability).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
             event.getOriginal().invalidateCaps();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        if (event.getEntity().hasEffect(ModEffects.STAR_EFFECT.get()) && event.getItemStack().getItem() instanceof ModItem) {
+            if (!event.getLevel().isClientSide) event.getEntity().sendSystemMessage(Component.translatable("message.jwn_items.cannot_use"));
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMobEffectExpired(MobEffectEvent.Expired event) {
+        if (event.getEntity() instanceof Player player && event.getEffectInstance().getEffect() == ModEffects.STAR_EFFECT.get()) {
+            player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStat -> {
+                player.getCapability(ModItemDataProvider.modItemDataCapability).ifPresent(modItemData -> {
+                    playerStat.set(modItemData.getStarStat());
+                    ModMessages.sendToPlayer(new PlayerStatsSyncS2CPacket(playerStat.get()), (ServerPlayer) player);
+                    MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
+                });
+            });
         }
     }
 }

@@ -16,6 +16,7 @@
   "item.jwn_items.coin10": "동전 뭉치",
   "item.jwn_items.prescription": "처방전",
   "item.jwn_items.radar": "레이더",
+  "item.jwn_items.star": "별?",
 
   "block.jwn_items.test_flooring": "테스트 장판",
   "block.jwn_items.poop": "똥",
@@ -29,12 +30,16 @@
   "stat.jwn_items.luck": "행운",
   "stat.jwn_items.coin": "동전",
 
+  "effect.jwn_items.star_effect": "으라차차",
+
   "item.jwn_items.message_no_stat_changed": "스텟 변동 없음",
 
   "message.jwn_items.ea": "개",
   "message.jwn_items.nothing": "주변에 광물이 없습니다.",
   "message.jwn_items.coolTimeLeft": "아직 스킬을 사용할 수 없습니다.",
   "message.jwn_items.secondLeft": "초 남음",
+  "message.jwn_items.full_inventory": "인벤토리가 가득 찼습니다.",
+  "message.jwn_items.cannot_use": "지금은 사용할 수 없습니다.",
 
   "item.jwn_items.message_pill_random_stat_change": "스텟 랜덤 변경",
 
@@ -51,5 +56,6 @@
   "tooltip.jwn_items.coin": "슬롯머신을 본 적 있나요? \n곳곳에 숨겨진 슬롯머신을 돌려 자신의 행운을 시험해보세요!",
   "tooltip.jwn_items.coin10": "코인을 10개 얻습니다.",
   "tooltip.jwn_items.prescription": "스킬 사용 시 3 ~ 5개의 알약을 얻을 수 있습니다.",
-  "tooltip.jwn_items.radar": "스킬 사용 시 주변 광물을 탐지합니다. \n주변에서 가장 가치가 높은 광물과 그 갯수를 알 수 있습니다."
+  "tooltip.jwn_items.radar": "스킬 사용 시 주변 광물을 탐지합니다. \n주변에서 가장 가치가 높은 광물과 그 갯수를 알 수 있습니다.",
+  "tooltip.jwn_items.star": "잠시동안 모든 스텟이 최대가 됩니다. \n효과가 지속되는 동안 아이템을 사용할 수 없습니다."
 }

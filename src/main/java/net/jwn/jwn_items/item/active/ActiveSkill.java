@@ -1,5 +1,8 @@
 package net.jwn.jwn_items.item.active;
 
+import net.jwn.jwn_items.capability.ModItemDataProvider;
+import net.jwn.jwn_items.capability.PlayerStatProvider;
+import net.jwn.jwn_items.effect.ModEffects;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItemProvider;
@@ -9,12 +12,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
@@ -153,5 +156,13 @@ public class ActiveSkill {
         } else {
             player.sendSystemMessage(Component.translatable("message.jwn_items.nothing"));
         }
+    }
+    public static void operateStar(Player player, int itemLevel) {
+        player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStat -> {
+            player.getCapability(ModItemDataProvider.modItemDataCapability).ifPresent(modItemData -> {
+                modItemData.setStarStat(playerStat.get());
+            });
+        });
+        player.addEffect(new MobEffectInstance(ModEffects.STAR_EFFECT.get(), (15 + itemLevel * 5) * 20));
     }
 }

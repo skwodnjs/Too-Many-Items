@@ -80,6 +80,16 @@ public class ModMessages {
                 .encoder(PlayerStatsSyncC2SPacket::toBytes)
                 .consumerMainThread(PlayerStatsSyncC2SPacket::handle)
                 .add();
+        net.messageBuilder(ModItemDataSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ModItemDataSyncS2CPacket::new)
+                .encoder(ModItemDataSyncS2CPacket::toBytes)
+                .consumerMainThread(ModItemDataSyncS2CPacket::handle)
+                .add();
+        net.messageBuilder(ModItemDataSyncC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ModItemDataSyncC2SPacket::new)
+                .encoder(ModItemDataSyncC2SPacket::toBytes)
+                .consumerMainThread(ModItemDataSyncC2SPacket::handle)
+                .add();
 
         // print
         net.messageBuilder(PrintStatC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
@@ -102,7 +112,11 @@ public class ModMessages {
                 .encoder(PrintFoundStuffC2SPacket::toBytes)
                 .consumerMainThread(PrintFoundStuffC2SPacket::handle)
                 .add();
-
+        net.messageBuilder(PrintModItemDataC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(PrintModItemDataC2SPacket::new)
+                .encoder(PrintModItemDataC2SPacket::toBytes)
+                .consumerMainThread(PrintModItemDataC2SPacket::handle)
+                .add();
         // skill
         net.messageBuilder(UseSkillC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(UseSkillC2SPacket::new)
