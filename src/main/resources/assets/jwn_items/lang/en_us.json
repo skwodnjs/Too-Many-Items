@@ -59,5 +59,21 @@
   "tooltip.jwn_items.coin10": "A Bundle of Coins tooltip",
   "tooltip.jwn_items.prescription": "Prescription tooltip",
   "tooltip.jwn_items.radar": "Radar tooltip",
-  "tooltip.jwn_items.star": "Star tooltip"
+  "tooltip.jwn_items.star": "Star tooltip",
+  "tooltip.jwn_items.lava_walker": "lava_walker tooltip",
+
+  "tooltip.jwn_items.lvl_5": "5 Level Effect: ",
+
+  "tooltip.jwn_items.d1_5": "d1_5",
+  "tooltip.jwn_items.d6_5": "d6_5",
+  "tooltip.jwn_items.mustache_5": "mustache_5",
+  "tooltip.jwn_items.charged_tnt_5": "charged_tnt_5",
+  "tooltip.jwn_items.battery_5v_5": "battery_5v_5",
+  "tooltip.jwn_items.aging_5": "aging_5",
+  "tooltip.jwn_items.rapid_growth_5": "rapid_growth_5",
+  "tooltip.jwn_items.auto_portion_5": "auto_portion_5",
+  "tooltip.jwn_items.prescription_5": "prescription_5",
+  "tooltip.jwn_items.radar_5": "radar_5",
+  "tooltip.jwn_items.star_5": "star_5",
+  "tooltip.jwn_items.lava_walker_5": "lava_walker_5"
 }
