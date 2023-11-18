@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MOD_ID);
-    private static final int ITEM_STACK = 64;
+    public static final int ITEM_STACK = 64;
 
     public static final RegistryObject<Item> TEST_ITEM = ITEMS.register("test",
             () -> new TestItem(new Item.Properties().stacksTo(ITEM_STACK)));

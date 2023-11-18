@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class Poop extends HalfTransparentBlock {
-    public Poop(Properties pProperties) {
+public class PoopBlock extends HalfTransparentBlock {
+    public PoopBlock(Properties pProperties) {
         super(pProperties);
     }
 

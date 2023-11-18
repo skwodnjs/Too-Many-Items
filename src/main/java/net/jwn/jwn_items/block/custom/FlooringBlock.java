@@ -12,10 +12,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class Flooring extends Block {
+public class FlooringBlock extends Block {
     protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
 
-    public Flooring(Properties pProperties) {
+    public FlooringBlock(Properties pProperties) {
         super(pProperties);
     }
 

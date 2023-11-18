@@ -23,6 +23,10 @@
   "block.jwn_items.test_flooring": "테스트 장판",
   "block.jwn_items.poop": "똥",
   "block.jwn_items.cold_lava": "식은 용암",
+  "block.jwn_items.shop_common": "상점",
+  "block.jwn_items.shop_rare": "희귀한 상점",
+  "block.jwn_items.roulette_common": "룰렛",
+  "block.jwn_items.roulette_rare": "희귀한 룰렛",
 
   "stat.jwn_items.health": "체력",
   "stat.jwn_items.damage": "데미지",
@@ -62,6 +66,7 @@
   "tooltip.jwn_items.radar": "스킬 사용 시 주변 광물을 탐지합니다. 주변에서 가장 가치가 높은 광물과 그 갯수를 알 수 있습니다.",
   "tooltip.jwn_items.star": "잠시동안 모든 스텟이 최대가 됩니다. 효과가 지속되는 동안 아이템을 사용할 수 없습니다.",
   "tooltip.jwn_items.lava_walker": "잠시동안 용암 위를 걸을 수 있습니다. 효과가 사라지기 전에 땅으로 올라가야겠죠?",
+  "tooltip.jwn_items.card_illusion": "주변 몬스터들이 사라집니다.",
 
   "tooltip.jwn_items.lvl_5": "5레벨 효과: ",
 

@@ -10,7 +10,7 @@ public class ModItemProvider {
         ArrayList<ModItem> modItems = new ArrayList<>();
         for (int id = 0; id < ITEM_TOTAL; id++) {
             if (getItemById(id).itemType == itemType && getItemById(id).quality == quality) {
-                modItems.add(getItemById(id));
+                getItemById(id);
             }
         }
         Random random = new Random();

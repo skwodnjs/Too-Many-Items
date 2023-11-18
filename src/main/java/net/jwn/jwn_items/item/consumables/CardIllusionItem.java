@@ -4,6 +4,7 @@ import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.item.Quality;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
@@ -28,7 +29,7 @@ public class CardIllusionItem extends ConsumableItem {
         AABB aabb = new AABB(startVec, endVec);
         pLevel.getEntities(pPlayer, aabb).forEach(entity -> {
             if (entity instanceof Enemy && !(entity instanceof Warden || entity instanceof WitherBoss || entity instanceof EnderDragon)) {
-                entity.kill();
+                entity.remove(Entity.RemovalReason.DISCARDED);
             }
         });
     }

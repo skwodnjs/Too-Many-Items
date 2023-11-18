@@ -23,6 +23,10 @@
   "block.jwn_items.test_flooring": "Test Flooring",
   "block.jwn_items.poop": "Poop",
   "block.jwn_items.cold_lava": "cold_lava",
+  "block.jwn_items.shop_common": "shop",
+  "block.jwn_items.shop_rare": "shop_rare",
+  "block.jwn_items.roulette_common": "roulette_common",
+  "block.jwn_items.roulette_rare": "roulette_rare",
 
   "stat.jwn_items.health": "Health",
   "stat.jwn_items.damage": "Damage",
@@ -62,6 +66,7 @@
   "tooltip.jwn_items.radar": "Radar tooltip",
   "tooltip.jwn_items.star": "Star tooltip",
   "tooltip.jwn_items.lava_walker": "lava_walker tooltip",
+  "tooltip.jwn_items.card_illusion": "card_illusion tooltip",
 
   "tooltip.jwn_items.lvl_5": "5 Level Effect: ",
 
