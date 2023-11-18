@@ -1,10 +1,5 @@
 package net.jwn.jwn_items.util;
 
-import net.jwn.jwn_items.capability.PlayerStatProvider;
-import net.minecraft.world.entity.player.Player;
-
-import java.util.concurrent.atomic.AtomicReference;
-
 public class Stat {
     private final StatType statType;
     private float value;
@@ -26,5 +21,10 @@ public class Stat {
 
     public float getValue() {
         return value;
+    }
+
+    public static Stat invertValue(Stat stat) {
+        float value = stat.getValue();
+        return new Stat(stat.getStatType(), -value);
     }
 }

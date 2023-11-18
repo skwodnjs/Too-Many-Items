@@ -1,9 +1,13 @@
 package net.jwn.jwn_items.item.consumables;
 
 import net.jwn.jwn_items.Main;
+import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.capability.PlayerStatProvider;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
+import net.jwn.jwn_items.item.ModItem;
+import net.jwn.jwn_items.item.ModItems;
+import net.jwn.jwn_items.item.Quality;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.PlayerStatsSyncS2CPacket;
 import net.jwn.jwn_items.util.Functions;
@@ -22,8 +26,9 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Pill extends ConsumableItem {
+public class PillItem extends ConsumableItem {
     private final List<StatType> statTypes = Arrays.asList(
             StatType.HEALTH_BY_CONSUMABLES,
             StatType.DAMAGE_BY_CONSUMABLES,
@@ -33,7 +38,7 @@ public class Pill extends ConsumableItem {
             StatType.MOVEMENT_SPEED_BY_CONSUMABLES
     );
 
-    public Pill(Properties pProperties, int id, int quality) {
+    public PillItem(Properties pProperties, int id, Quality quality) {
         super(pProperties, id, quality);
     }
 
@@ -58,10 +63,15 @@ public class Pill extends ConsumableItem {
             StringBuilder message = new StringBuilder();
             Collections.shuffle(statTypes);
 
+            AtomicBoolean isPrescriptionMaxLevel = new AtomicBoolean(false);
+            pPlayer.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+                isPrescriptionMaxLevel.set(myStuff.isMaxLevel(((ModItem) ModItems.PRESCRIPTION.get()).id));
+            });
+
             int changes = getRandom();
             for (int i = 0; i < changes; i++) {
                 float value = (float) (Math.random() * 1.5 + 0.5);
-                float sign = (Math.random() < 0.5) ? -1.0f : 1.0f;
+                float sign = isPrescriptionMaxLevel.get() ? 1 : (Math.random() < 0.5) ? -1.0f : 1.0f;
                 Stat randomStat = new Stat(statTypes.get(i), sign * value);
 
                 float result = Functions.addSingleStat(pPlayer, randomStat);

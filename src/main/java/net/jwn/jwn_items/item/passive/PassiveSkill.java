@@ -1,15 +1,23 @@
 package net.jwn.jwn_items.item.passive;
 
 import net.jwn.jwn_items.capability.MyStuffProvider;
+import net.jwn.jwn_items.capability.PlayerStatProvider;
 import net.jwn.jwn_items.item.ModItem;
 import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.networking.ModMessages;
+import net.jwn.jwn_items.util.Functions;
+import net.jwn.jwn_items.util.Stat;
+import net.jwn.jwn_items.util.StatType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.phys.AABB;
@@ -31,7 +39,8 @@ public class PassiveSkill {
         Vec3 pEnd = player.position().add(5, 1, 5);
         AABB aabb = new AABB(pStart, pEnd);
         player.level().getEntities(player, aabb).forEach(entity -> {
-            if (entity instanceof Monster && !entity.getTags().contains(tag) && Math.random() < r) {
+            if ((entity instanceof Enemy && !(entity instanceof Warden || entity instanceof WitherBoss || entity instanceof EnderDragon))
+                    && !entity.getTags().contains(tag) && Math.random() < r) {
                 entity.addTag(tag);
                 ModMessages.sendToPlayer(new AddTagS2CPacket(entity.getId(), tag), player);
             }
@@ -99,8 +108,13 @@ public class PassiveSkill {
     public static void operateTick(Player player) {
 
     }
-
     public static void operateClientTick(Player player) {
 
+    }
+
+    public static void operateMustacheMaxLevel(Player player) {
+        player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStat -> {
+            playerStat.add(player, new Stat(StatType.LUCK_BY_CONSUMABLES, 1));
+        });
     }
 }

@@ -1,12 +1,10 @@
 package net.jwn.jwn_items.item.active;
 
 import net.jwn.jwn_items.capability.ModItemDataProvider;
+import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.capability.PlayerStatProvider;
 import net.jwn.jwn_items.effect.ModEffects;
-import net.jwn.jwn_items.item.ItemType;
-import net.jwn.jwn_items.item.ModItem;
-import net.jwn.jwn_items.item.ModItemProvider;
-import net.jwn.jwn_items.item.ModItems;
+import net.jwn.jwn_items.item.*;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,6 +20,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ActiveSkill {
     public static void operateD1Server(Player player) {
@@ -34,10 +33,14 @@ public class ActiveSkill {
                 }
             }
         });
+        AtomicInteger itemLevel = new AtomicInteger();
+        player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+            itemLevel.set(myStuff.getLevelById(((ModItem) ModItems.D1_ITEM.get()).id));
+        });
         Random random = new Random();
         int targetIndex = modItemList.get(random.nextInt(modItemList.size()));
         ModItem oldItem = (ModItem) player.getInventory().getItem(targetIndex).getItem();
-        ModItem newItem = ModItemProvider.getRandomItem(oldItem.itemType, oldItem.quality);
+        ModItem newItem = ModItemProvider.getRandomItem(oldItem.itemType, itemLevel.get() == 5 && oldItem.quality.level <= Quality.RARE.level ? oldItem.quality.add(1) : oldItem.quality);
         player.getInventory().setItem(targetIndex, newItem.getDefaultInstance());
     }
     public static void operateD6Server(Player player) {
@@ -72,7 +75,7 @@ public class ActiveSkill {
             player.level().addFreshEntity(itemEntity);
         }
     }
-    public static void operateRadarServer(Player player) {
+    public static void operateRadarServer(Player player, int itemLevel) {
         List<Block> blocksToDetect = Arrays.asList(
                 Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE,
                 Blocks.IRON_ORE, Blocks.DEEPSLATE_IRON_ORE, Blocks.RAW_IRON_BLOCK,
@@ -105,9 +108,11 @@ public class ActiveSkill {
         detectedBlock.put(Blocks.DIAMOND_ORE, 0);
         detectedBlock.put(Blocks.DEEPSLATE_DIAMOND_ORE, 0);
 
-        for (int i = -5; i <= 5; i++) {
-            for (int j = -5; j <= 5; j++) {
-                for (int k = -5; k <= 5; k++) {
+        int range = itemLevel == 5 ? 10 : 5;
+
+        for (int i = -range; i <= range; i++) {
+            for (int j = -range; j <= range; j++) {
+                for (int k = -range; k <= range; k++) {
                     BlockPos targetBlockPos = player.getOnPos().offset(i, k, j);
                     Block targetBlock = player.level().getBlockState(targetBlockPos).getBlock();
                     if (blocksToDetect.contains(targetBlock)) {

@@ -63,7 +63,6 @@ public class ModAnimations {
             pRightArm.xRot = (float) Math.toRadians(30);
             pLeftArm.xRot = (float) Math.toRadians(30);
         } else if (time <= 30) {
-            System.out.println(time);
             double xRot = Math.toRadians(30 - (30.0 / 4.0) * (time - 26));
             pBody.xRot = (float) xRot;
             pBody.z = (float) (-5 + (5.0 / 4.0) * (time - 26));

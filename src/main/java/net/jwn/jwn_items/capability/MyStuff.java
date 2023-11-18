@@ -1,11 +1,17 @@
 package net.jwn.jwn_items.capability;
 
+import net.jwn.jwn_items.item.ModItemProvider;
+import net.jwn.jwn_items.item.active.ActiveItem;
+import net.jwn.jwn_items.item.passive.PassiveItem;
 import net.jwn.jwn_items.util.ModSlot;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
+import net.jwn.jwn_items.util.Stat;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class MyStuff {
     public static final int ACTIVE_MAX_UPGRADE = 5;
@@ -117,7 +123,7 @@ public class MyStuff {
         return true;
     }
 
-    public void removeItem(ItemType itemType, int index) {
+    public void removeItem(Player player, ItemType itemType, int index) {
         if (itemType == ItemType.ACTIVE) {
             for (int i = index; i < ACTIVE_MAX_UPGRADE - 1; i++) {
                 activeItemID[i] = activeItemID[i+1];
@@ -128,6 +134,7 @@ public class MyStuff {
             activeItemLevel[ACTIVE_MAX_UPGRADE - 1] = 0;
             activeItemLocked[ACTIVE_MAX_UPGRADE - 1] = false;
         } else if (itemType == ItemType.PASSIVE) {
+            subPassiveStat(player, passiveItemID[index]);
             for (int i = index; i < PASSIVE_MAX - 1; i++) {
                 passiveItemID[i] = passiveItemID[i+1];
                 passiveItemLevel[i] = passiveItemLevel[i+1];
@@ -137,6 +144,23 @@ public class MyStuff {
             passiveItemLevel[PASSIVE_MAX - 1] = 0;
             passiveItemLocked[PASSIVE_MAX - 1] = false;
         }
+    }
+
+    private void subPassiveStat(Player player, int id) {
+        player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStat -> {
+            List<Stat>  statListLv1 = ((PassiveItem) ModItemProvider.getItemById(id)).statListLv1;
+            List<Stat>  statListLv5 = ((PassiveItem) ModItemProvider.getItemById(id)).statListLv5;
+            statListLv1.forEach(stat -> {
+                playerStat.add(player, Stat.invertValue(stat));
+            });
+            statListLv5.forEach(stat -> {
+                playerStat.add(player, Stat.invertValue(stat));
+            });
+        });
+    }
+
+    public boolean isMaxLevel(int id) {
+        return getLevelById(id) == 5;
     }
 
     public void changeMainActiveItem() {

@@ -4,6 +4,7 @@ import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
+import net.jwn.jwn_items.item.Quality;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -19,7 +20,7 @@ public class ActiveItem extends ModItem {
     private final int maxStack;
     private final int levelWeight;
 
-    public ActiveItem(Properties pProperties, int id, int quality, int coolTimeDefault, int chargeStack, int levelWeight) {
+    public ActiveItem(Properties pProperties, int id, Quality quality, int coolTimeDefault, int chargeStack, int levelWeight) {
         super(pProperties, ItemType.ACTIVE, id, quality);
         this.coolTimeDefault = coolTimeDefault;
         this.maxStack = chargeStack;

@@ -65,18 +65,6 @@ public class PlayerStat {
         return result.getValue();
     }
 
-//    public void setOnly(Player player, Stat setStat) {
-//        int index = setStat.getStatType().ordinal();
-//        float setValue = setStat.getValue();
-//
-//        if ((index == 0 || index == 7) && (setStat.getValue() < MIN_STAT || setStat.getValue() > MAX_HEALTH)) return;
-//        else if ((index == 14) && (setStat.getValue() < MIN_STAT || setStat.getValue() > MAX_COIN)) return;
-//        else if (setStat.getValue() < MIN_STAT || setStat.getValue() > MAX_STAT) return;
-//
-//        playerStats[index] = setValue;
-//        MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
-//    }
-
     public void reset() {
         Arrays.fill(playerStats, 0);
     }

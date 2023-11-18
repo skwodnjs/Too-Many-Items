@@ -66,7 +66,7 @@ public class StuffIFoundScreen extends Screen {
     }
 
     private void drawSlot(int pX, int pY, int itemId, int level, boolean isConsumable) {
-        ImageButton background = new ImageButton(pX, pY, 18, 18, (level == 5 || (isConsumable && level != -1)) ? 34 : 16, 166, 0,
+        ImageButton background = new ImageButton(pX, pY, 18, 18, (level == 5 || (isConsumable && level != 0)) ? 34 : 16, 166, 0,
                 BACKGROUND_RESOURCE, 256, 256, pButton -> {});
         ImageButton item;
         if (itemId == -1) {

@@ -7,14 +7,19 @@ import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.event.custom.PlayerStatsChangedEvent;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
+import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.item.passive.*;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.PlayerStatsSyncS2CPacket;
+import net.jwn.jwn_items.util.Stat;
 import net.jwn.jwn_items.util.StatType;
 import net.jwn.jwn_items.util.Functions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -22,6 +27,8 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -29,6 +36,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID)
@@ -219,6 +228,39 @@ public class ModEvents {
                     ModMessages.sendToPlayer(new PlayerStatsSyncS2CPacket(playerStat.get()), (ServerPlayer) player);
                     MinecraftForge.EVENT_BUS.post(new PlayerStatsChangedEvent(player));
                 });
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingDeathEvent(LivingDeathEvent event) {
+        if (event.getEntity().getTags().contains("ahchoo") && event.getSource().getDirectEntity() instanceof Player player) {
+            player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+                if (myStuff.isMaxLevel(((ModItem) (ModItems.MUSTACHE_ITEM.get())).id)) {
+                    PassiveSkill.operateMustacheMaxLevel(player);
+                    if (!player.level().isClientSide) Functions.syncPlayerStatS2C((ServerPlayer) player);
+                }
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingHurtEvent(LivingHurtEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
+                if (myStuff.isMaxLevel(((ModItem) (ModItems.STAR.get())).id)) {
+                    event.setAmount(event.getAmount() / 2);
+                }
+                if (myStuff.isMaxLevel(((ModItem) (ModItems.LAVA_WALKER.get())).id)) {
+                    List<String> fireList = new ArrayList<>(){{
+                       add("lava");
+                       add("onFire");
+                       add("inFire");
+                    }};
+                    if (fireList.contains(event.getSource().type().msgId())) {
+                        event.setAmount(event.getAmount() / 2);
+                    }
+                }
             });
         }
     }

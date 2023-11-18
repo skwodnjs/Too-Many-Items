@@ -2,6 +2,7 @@ package net.jwn.jwn_items.item.consumables;
 
 import net.jwn.jwn_items.capability.PlayerStatProvider;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
+import net.jwn.jwn_items.item.Quality;
 import net.jwn.jwn_items.util.Stat;
 import net.jwn.jwn_items.util.StatType;
 import net.minecraft.world.InteractionHand;
@@ -11,9 +12,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
-public class Coin extends ConsumableItem {
+public class CoinItem extends ConsumableItem {
     final int value;
-    public Coin(Properties pProperties, int id, int quality, int value) {
+    public CoinItem(Properties pProperties, int id, Quality quality, int value) {
         super(pProperties, id, quality);
         this.value = value;
     }

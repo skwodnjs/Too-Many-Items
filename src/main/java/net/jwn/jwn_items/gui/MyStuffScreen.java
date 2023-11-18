@@ -191,15 +191,16 @@ public class MyStuffScreen extends Screen {
         Player player = Minecraft.getInstance().player;
         player.getCapability(MyStuffProvider.myStuffCapability).ifPresent(myStuff -> {
             for (int i = 1; i <= removableActiveSlot.length; i++) {
-                if (removableActiveSlot[removableActiveSlot.length - i]) myStuff.removeItem(ItemType.ACTIVE, removableActiveSlot.length - i);
+                if (removableActiveSlot[removableActiveSlot.length - i]) myStuff.removeItem(player, ItemType.ACTIVE, removableActiveSlot.length - i);
             }
             for (int i = 1; i <= removablePassiveSlot.length; i++) {
-                if (removablePassiveSlot[removablePassiveSlot.length- i]) myStuff.removeItem(ItemType.PASSIVE, removablePassiveSlot.length - i);
+                if (removablePassiveSlot[removablePassiveSlot.length- i]) myStuff.removeItem(player, ItemType.PASSIVE, removablePassiveSlot.length - i);
             }
-            ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.isActiveUpgraded()));
             Arrays.fill(removableActiveSlot, false);
             Arrays.fill(removablePassiveSlot, false);
         });
+        Functions.syncMyStuffC2S(player);
+        Functions.syncPlayerStatC2S(player);
         rebuildWidgets();
     }
 

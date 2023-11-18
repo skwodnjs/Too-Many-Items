@@ -5,6 +5,7 @@ import net.jwn.jwn_items.capability.PlayerStatProvider;
 import net.jwn.jwn_items.event.custom.ModItemUsedSuccessfullyEvent;
 import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItem;
+import net.jwn.jwn_items.item.Quality;
 import net.jwn.jwn_items.util.Stat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -19,11 +20,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PassiveItem extends ModItem {
-    public final List<Stat> statList;
+    public final List<Stat> statListLv1;
+    public final List<Stat> statListLv5;
 
-    public PassiveItem(Properties pProperties, int id, int quality, List<Stat> statList) {
+    public PassiveItem(Properties pProperties, int id, Quality quality, List<Stat> statListLv1, List<Stat> statListLv5) {
         super(pProperties, ItemType.PASSIVE, id, quality);
-        this.statList = statList;
+        this.statListLv1 = statListLv1;
+        this.statListLv5 = statListLv5;
     }
 
     @Override
@@ -40,9 +43,15 @@ public class PassiveItem extends ModItem {
         } else {
             message = Component.literal("success");
             if (itemLevel.get() == 1) {
-                pPlayer.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
-                    statList.forEach(stat -> {
-                        playerStats.add(pPlayer, stat);
+                pPlayer.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStat -> {
+                    statListLv1.forEach(stat -> {
+                        playerStat.add(pPlayer, stat);
+                    });
+                });
+            } else if (itemLevel.get() == 5) {
+                pPlayer.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStat -> {
+                    statListLv5.forEach(stat -> {
+                        playerStat.add(pPlayer, stat);
                     });
                 });
             }

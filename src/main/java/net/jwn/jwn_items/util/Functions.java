@@ -13,6 +13,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import static net.jwn.jwn_items.capability.MyStuff.*;
 
 public class Functions {
+    public static class ItemFunctions {
+//        public static void
+    }
+
     // print capabilities
     public static void printStat(Player player) {
         player.getCapability(PlayerStatProvider.playerStatsCapability).ifPresent(playerStats -> {
