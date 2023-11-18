@@ -26,6 +26,8 @@ public class LavaWalkerEffect extends MobEffect {
                         if (((LiquidBlock) Blocks.LAVA).getFluidState(targetBlockState).isSource()) {
                             player.level().setBlock(targetBlockPos, ModBlocks.COLD_LAVA.get().defaultBlockState(), 3);
                         }
+                    } else if (targetBlockState.getBlock() == ModBlocks.COLD_LAVA.get()) {
+                        player.level().setBlock(targetBlockPos, ModBlocks.COLD_LAVA.get().defaultBlockState(), 3);
                     }
                 }
             }
