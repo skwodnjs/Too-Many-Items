@@ -1,6 +1,12 @@
 {
   "title.jwn_items.my_stuff": "찾은 것들!",
   "title.jwn_items.found_stuff": "내가 찾은 것들!",
+  "title.jwn_items.synthesis_common": "합성 상자",
+  "title.jwn_items.shop_common": "상점",
+  "title.jwn_items.roulette_common": "룰렛",
+  "title.jwn_items.synthesis_rare": "희귀한 합성 상자",
+  "title.jwn_items.shop_rare": "희귀한 상점",
+  "title.jwn_items.roulette_rare": "희귀한 룰렛",
 
   "item.jwn_items.test": "테스트용",
   "item.jwn_items.pill": "알약",
@@ -27,6 +33,8 @@
   "block.jwn_items.shop_rare": "희귀한 상점",
   "block.jwn_items.roulette_common": "룰렛",
   "block.jwn_items.roulette_rare": "희귀한 룰렛",
+  "block.jwn_items.synthesis_common": "합성 상자",
+  "block.jwn_items.synthesis_rare": "희귀환 합성 상자",
 
   "stat.jwn_items.health": "체력",
   "stat.jwn_items.damage": "데미지",
@@ -46,7 +54,8 @@
   "message.jwn_items.coolTimeLeft": "아직 스킬을 사용할 수 없습니다.",
   "message.jwn_items.secondLeft": "초 남음",
   "message.jwn_items.full_inventory": "인벤토리가 가득 찼습니다.",
-  "message.jwn_items.cannot_use": "지금은 사용할 수 없습니다.",
+  "message.jwn_items.cannot_use_skill": "지금은 사용할 수 없습니다.",
+  "message.jwn_items.cannot_use_synthesis_block": "다른 플레이어의 합성상자는 사용할 수 없습니다.",
 
   "item.jwn_items.message_pill_random_stat_change": "스텟 랜덤 변경",
 

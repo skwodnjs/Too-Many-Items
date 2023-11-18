@@ -1,6 +1,12 @@
 {
   "title.jwn_items.my_stuff": "MY STUFF!",
   "title.jwn_items.found_stuff": "STUFF I FOUND!",
+  "title.jwn_items.synthesis_common": "SYNTHESIS",
+  "title.jwn_items.shop_common": "SHOP",
+  "title.jwn_items.roulette_common": "ROULETTE",
+  "title.jwn_items.synthesis_rare": "SYNTHESIS",
+  "title.jwn_items.shop_rare": "SHOP",
+  "title.jwn_items.roulette_rare": "ROULETTE",
 
   "item.jwn_items.test": "Test",
   "item.jwn_items.pill": "Pill",
@@ -27,6 +33,8 @@
   "block.jwn_items.shop_rare": "shop_rare",
   "block.jwn_items.roulette_common": "roulette_common",
   "block.jwn_items.roulette_rare": "roulette_rare",
+  "block.jwn_items.synthesis_common": "synthesis_common",
+  "block.jwn_items.synthesis_rare": "synthesis_rare",
 
   "stat.jwn_items.health": "Health",
   "stat.jwn_items.damage": "Damage",
@@ -46,7 +54,8 @@
   "message.jwn_items.coolTimeLeft": "Can't use now",
   "message.jwn_items.secondLeft": "sec left",
   "message.jwn_items.full_inventory": "Full inventory",
-  "message.jwn_items.cannot_use": "Can't use now",
+  "message.jwn_items.cannot_use_skill": "Can't use now",
+  "message.jwn_items.cannot_use_synthesis_block": "Can't use now",
 
   "item.jwn_items.message_pill_random_stat_change": "random stat change",
 

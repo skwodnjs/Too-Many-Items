@@ -3,8 +3,8 @@ package net.jwn.jwn_items.event;
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.MyStuffProvider;
 import net.jwn.jwn_items.capability.PlayerOptionProvider;
-import net.jwn.jwn_items.gui.MyStuffScreen;
-import net.jwn.jwn_items.gui.StuffIFoundScreen;
+import net.jwn.jwn_items.gui.screen.MyStuffScreen;
+import net.jwn.jwn_items.gui.screen.StuffIFoundScreen;
 import net.jwn.jwn_items.hud.ActiveItemHubOverlay;
 import net.jwn.jwn_items.hud.StatHudOverLay;
 import net.jwn.jwn_items.networking.ModMessages;
@@ -20,7 +20,6 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = Main.MOD_ID, value = Dist.CLIENT)

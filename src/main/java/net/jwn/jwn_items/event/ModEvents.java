@@ -11,15 +11,11 @@ import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.item.passive.*;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.jwn.jwn_items.networking.packet.PlayerStatsSyncS2CPacket;
-import net.jwn.jwn_items.util.Stat;
 import net.jwn.jwn_items.util.StatType;
 import net.jwn.jwn_items.util.Functions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -214,7 +210,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         if (event.getEntity().hasEffect(ModEffects.STAR_EFFECT.get()) && event.getItemStack().getItem() instanceof ModItem) {
-            if (!event.getLevel().isClientSide) event.getEntity().sendSystemMessage(Component.translatable("message.jwn_items.cannot_use"));
+            if (!event.getLevel().isClientSide) event.getEntity().sendSystemMessage(Component.translatable("message.jwn_items.cannot_use_skill"));
             event.setCanceled(true);
         }
     }

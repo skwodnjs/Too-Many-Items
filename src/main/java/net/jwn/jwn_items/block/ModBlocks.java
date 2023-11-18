@@ -2,9 +2,7 @@ package net.jwn.jwn_items.block;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.block.custom.*;
-import net.jwn.jwn_items.item.ItemType;
 import net.jwn.jwn_items.item.ModItems;
-import net.jwn.jwn_items.item.Quality;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -31,15 +29,21 @@ public class ModBlocks {
             () -> new ColdLavaBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> SHOP_COMMON = registerBlock("shop_common",
-            () -> new ShopBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> SHOP_RARE = registerBlock("shop_rare",
-            () -> new ShopBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> ROULETTE_COMMON = registerBlock("roulette_common",
             () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> ROULETTE_RARE = registerBlock("roulette_rare",
+            () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
+
+    public static final RegistryObject<Block> SYNTHESIS_COMMON = registerBlock("synthesis_common",
+            () -> new SynthesisCommonBlock(BlockBehaviour.Properties.of().noOcclusion()));
+
+    public static final RegistryObject<Block> SYNTHESIS_RARE = registerBlock("synthesis_rare",
             () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {

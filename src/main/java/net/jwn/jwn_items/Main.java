@@ -4,11 +4,15 @@ import com.mojang.logging.LogUtils;
 import net.jwn.jwn_items.block.ModBlocks;
 import net.jwn.jwn_items.block.blockentity.ModBlockEntities;
 import net.jwn.jwn_items.effect.ModEffects;
+import net.jwn.jwn_items.gui.menu.ModMenuTypes;
+import net.jwn.jwn_items.gui.screen.SynthesisScreen;
 import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.networking.ModMessages;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.MenuProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -37,6 +41,7 @@ public class Main
         ModBlocks.register(modEventBus);
         ModEffects.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -68,7 +73,7 @@ public class Main
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.POOP_BLOCK.get(), RenderType.translucent());
+            MenuScreens.register(ModMenuTypes.SYNTHESIS_COMMON_MENU.get(), SynthesisScreen::new);
         }
     }
 }

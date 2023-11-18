@@ -16,6 +16,10 @@ public class ModBlockEntities {
                     () -> BlockEntityType.Builder.of(ColdLavaBlockEntity::new, ModBlocks.COLD_LAVA.get())
                             .build(null));
 
+    public static final RegistryObject<BlockEntityType<SynthesisCommonBlockEntity>> SYNTHESIS_BLOCK_ENTITY_COMMON =
+            BLOCK_ENTITIES.register("synthesis_common",
+                    () -> BlockEntityType.Builder.of(SynthesisCommonBlockEntity::new, ModBlocks.SYNTHESIS_COMMON.get())
+                            .build(null));
 
     public static void register(IEventBus modEventBus) {
         BLOCK_ENTITIES.register(modEventBus);

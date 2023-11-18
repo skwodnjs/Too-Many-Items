@@ -1,4 +1,4 @@
-package net.jwn.jwn_items.gui;
+package net.jwn.jwn_items.gui.screen;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.CoolTimeProvider;
@@ -29,7 +29,7 @@ import static net.jwn.jwn_items.capability.MyStuff.*;
 
 public class MyStuffScreen extends Screen {
     public MyStuffScreen() {
-        super(Component.literal("My Stuff"));
+        super(Component.translatable("title.jwn_items.found_stuff"));
     }
 
     private int leftPos, topPos;
@@ -127,7 +127,6 @@ public class MyStuffScreen extends Screen {
             pGuiGraphics.blit(SCREEN_RESOURCE, leftPos + 107, topPos + 17, 93, 166, 18, 18);
         }
 
-        String title = I18n.get("title." + Main.MOD_ID + ".my_stuff");
         pGuiGraphics.drawString(font, title, leftPos + 7, topPos + 7, 0x404040, false);
 
         Player player = Minecraft.getInstance().player;

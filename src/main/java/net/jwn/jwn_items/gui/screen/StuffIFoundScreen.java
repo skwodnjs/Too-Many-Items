@@ -1,4 +1,4 @@
-package net.jwn.jwn_items.gui;
+package net.jwn.jwn_items.gui.screen;
 
 import net.jwn.jwn_items.Main;
 import net.jwn.jwn_items.capability.FoundStuffProvider;
@@ -19,7 +19,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class StuffIFoundScreen extends Screen {
     public StuffIFoundScreen() {
-        super(Component.literal("Stuff I Found"));
+        super(Component.translatable("title.jwn_items.found_stuff"));
     }
 
     private int leftPos, topPos;
@@ -40,7 +40,6 @@ public class StuffIFoundScreen extends Screen {
     protected void init() {
         super.init();
         setting();
-        System.out.println(items.length);
 
         this.leftPos = (width - 176) / 2;
         this.topPos = (height - 166) / 2;
@@ -59,7 +58,6 @@ public class StuffIFoundScreen extends Screen {
         pGuiGraphics.blit(BACKGROUND_RESOURCE, leftPos, topPos, 0, 0, 176, 166);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 
-        String title = I18n.get("title." + Main.MOD_ID + ".found_stuff");
         pGuiGraphics.drawString(font, title, leftPos + 7, topPos + 7, 0x404040, false);
 
         pGuiGraphics.drawString(font, "-" + page + "-", leftPos + 83, topPos + 150, 0x404040, false);
@@ -101,5 +99,10 @@ public class StuffIFoundScreen extends Screen {
             rebuildWidgets();
         }
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
     }
 }
