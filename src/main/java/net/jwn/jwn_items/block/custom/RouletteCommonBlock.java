@@ -1,7 +1,7 @@
 package net.jwn.jwn_items.block.custom;
 
+import net.jwn.jwn_items.block.blockentity.RouletteCommonBlockEntity;
 import net.jwn.jwn_items.block.blockentity.ShopCommonBlockEntity;
-import net.jwn.jwn_items.block.blockentity.SynthesisCommonBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,15 +19,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class ShopCommonBlock extends BaseEntityBlock {
-    public ShopCommonBlock(Properties pProperties) {
+public class RouletteCommonBlock extends BaseEntityBlock {
+    public RouletteCommonBlock(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
     public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
         if (pPlacer instanceof ServerPlayer player) {
-            ((ShopCommonBlockEntity) pLevel.getBlockEntity(pPos)).setOwner(player.getUUID());
+            ((RouletteCommonBlockEntity) pLevel.getBlockEntity(pPos)).setOwner(player.getUUID());
         }
     }
 
@@ -39,7 +39,7 @@ public class ShopCommonBlock extends BaseEntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof ShopCommonBlockEntity shopCommonBlockEntity) shopCommonBlockEntity.drops();
+            if (blockEntity instanceof RouletteCommonBlockEntity rouletteCommonBlockEntity) rouletteCommonBlockEntity.drops();
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
@@ -48,9 +48,9 @@ public class ShopCommonBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof ShopCommonBlockEntity shopCommonBlockEntity) {
-                if (pPlayer.getUUID().equals(((ShopCommonBlockEntity) pLevel.getBlockEntity(pPos)).getOwner())) {
-                    NetworkHooks.openScreen((ServerPlayer) pPlayer, shopCommonBlockEntity, pPos);
+            if (blockEntity instanceof RouletteCommonBlockEntity rouletteCommonBlockEntity) {
+                if (pPlayer.getUUID().equals(((RouletteCommonBlockEntity) pLevel.getBlockEntity(pPos)).getOwner())) {
+                    NetworkHooks.openScreen((ServerPlayer) pPlayer, rouletteCommonBlockEntity, pPos);
                 } else {
                     pPlayer.sendSystemMessage(Component.translatable("message.jwn_items.cannot_use_owner_block"));
                 }
@@ -64,6 +64,6 @@ public class ShopCommonBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new ShopCommonBlockEntity(pPos, pState);
+        return new RouletteCommonBlockEntity(pPos, pState);
     }
 }

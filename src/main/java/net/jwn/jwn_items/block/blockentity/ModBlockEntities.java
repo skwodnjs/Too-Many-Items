@@ -29,6 +29,19 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("shop_common",
                     () -> BlockEntityType.Builder.of(ShopCommonBlockEntity::new, ModBlocks.SHOP_COMMON.get())
                             .build(null));
+    public static final RegistryObject<BlockEntityType<ShopRareBlockEntity>> SHOP_BLOCK_ENTITY_RARE =
+            BLOCK_ENTITIES.register("shop_rare",
+                    () -> BlockEntityType.Builder.of(ShopRareBlockEntity::new, ModBlocks.SHOP_RARE.get())
+                            .build(null));
+
+    public static final RegistryObject<BlockEntityType<ShopCommonBlockEntity>> ROULETTE_BLOCK_ENTITY_COMMON =
+            BLOCK_ENTITIES.register("roulette_common",
+                    () -> BlockEntityType.Builder.of(ShopCommonBlockEntity::new, ModBlocks.ROULETTE_COMMON.get())
+                            .build(null));
+    public static final RegistryObject<BlockEntityType<ShopCommonBlockEntity>> ROULETTE_BLOCK_ENTITY_RARE =
+            BLOCK_ENTITIES.register("roulette_rare",
+                    () -> BlockEntityType.Builder.of(ShopCommonBlockEntity::new, ModBlocks.ROULETTE_RARE.get())
+                            .build(null));
 
     public static void register(IEventBus modEventBus) {
         BLOCK_ENTITIES.register(modEventBus);

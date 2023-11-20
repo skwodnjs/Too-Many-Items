@@ -32,13 +32,13 @@ public class ModBlocks {
             () -> new ShopCommonBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> SHOP_RARE = registerBlock("shop_rare",
-            () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            () -> new ShopRareBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> ROULETTE_COMMON = registerBlock("roulette_common",
-            () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            () -> new RouletteCommonBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> ROULETTE_RARE = registerBlock("roulette_rare",
-            () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            () -> new RouletteRareBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> SYNTHESIS_COMMON = registerBlock("synthesis_common",
             () -> new SynthesisCommonBlock(BlockBehaviour.Properties.of().noOcclusion()));

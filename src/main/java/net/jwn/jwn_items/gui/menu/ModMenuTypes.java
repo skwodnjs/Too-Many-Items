@@ -20,6 +20,12 @@ public class ModMenuTypes {
             registerMenuType("synthesis_rare_menu", SynthesisRareScreenMenu::new);
     public static final RegistryObject<MenuType<ShopCommonScreenMenu>> SHOP_COMMON_MENU =
             registerMenuType("shop_common_menu", ShopCommonScreenMenu::new);
+    public static final RegistryObject<MenuType<ShopRareScreenMenu>> SHOP_RARE_MENU =
+            registerMenuType("shop_rare_menu", ShopRareScreenMenu::new);
+    public static final RegistryObject<MenuType<RouletteCommonScreenMenu>> ROULETTE_COMMON_MENU =
+            registerMenuType("roulette_common_menu", RouletteCommonScreenMenu::new);
+    public static final RegistryObject<MenuType<RouletteRareScreenMenu>> ROULETTE_RARE_MENU =
+            registerMenuType("roulette_rare_menu", RouletteRareScreenMenu::new);
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));
