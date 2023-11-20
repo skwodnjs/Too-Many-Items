@@ -1,7 +1,6 @@
 package net.jwn.jwn_items.block.blockentity;
 
 import net.jwn.jwn_items.gui.menu.ShopCommonScreenMenu;
-import net.jwn.jwn_items.gui.menu.SynthesisCommonScreenMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -30,7 +29,7 @@ public class ShopCommonBlockEntity extends BlockEntity implements MenuProvider {
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     public ShopCommonBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.SHOP_BLOCK_ENTITY_COMMON.get(), pPos, pBlockState);
+        super(ModBlockEntities.SHOP_COMMON_BLOCK_ENTITY.get(), pPos, pBlockState);
     }
 
     public void setOwner(UUID owner) {

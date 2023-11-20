@@ -1,6 +1,5 @@
 package net.jwn.jwn_items.block.blockentity;
 
-import net.jwn.jwn_items.gui.menu.RouletteCommonScreenMenu;
 import net.jwn.jwn_items.gui.menu.RouletteRareScreenMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,11 +25,11 @@ import java.util.UUID;
 
 public class RouletteRareBlockEntity extends BlockEntity implements MenuProvider {
     private UUID owner;
-    private final ItemStackHandler itemHandler = new ItemStackHandler(1);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(3);
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     public RouletteRareBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.ROULETTE_BLOCK_ENTITY_RARE.get(), pPos, pBlockState);
+        super(ModBlockEntities.ROULETTE_RARE_BLOCK_ENTITY.get(), pPos, pBlockState);
     }
 
     public void setOwner(UUID owner) {

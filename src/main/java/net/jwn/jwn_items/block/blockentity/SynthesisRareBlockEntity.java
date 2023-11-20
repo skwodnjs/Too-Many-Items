@@ -29,7 +29,7 @@ public class SynthesisRareBlockEntity extends BlockEntity implements MenuProvide
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     public SynthesisRareBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.SYNTHESIS_BLOCK_ENTITY_RARE.get(), pPos, pBlockState);
+        super(ModBlockEntities.SYNTHESIS_RARE_BLOCK_ENTITY.get(), pPos, pBlockState);
     }
 
     public void setOwner(UUID owner) {

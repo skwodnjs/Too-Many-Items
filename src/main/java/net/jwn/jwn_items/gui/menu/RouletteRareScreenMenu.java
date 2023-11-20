@@ -13,6 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class RouletteRareScreenMenu extends AbstractContainerMenu {
     public final RouletteRareBlockEntity blockEntity;
@@ -24,7 +26,7 @@ public class RouletteRareScreenMenu extends AbstractContainerMenu {
 
     public RouletteRareScreenMenu(int pContainerId, Inventory inventory, BlockEntity entity) {
         super(ModMenuTypes.ROULETTE_RARE_MENU.get(), pContainerId);
-        checkContainerSize(inventory, 1);
+        checkContainerSize(inventory, 3);
         this.blockEntity = (RouletteRareBlockEntity) entity;
         this.level = inventory.player.level();
 
@@ -32,12 +34,24 @@ public class RouletteRareScreenMenu extends AbstractContainerMenu {
         addPlayerHotBar(inventory);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-//            this.addSlot(new SlotItemHandler(iItemHandler, 0, 16, 34) {
-//                @Override
-//                public boolean mayPlace(@NotNull ItemStack stack) {
-//                    return false;
-//                }
-//            });
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 16, 34) {
+                @Override
+                public boolean mayPlace(@NotNull ItemStack stack) {
+                    return false;
+                }
+            });
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 66, 34) {
+                @Override
+                public boolean mayPlace(@NotNull ItemStack stack) {
+                    return false;
+                }
+            });
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 116, 34) {
+                @Override
+                public boolean mayPlace(@NotNull ItemStack stack) {
+                    return false;
+                }
+            });
         });
     }
 
@@ -57,7 +71,7 @@ public class RouletteRareScreenMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 1;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 3;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);

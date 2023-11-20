@@ -26,7 +26,7 @@ public class RouletteCommonScreenMenu extends AbstractContainerMenu {
 
     public RouletteCommonScreenMenu(int pContainerId, Inventory inventory, BlockEntity entity) {
         super(ModMenuTypes.ROULETTE_COMMON_MENU.get(), pContainerId);
-        checkContainerSize(inventory, 1);
+        checkContainerSize(inventory, 3);
         this.blockEntity = (RouletteCommonBlockEntity) entity;
         this.level = inventory.player.level();
 
@@ -34,12 +34,24 @@ public class RouletteCommonScreenMenu extends AbstractContainerMenu {
         addPlayerHotBar(inventory);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-//            this.addSlot(new SlotItemHandler(iItemHandler, 0, 16, 34) {
-//                @Override
-//                public boolean mayPlace(@NotNull ItemStack stack) {
-//                    return false;
-//                }
-//            });
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 16, 34) {
+                @Override
+                public boolean mayPlace(@NotNull ItemStack stack) {
+                    return false;
+                }
+            });
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 66, 34) {
+                @Override
+                public boolean mayPlace(@NotNull ItemStack stack) {
+                    return false;
+                }
+            });
+            this.addSlot(new SlotItemHandler(iItemHandler, 0, 116, 34) {
+                @Override
+                public boolean mayPlace(@NotNull ItemStack stack) {
+                    return false;
+                }
+            });
         });
     }
 
@@ -59,7 +71,7 @@ public class RouletteCommonScreenMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 1;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 3;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);

@@ -1,6 +1,5 @@
 package net.jwn.jwn_items.block.blockentity;
 
-import net.jwn.jwn_items.gui.menu.ShopCommonScreenMenu;
 import net.jwn.jwn_items.gui.menu.ShopRareScreenMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,7 +29,7 @@ public class ShopRareBlockEntity extends BlockEntity implements MenuProvider {
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     public ShopRareBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.SHOP_BLOCK_ENTITY_RARE.get(), pPos, pBlockState);
+        super(ModBlockEntities.SHOP_RARE_BLOCK_ENTITY.get(), pPos, pBlockState);
     }
 
     public void setOwner(UUID owner) {

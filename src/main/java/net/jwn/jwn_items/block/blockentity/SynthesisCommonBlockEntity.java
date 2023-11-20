@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -30,7 +29,7 @@ public class SynthesisCommonBlockEntity extends BlockEntity implements MenuProvi
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     public SynthesisCommonBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.SYNTHESIS_BLOCK_ENTITY_COMMON.get(), pPos, pBlockState);
+        super(ModBlockEntities.SYNTHESIS_COMMON_BLOCK_ENTITY.get(), pPos, pBlockState);
     }
 
     public void setOwner(UUID owner) {
