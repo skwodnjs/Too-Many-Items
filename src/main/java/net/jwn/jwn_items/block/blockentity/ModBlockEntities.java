@@ -20,6 +20,15 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("synthesis_common",
                     () -> BlockEntityType.Builder.of(SynthesisCommonBlockEntity::new, ModBlocks.SYNTHESIS_COMMON.get())
                             .build(null));
+    public static final RegistryObject<BlockEntityType<SynthesisRareBlockEntity>> SYNTHESIS_BLOCK_ENTITY_RARE =
+            BLOCK_ENTITIES.register("synthesis_rare",
+                    () -> BlockEntityType.Builder.of(SynthesisRareBlockEntity::new, ModBlocks.SYNTHESIS_RARE.get())
+                            .build(null));
+
+    public static final RegistryObject<BlockEntityType<ShopCommonBlockEntity>> SHOP_BLOCK_ENTITY_COMMON =
+            BLOCK_ENTITIES.register("shop_common",
+                    () -> BlockEntityType.Builder.of(ShopCommonBlockEntity::new, ModBlocks.SHOP_COMMON.get())
+                            .build(null));
 
     public static void register(IEventBus modEventBus) {
         BLOCK_ENTITIES.register(modEventBus);

@@ -1,6 +1,6 @@
 package net.jwn.jwn_items.block.custom;
 
-import net.jwn.jwn_items.block.blockentity.SynthesisCommonBlockEntity;
+import net.jwn.jwn_items.block.blockentity.SynthesisRareBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,15 +18,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class SynthesisCommonBlock extends BaseEntityBlock {
-    public SynthesisCommonBlock(Properties pProperties) {
+public class SynthesisRareBlock extends BaseEntityBlock {
+    public SynthesisRareBlock(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
     public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
         if (pPlacer instanceof ServerPlayer player) {
-            ((SynthesisCommonBlockEntity) pLevel.getBlockEntity(pPos)).setOwner(player.getUUID());
+            ((SynthesisRareBlockEntity) pLevel.getBlockEntity(pPos)).setOwner(player.getUUID());
         }
     }
 
@@ -38,7 +38,7 @@ public class SynthesisCommonBlock extends BaseEntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof SynthesisCommonBlockEntity synthesisBlockCommonEntity) synthesisBlockCommonEntity.drops();
+            if (blockEntity instanceof SynthesisRareBlockEntity SynthesisRareBlockEntity) SynthesisRareBlockEntity.drops();
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
@@ -47,9 +47,9 @@ public class SynthesisCommonBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof SynthesisCommonBlockEntity synthesisCommonBlockEntity) {
-                if (pPlayer.getUUID().equals(((SynthesisCommonBlockEntity) pLevel.getBlockEntity(pPos)).getOwner())) {
-                    NetworkHooks.openScreen((ServerPlayer) pPlayer, synthesisCommonBlockEntity, pPos);
+            if (blockEntity instanceof SynthesisRareBlockEntity SynthesisRareBlockEntity) {
+                if (pPlayer.getUUID().equals(((SynthesisRareBlockEntity) pLevel.getBlockEntity(pPos)).getOwner())) {
+                    NetworkHooks.openScreen((ServerPlayer) pPlayer, SynthesisRareBlockEntity, pPos);
                 } else {
                     pPlayer.sendSystemMessage(Component.translatable("message.jwn_items.cannot_use_owner_block"));
                 }
@@ -63,6 +63,6 @@ public class SynthesisCommonBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new SynthesisCommonBlockEntity(pPos, pState);
+        return new SynthesisRareBlockEntity(pPos, pState);
     }
 }

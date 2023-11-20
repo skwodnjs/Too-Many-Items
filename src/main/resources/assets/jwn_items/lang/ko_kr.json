@@ -55,7 +55,7 @@
   "message.jwn_items.secondLeft": "초 남음",
   "message.jwn_items.full_inventory": "인벤토리가 가득 찼습니다.",
   "message.jwn_items.cannot_use_skill": "지금은 사용할 수 없습니다.",
-  "message.jwn_items.cannot_use_synthesis_block": "다른 플레이어의 합성상자는 사용할 수 없습니다.",
+  "message.jwn_items.cannot_use_owner_block": "다른 플레이어의 합성상자는 사용할 수 없습니다.",
 
   "item.jwn_items.message_pill_random_stat_change": "스텟 랜덤 변경",
 

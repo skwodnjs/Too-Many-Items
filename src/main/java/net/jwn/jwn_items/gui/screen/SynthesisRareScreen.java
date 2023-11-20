@@ -2,7 +2,7 @@ package net.jwn.jwn_items.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.jwn.jwn_items.Main;
-import net.jwn.jwn_items.gui.menu.SynthesisCommonScreenMenu;
+import net.jwn.jwn_items.gui.menu.SynthesisRareScreenMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -11,10 +11,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class SynthesisScreen extends AbstractContainerScreen<SynthesisCommonScreenMenu> {
+public class SynthesisRareScreen extends AbstractContainerScreen<SynthesisRareScreenMenu> {
     private static final ResourceLocation resourceLocation = new ResourceLocation(Main.MOD_ID, "textures/gui/synthesis_screen.png");
 
-    public SynthesisScreen(SynthesisCommonScreenMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public SynthesisRareScreen(SynthesisRareScreenMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 

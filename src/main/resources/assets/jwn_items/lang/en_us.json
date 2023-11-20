@@ -55,7 +55,7 @@
   "message.jwn_items.secondLeft": "sec left",
   "message.jwn_items.full_inventory": "Full inventory",
   "message.jwn_items.cannot_use_skill": "Can't use now",
-  "message.jwn_items.cannot_use_synthesis_block": "Can't use now",
+  "message.jwn_items.cannot_use_owner_block": "Can't use now",
 
   "item.jwn_items.message_pill_random_stat_change": "random stat change",
 

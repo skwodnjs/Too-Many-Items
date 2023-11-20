@@ -29,7 +29,7 @@ public class ModBlocks {
             () -> new ColdLavaBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> SHOP_COMMON = registerBlock("shop_common",
-            () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            () -> new ShopCommonBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> SHOP_RARE = registerBlock("shop_rare",
             () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
@@ -44,7 +44,7 @@ public class ModBlocks {
             () -> new SynthesisCommonBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     public static final RegistryObject<Block> SYNTHESIS_RARE = registerBlock("synthesis_rare",
-            () -> new RouletteBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            () -> new SynthesisRareBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

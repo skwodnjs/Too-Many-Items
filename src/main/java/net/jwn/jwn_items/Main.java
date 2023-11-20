@@ -5,14 +5,12 @@ import net.jwn.jwn_items.block.ModBlocks;
 import net.jwn.jwn_items.block.blockentity.ModBlockEntities;
 import net.jwn.jwn_items.effect.ModEffects;
 import net.jwn.jwn_items.gui.menu.ModMenuTypes;
-import net.jwn.jwn_items.gui.screen.SynthesisScreen;
+import net.jwn.jwn_items.gui.screen.ShopCommonScreen;
+import net.jwn.jwn_items.gui.screen.SynthesisRareScreen;
+import net.jwn.jwn_items.gui.screen.SynthesisCommonScreen;
 import net.jwn.jwn_items.item.ModItems;
 import net.jwn.jwn_items.networking.ModMessages;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.MenuProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -73,7 +71,9 @@ public class Main
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            MenuScreens.register(ModMenuTypes.SYNTHESIS_COMMON_MENU.get(), SynthesisScreen::new);
+            MenuScreens.register(ModMenuTypes.SYNTHESIS_COMMON_MENU.get(), SynthesisCommonScreen::new);
+            MenuScreens.register(ModMenuTypes.SYNTHESIS_RARE_MENU.get(), SynthesisRareScreen::new);
+            MenuScreens.register(ModMenuTypes.SHOP_COMMON_MENU.get(), ShopCommonScreen::new);
         }
     }
 }

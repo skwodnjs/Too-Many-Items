@@ -1,5 +1,6 @@
 package net.jwn.jwn_items.block.custom;
 
+import net.jwn.jwn_items.block.blockentity.ShopCommonBlockEntity;
 import net.jwn.jwn_items.block.blockentity.SynthesisCommonBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -18,15 +19,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-public class SynthesisCommonBlock extends BaseEntityBlock {
-    public SynthesisCommonBlock(Properties pProperties) {
+public class ShopCommonBlock extends BaseEntityBlock {
+    public ShopCommonBlock(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
     public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
         if (pPlacer instanceof ServerPlayer player) {
-            ((SynthesisCommonBlockEntity) pLevel.getBlockEntity(pPos)).setOwner(player.getUUID());
+            ((ShopCommonBlockEntity) pLevel.getBlockEntity(pPos)).setOwner(player.getUUID());
         }
     }
 
@@ -47,9 +48,9 @@ public class SynthesisCommonBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof SynthesisCommonBlockEntity synthesisCommonBlockEntity) {
-                if (pPlayer.getUUID().equals(((SynthesisCommonBlockEntity) pLevel.getBlockEntity(pPos)).getOwner())) {
-                    NetworkHooks.openScreen((ServerPlayer) pPlayer, synthesisCommonBlockEntity, pPos);
+            if (blockEntity instanceof ShopCommonBlockEntity shopCommonBlockEntity) {
+                if (pPlayer.getUUID().equals(((ShopCommonBlockEntity) pLevel.getBlockEntity(pPos)).getOwner())) {
+                    NetworkHooks.openScreen((ServerPlayer) pPlayer, shopCommonBlockEntity, pPos);
                 } else {
                     pPlayer.sendSystemMessage(Component.translatable("message.jwn_items.cannot_use_owner_block"));
                 }
@@ -63,6 +64,6 @@ public class SynthesisCommonBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new SynthesisCommonBlockEntity(pPos, pState);
+        return new ShopCommonBlockEntity(pPos, pState);
     }
 }
