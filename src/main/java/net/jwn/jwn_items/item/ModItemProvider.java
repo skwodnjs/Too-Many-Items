@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ModItemProvider {
-    public static final int ITEM_TOTAL = 16;
+    public static final int ITEM_TOTAL = 33;
 
     public static ModItem getRandomItem(ItemType itemType, Quality quality) {
         ArrayList<ModItem> modItems = new ArrayList<>();
@@ -36,6 +36,23 @@ public class ModItemProvider {
             case 13: return (ModItem) ModItems.STAR.get();
             case 14: return (ModItem) ModItems.LAVA_WALKER.get();
             case 15: return (ModItem) ModItems.CARD_ILLUSION.get();
+            case 16: return (ModItem) ModItems.INSECT_REPELLENT.get();
+            case 17: return (ModItem) ModItems.KIMCHI.get();
+            case 18: return (ModItem) ModItems.FRACTURED_SKULL.get();
+            case 19: return (ModItem) ModItems.SPINACH.get();
+            case 20: return (ModItem) ModItems.SLIME_MONSTER.get();
+            case 21: return (ModItem) ModItems.OLD_RING.get();
+            case 22: return (ModItem) ModItems.COIN_PURSE.get();
+            case 23: return (ModItem) ModItems.ELECTRIC_FLY_SWATTER.get();
+            case 24: return (ModItem) ModItems.GHAST_SNOT.get();
+            case 25: return (ModItem) ModItems.GH_INJECTION.get();
+            case 26: return (ModItem) ModItems.OLD_PILLOW.get();
+            case 27: return (ModItem) ModItems.MYSTERIOUS_LIQUID.get();
+            case 28: return (ModItem) ModItems.EDIBLE_GOLD_DUST.get();
+            case 29: return (ModItem) ModItems.DUST_BUNNY.get();
+            case 30: return (ModItem) ModItems.ROASTED_EGG.get();
+            case 31: return (ModItem) ModItems.CRACKED_TRIANGULAR_FLASK.get();
+            case 32: return (ModItem) ModItems.FREEZE_DRIED_PORK_FEED.get();
         };
         return null;
     }

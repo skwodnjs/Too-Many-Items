@@ -8,9 +8,11 @@ public enum Quality {
     LEGENDARY(4);
 
     public final int level;
-    private Quality(int level) {
+
+    Quality(int level) {
         this.level = level;
     }
+
     public Quality add(int value) {
         if (level + value >= 4) return LEGENDARY;
         else if (level + value == 3) return EPIC;

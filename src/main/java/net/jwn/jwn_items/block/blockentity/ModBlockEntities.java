@@ -15,7 +15,6 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("cold_lava",
                     () -> BlockEntityType.Builder.of(ColdLavaBlockEntity::new, ModBlocks.COLD_LAVA.get())
                             .build(null));
-
     public static final RegistryObject<BlockEntityType<SynthesisCommonBlockEntity>> SYNTHESIS_COMMON_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("synthesis_common",
                     () -> BlockEntityType.Builder.of(SynthesisCommonBlockEntity::new, ModBlocks.SYNTHESIS_COMMON.get())
@@ -24,7 +23,6 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("synthesis_rare",
                     () -> BlockEntityType.Builder.of(SynthesisRareBlockEntity::new, ModBlocks.SYNTHESIS_RARE.get())
                             .build(null));
-
     public static final RegistryObject<BlockEntityType<ShopCommonBlockEntity>> SHOP_COMMON_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("shop_common",
                     () -> BlockEntityType.Builder.of(ShopCommonBlockEntity::new, ModBlocks.SHOP_COMMON.get())
@@ -33,7 +31,6 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("shop_rare",
                     () -> BlockEntityType.Builder.of(ShopRareBlockEntity::new, ModBlocks.SHOP_RARE.get())
                             .build(null));
-
     public static final RegistryObject<BlockEntityType<RouletteCommonBlockEntity>> ROULETTE_COMMON_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("roulette_common",
                     () -> BlockEntityType.Builder.of(RouletteCommonBlockEntity::new, ModBlocks.ROULETTE_COMMON.get())

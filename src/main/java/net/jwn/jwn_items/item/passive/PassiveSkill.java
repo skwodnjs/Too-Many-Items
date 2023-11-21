@@ -47,18 +47,6 @@ public class PassiveSkill {
         });
     }
     private static void agingServerTick(Player player) {
-        Vec3 pStart = player.position().add(-5, -1, -5);
-        Vec3 pEnd = player.position().add(5, 1, 5);
-        AABB aabb = new AABB(pStart, pEnd);
-        player.level().getEntities(player, aabb).forEach(entity -> {
-            if (entity instanceof AgeableMob ageableMob) {
-                if (ageableMob.getAge() < 0) {
-                    ((AgeableMob) entity).setAge(-1);
-                }
-            }
-        });
-    }
-    private static void rapidGrowthServerTick(Player player) {
         for (int i = -5; i <= 5; i++) {
             for (int j = -5; j <= 5; j++) {
                 for (int k = 0; k < 2; k++) {
@@ -69,6 +57,18 @@ public class PassiveSkill {
                 }
             }
         }
+    }
+    private static void rapidGrowthServerTick(Player player) {
+        Vec3 pStart = player.position().add(-5, -1, -5);
+        Vec3 pEnd = player.position().add(5, 1, 5);
+        AABB aabb = new AABB(pStart, pEnd);
+        player.level().getEntities(player, aabb).forEach(entity -> {
+            if (entity instanceof AgeableMob ageableMob) {
+                if (ageableMob.getAge() < 0) {
+                    ((AgeableMob) entity).setAge(-1);
+                }
+            }
+        });
     }
     private static void autoPortionServerTick(Player player, int level) {
         if (player.isSwimming()) {

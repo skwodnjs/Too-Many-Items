@@ -54,6 +54,7 @@ public class ClientEvents {
                     ModMessages.sendToServer(new MyStuffSyncC2SPacket(myStuff.getActiveSlots(), myStuff.getPassiveSlots(), myStuff.isActiveUpgraded()));
                 });
             } else if (KeyBindings.FOUND_STUFF_KEY.consumeClick()) {
+//                System.out.println("자 일단 눌렀다");
                 Minecraft.getInstance().setScreen(new StuffIFoundScreen());
                 Functions.printFoundStuff(player);
                 ModMessages.sendToServer(new PrintFoundStuffC2SPacket());

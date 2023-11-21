@@ -43,9 +43,11 @@ public class StuffIFoundScreen extends Screen {
 
         this.leftPos = (width - 176) / 2;
         this.topPos = (height - 166) / 2;
+//        System.out.println("자 이제 그린다");
 
         for (int i = 0; i < 54; i++) {
             int itemId = (page - 1) * 54 + i;
+//            System.out.println(itemId);
             if (itemId < items.length) {
                 drawSlot(leftPos + 7 + (i % 9) * 18, topPos + 17 + (i / 9) * 22, items[itemId] == 0 ? -1 : i, items[itemId], ModItemProvider.getItemById(itemId).itemType == ItemType.CONSUMABLES);
             }
